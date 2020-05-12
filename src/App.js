@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import fetchReddit from './services/redditFetch'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeData } from './reducers/dataReducer'
 
 const App = () => {
-	const [posts, setPosts] = useState([])
+	const dispatch = useDispatch()
 	useEffect(() => {
-		fetchReddit.fetchSubredditData('wallstreetbets')
-			.then(data => setPosts(data.data.children))
-	}, [])
+		dispatch(initializeData('wallstreetbets'))
+	}, [dispatch])
+
+	const data = useSelector(state => state.data)
 
 	return (
 		<div className="App">
-			{posts.map(post => (
-				<div key={post.data.name}>
-					{post.data.title}
+			{data.map(post => (
+				<div key={post.id}>
+					{post.title}
 					<br/>
-					Content: {post.data.selftext}
+					Content: {post.content}<br/><br/>
 				</div>
 			))}
 		</div>
