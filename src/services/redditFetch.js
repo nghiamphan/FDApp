@@ -24,18 +24,32 @@ const fetchSubredditData = async (subreddit) => {
 
 	for (let i = 0; i < finished.length; i++) {
 		for (let j = 0; j < finished[i].data[1].data.children.length; j++) {
-			const commentObject = finished[i].data[1].data.children[j].data
-			if (commentObject.body) {
-				data[i].comments.push({
-					id: commentObject.id,
-					content: commentObject.body,
-					ups: commentObject.ups,
-					link: commentObject.permalink,
-				})
+			preorderTreeTraversal(data[i].comments, finished[i].data[1].data.children[j])
+		}
+	}
+
+	return data
+}
+
+//////////////////////////////
+// Helpers
+//////////////////////////////
+
+const preorderTreeTraversal = (array, root) => {
+	if (root) {
+		if (root.data.body)
+			array.push({
+				id: root.data.id,
+				content: root.data.body,
+				ups: root.data.ups,
+				link: root.data.permalink
+			})
+		if (root.data.replies) {
+			for (let i = 0; i < root.data.replies.data.children.length; i++) {
+				preorderTreeTraversal(array, root.data.replies.data.children[i])
 			}
 		}
 	}
-	return data
 }
 
 export default {
