@@ -2,11 +2,11 @@ import axios from 'axios'
 
 const baseUrl = 'https://www.reddit.com'
 
-const fetchSubredditData = async (subreddit) => {
+const fetchSubredditData = async (subreddit, pages) => {
 	let aggregateData = []
 	let after = ''
 
-	for (let i = 0; i < 6; i++) {
+	for (let i = 0; i < pages; i++) {
 		const response = await axios.get(`${baseUrl}/r/${subreddit}.json?limit=1000&after=${after}`)
 		after = response.data.data.after
 		const data = response.data.data.children.map(thread => ({

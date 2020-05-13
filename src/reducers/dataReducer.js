@@ -19,9 +19,9 @@ const dataReducer = (state = [], action) => {
 // Actions
 ////////////////////////
 
-export const initializeData = subreddit => {
+export const initializeData = (subreddit, pages) => {
 	return async dispatch => {
-		const data = await redditFetch.fetchSubredditData(subreddit)
+		const data = await redditFetch.fetchSubredditData(subreddit, pages)
 		dispatch({
 			type: INIT_DATA,
 			data
