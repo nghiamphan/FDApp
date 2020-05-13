@@ -3,32 +3,38 @@ import axios from 'axios'
 const baseUrl = 'https://www.reddit.com'
 
 const fetchSubredditData = async (subreddit) => {
-	const response = await axios.get(`${baseUrl}/r/${subreddit}.json`)
+	let aggregateData = []
+	let after = ''
 
-	const data = response.data.data.children.map(thread => ({
-		id: thread.data.id,
-		title: thread.data.title,
-		content: thread.data.selftext,
-		flair: thread.data.link_flair_text,
-		ups: thread.data.ups,
-		upvote_ratio: thread.data.upvote_ratio,
-		link: thread.data.permalink,
-		comments: []
-	}))
+	for (let i = 0; i < 6; i++) {
+		const response = await axios.get(`${baseUrl}/r/${subreddit}.json?limit=1000&after=${after}`)
+		after = response.data.data.after
+		const data = response.data.data.children.map(thread => ({
+			id: thread.data.id,
+			title: thread.data.title,
+			content: thread.data.selftext,
+			flair: thread.data.link_flair_text,
+			ups: thread.data.ups,
+			upvote_ratio: thread.data.upvote_ratio,
+			link: thread.data.permalink,
+			comments: []
+		}))
 
-	const promiseArray = response.data.data.children.map(thread => {
-		const threadUrl = baseUrl + thread.data.permalink.substring(0, thread.data.permalink.length-1) + '.json'
-		return axios.get(threadUrl)
-	})
-	const finished = await Promise.all(promiseArray)
+		const promiseArray = response.data.data.children.map(thread => {
+			const threadUrl = baseUrl + thread.data.permalink.substring(0, thread.data.permalink.length-1) + '.json'
+			return axios.get(threadUrl)
+		})
+		const finished = await Promise.all(promiseArray)
 
-	for (let i = 0; i < finished.length; i++) {
-		for (let j = 0; j < finished[i].data[1].data.children.length; j++) {
-			preorderTreeTraversal(data[i].comments, finished[i].data[1].data.children[j])
+		for (let i = 0; i < finished.length; i++) {
+			for (let j = 0; j < finished[i].data[1].data.children.length; j++) {
+				preorderTreeTraversal(data[i].comments, finished[i].data[1].data.children[j])
+			}
 		}
+		aggregateData = aggregateData.concat(data)
 	}
 
-	return data
+	return aggregateData
 }
 
 //////////////////////////////
