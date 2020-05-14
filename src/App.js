@@ -5,7 +5,7 @@ import { initializeData } from './reducers/dataReducer'
 const App = () => {
 	const dispatch = useDispatch()
 	useEffect(() => {
-		dispatch(initializeData('wallstreetbets', 6))
+		dispatch(initializeData('wallstreetbets', 2, 'DD'))
 	}, [dispatch])
 
 	const data = useSelector(state => state.data)

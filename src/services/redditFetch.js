@@ -2,12 +2,15 @@ import axios from 'axios'
 
 const baseUrl = 'https://www.reddit.com'
 
-const fetchSubredditData = async (subreddit, pages) => {
+const fetchSubredditData = async (subreddit, pages, flair) => {
 	let aggregateData = []
 	let after = ''
 
 	for (let i = 0; i < pages; i++) {
-		const response = await axios.get(`${baseUrl}/r/${subreddit}.json?limit=1000&after=${after}`)
+		const url = flair
+			? `${baseUrl}/r/${subreddit}/search.json?sort=new&q=flair:${flair}&restrict_sr=on&limit=100&after=${after}`
+			: `${baseUrl}/r/${subreddit}.json?limit=100&after=${after}`
+		const response = await axios.get(url)
 		after = response.data.data.after
 		const data = response.data.data.children.map(thread => ({
 			id: thread.data.id,
