@@ -8,8 +8,14 @@ const INIT_DATA = 'INIT_DATA'
 
 const dataReducer = (state = [], action) => {
 	switch (action.type) {
-	case INIT_DATA:
-		return action.data
+	case INIT_DATA: {
+		const newState = { ...state }
+		newState[action.subreddit] = {
+			data: action.data,
+			flairs: action.flairs
+		}
+		return newState
+	}
 	default:
 		return state
 	}
@@ -21,10 +27,12 @@ const dataReducer = (state = [], action) => {
 
 export const initializeData = (subreddit, pages, flair) => {
 	return async dispatch => {
-		const data = await redditFetch.fetchSubredditData(subreddit, pages, flair)
+		const { data, flairs } = await redditFetch.fetchSubredditData(subreddit, pages, flair)
 		dispatch({
 			type: INIT_DATA,
-			data
+			subreddit,
+			data,
+			flairs,
 		})
 	}
 }
