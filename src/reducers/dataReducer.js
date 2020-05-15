@@ -1,6 +1,6 @@
 import redditFetch from '../services/redditFetch'
 
-const INIT_DATA = 'INIT_DATA'
+const FETCH_DATA = 'FETCH_DATA'
 
 ////////////////////////
 // Reducer
@@ -8,7 +8,7 @@ const INIT_DATA = 'INIT_DATA'
 
 const dataReducer = (state = [], action) => {
 	switch (action.type) {
-	case INIT_DATA: {
+	case FETCH_DATA: {
 		const newState = { ...state }
 		newState[action.subreddit] = {
 			data: action.data,
@@ -25,11 +25,11 @@ const dataReducer = (state = [], action) => {
 // Actions
 ////////////////////////
 
-export const initializeData = (subreddit, pages, flair) => {
+export const fetchData = (subreddit, pages, flair) => {
 	return async dispatch => {
 		const { data, flairs } = await redditFetch.fetchSubredditData(subreddit, pages, flair)
 		dispatch({
-			type: INIT_DATA,
+			type: FETCH_DATA,
 			subreddit,
 			data,
 			flairs,

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeData } from './reducers/dataReducer'
+import { fetchData } from './reducers/dataReducer'
 
 const App = () => {
 	const dispatch = useDispatch()
 	useEffect(() => {
-		dispatch(initializeData('wallstreetbets', 1))
+		dispatch(fetchData('wallstreetbets', 1))
 	}, [dispatch])
 
 	const state = useSelector(state => state.data)
