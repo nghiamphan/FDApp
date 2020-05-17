@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { fetchData } from './reducers/dataReducer'
+import SearchForm from './components/SearchForm'
 
 const App = () => {
 	const dispatch = useDispatch()
@@ -8,20 +9,9 @@ const App = () => {
 		dispatch(fetchData('wallstreetbets', 1))
 	}, [dispatch])
 
-	const state = useSelector(state => state.data)
-	const data = state['wallstreetbets']
-		? state['wallstreetbets'].data
-		: []
-
 	return (
 		<div className="App">
-			{data.map(post => (
-				<div key={post.id}>
-					{post.title}
-					<br/>
-					Content: {post.content}<br/><br/>
-				</div>
-			))}
+			<SearchForm/>
 		</div>
 	)
 }
