@@ -8,7 +8,7 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 	let after = ''
 
 	for (let i = 0; i < pages; i++) {
-		const url = flairQuery
+		const url = (flairQuery && flairQuery !== 'All')
 			? `${baseUrl}/r/${subreddit}/search.json?sort=new&q=flair:${flairQuery}&restrict_sr=on&limit=100&after=${after}`
 			: `${baseUrl}/r/${subreddit}.json?limit=100&after=${after}`
 		const response = await axios.get(url)

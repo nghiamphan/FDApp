@@ -10,7 +10,7 @@ const SearchForm = () => {
 	const flairs = useSelector(state => state.data['wallstreetbets'].flairs)
 
 	const onSubmit = input => {
-		dispatch(fetchData(input.subreddit, 1))
+		dispatch(fetchData(input.subreddit, 1, input.flair))
 		dispatch(updateFilter(input.ticker, input.subreddit, input.flair))
 	}
 
