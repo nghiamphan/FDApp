@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { fetchFlairs } from './reducers/dataReducer'
 import SearchForm from './components/SearchForm'
+import DisplayResult from './components/DisplayResult'
 
 const App = () => {
 	const dispatch = useDispatch()
@@ -12,6 +13,7 @@ const App = () => {
 	return (
 		<div className="App">
 			<SearchForm/>
+			<DisplayResult/>
 		</div>
 	)
 }
