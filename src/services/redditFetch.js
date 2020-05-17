@@ -17,6 +17,7 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 			id: thread.data.id,
 			title: thread.data.title,
 			content: thread.data.selftext,
+			content_html: thread.data.selftext_html,
 			flair: thread.data.link_flair_text,
 			ups: thread.data.ups,
 			upvote_ratio: thread.data.upvote_ratio,
@@ -67,6 +68,7 @@ const preorderTreeTraversal = (array, root) => {
 			array.push({
 				id: root.data.id,
 				content: root.data.body,
+				content_html: root.data.body_html,
 				ups: root.data.ups,
 				link: root.data.permalink,
 				created_utc: root.data.created_utc,
