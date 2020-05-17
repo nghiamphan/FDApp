@@ -6,7 +6,14 @@ const FETCH_DATA = 'FETCH_DATA'
 // Reducer
 ////////////////////////
 
-const dataReducer = (state = {}, action) => {
+const initialState = {
+	wallstreetbets: {
+		data: [],
+		flairs: []
+	}
+}
+
+const dataReducer = (state = initialState, action) => {
 	switch (action.type) {
 	case FETCH_DATA: {
 		const newState = { ...state }
