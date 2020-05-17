@@ -21,7 +21,7 @@ const SearchForm = () => {
 				<input
 					type="text"
 					name="ticker"
-					ref={register({ required: true })}
+					ref={register()}
 				/>
 				<br/>
 				<label>Subreddit</label>
