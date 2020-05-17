@@ -1,4 +1,5 @@
 import redditFetch from '../services/redditFetch'
+import { subreddits } from '../utils/constants'
 
 const FETCH_DATA = 'FETCH_DATA'
 const FETCH_FLAIRS = 'FETCH_FLAIRS'
@@ -7,16 +8,15 @@ const FETCH_FLAIRS = 'FETCH_FLAIRS'
 // Reducer
 ////////////////////////
 
-const initialState = {
-	wallstreetbets: {
+const initialState = {}
+
+subreddits.map(subreddit => {
+	initialState[subreddit] = {
 		data: [],
-		flairs: []
-	},
-	investing: {
-		data: [],
-		flairs: []
+		flairs: [],
 	}
-}
+	return 0
+})
 
 const dataReducer = (state = initialState, action) => {
 	switch (action.type) {

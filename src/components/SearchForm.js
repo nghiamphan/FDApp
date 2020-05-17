@@ -3,21 +3,20 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchData } from '../reducers/dataReducer'
 import { updateFilter } from '../reducers/filterReducer'
+import { subreddits, wsb } from '../utils/constants'
 
 const SearchForm = () => {
 	const { register, handleSubmit, } = useForm()
 
 	const dispatch = useDispatch()
-	const flairs = useSelector(state => state.data['wallstreetbets'].flairs)
-
-	const subreddits = ['wallstreetbets', 'investing']
+	const flairs = useSelector(state => state.data[wsb].flairs)
 
 	const onSubmit = input => {
 		let subredditsToFetch = []
 		for (let i = 0; i < subreddits.length; i++) {
 			if (input.subreddits[i]) {
 				subredditsToFetch.push(subreddits[i])
-				subreddits[i] === 'wallstreetbets'
+				subreddits[i] === wsb
 					? dispatch(fetchData(subreddits[i], 1, input.flair))
 					: dispatch(fetchData(subreddits[i], 1))
 			}
