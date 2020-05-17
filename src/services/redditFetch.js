@@ -4,7 +4,6 @@ const baseUrl = 'https://www.reddit.com'
 
 const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 	let aggregateData = []
-	let flairs = []
 	let after = ''
 
 	for (let i = 0; i < pages; i++) {
@@ -13,24 +12,18 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 			: `${baseUrl}/r/${subreddit}.json?limit=100&after=${after}`
 		const response = await axios.get(url)
 		after = response.data.data.after
-		const data = response.data.data.children.map(thread => {
-			const flair = thread.data.link_flair_text
-			if (!flairs.includes(flair) && flair) {
-				flairs.push(flair)
-			}
 
-			return {
-				id: thread.data.id,
-				title: thread.data.title,
-				content: thread.data.selftext,
-				flair: thread.data.link_flair_text,
-				ups: thread.data.ups,
-				upvote_ratio: thread.data.upvote_ratio,
-				link: thread.data.permalink,
-				created_utc: thread.data.created_utc,
-				comments: []
-			}
-		})
+		const data = response.data.data.children.map(thread => ({
+			id: thread.data.id,
+			title: thread.data.title,
+			content: thread.data.selftext,
+			flair: thread.data.link_flair_text,
+			ups: thread.data.ups,
+			upvote_ratio: thread.data.upvote_ratio,
+			link: thread.data.permalink,
+			created_utc: thread.data.created_utc,
+			comments: []
+		}))
 
 		const promiseArray = response.data.data.children.map(thread => {
 			const threadUrl = baseUrl + thread.data.permalink.substring(0, thread.data.permalink.length-1) + '.json'
@@ -45,12 +38,23 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 		}
 		aggregateData = aggregateData.concat(data)
 	}
+
+	return aggregateData
+}
+
+const fetchFlairs = async (subreddit) => {
+	let flairs = []
+	const response = await axios.get(`${baseUrl}/r/${subreddit}.json?limit=100`)
+	response.data.data.children.map(thread => {
+		const flair = thread.data.link_flair_text
+		if (!flairs.includes(flair) && flair) {
+			flairs.push(flair)
+		}
+		return 0
+	})
 	flairs.sort()
 
-	return {
-		data: aggregateData,
-		flairs: flairs
-	}
+	return flairs
 }
 
 //////////////////////////////
@@ -76,5 +80,6 @@ const preorderTreeTraversal = (array, root) => {
 }
 
 export default {
-	fetchSubredditData
+	fetchSubredditData,
+	fetchFlairs,
 }
