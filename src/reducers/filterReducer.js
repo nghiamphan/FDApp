@@ -6,7 +6,7 @@ const UPDATE_FILTER = 'UPDATE_FILTER'
 
 const initialState = {
 	ticker: null,
-	subreddit: null,
+	subreddits: [],
 	flair: null,
 }
 
@@ -15,7 +15,7 @@ const filterReducer = (state = initialState, action) => {
 	case UPDATE_FILTER:
 		return {
 			ticker: action.ticker,
-			subreddit: action.subreddit,
+			subreddits: action.subreddits,
 			flair: action.flair,
 		}
 	default:
@@ -27,10 +27,10 @@ const filterReducer = (state = initialState, action) => {
 // Actions
 ////////////////////////
 
-export const updateFilter = (ticker, subreddit, flair) => ({
+export const updateFilter = (ticker, subreddits, flair) => ({
 	type: UPDATE_FILTER,
 	ticker,
-	subreddit,
+	subreddits,
 	flair,
 })
 

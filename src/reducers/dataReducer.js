@@ -11,6 +11,10 @@ const initialState = {
 	wallstreetbets: {
 		data: [],
 		flairs: []
+	},
+	investing: {
+		data: [],
+		flairs: []
 	}
 }
 

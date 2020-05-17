@@ -13,7 +13,7 @@ const App = () => {
 	return (
 		<div className="App">
 			<SearchForm/>
-			<DisplayResult/>
+			{/* <DisplayResult/> */}
 		</div>
 	)
 }

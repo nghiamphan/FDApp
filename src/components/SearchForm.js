@@ -6,12 +6,24 @@ import { updateFilter } from '../reducers/filterReducer'
 
 const SearchForm = () => {
 	const { register, handleSubmit, } = useForm()
+
 	const dispatch = useDispatch()
 	const flairs = useSelector(state => state.data['wallstreetbets'].flairs)
 
+	const subreddits = ['wallstreetbets', 'investing']
+
 	const onSubmit = input => {
-		dispatch(fetchData(input.subreddit, 1, input.flair))
-		dispatch(updateFilter(input.ticker, input.subreddit, input.flair))
+		let subredditsToFetch = []
+		for (let i = 0; i < subreddits.length; i++) {
+			if (input.subreddits[i]) {
+				subredditsToFetch.push(subreddits[i])
+				subreddits[i] === 'wallstreetbets'
+					? dispatch(fetchData(subreddits[i], 1, input.flair))
+					: dispatch(fetchData(subreddits[i], 1))
+			}
+		}
+
+		dispatch(updateFilter(input.ticker, subredditsToFetch, input.flair))
 	}
 
 	return (
@@ -24,12 +36,19 @@ const SearchForm = () => {
 					ref={register()}
 				/>
 				<br/>
-				<label>Subreddit</label>
-				<input
-					type="text"
-					name="subreddit"
-					ref={register({ required: true })}
-				/>
+				<label>Subreddits</label>
+				{subreddits.map((subreddit, index) => (
+					<div key={index}>
+						<input
+							type="checkbox"
+							name={`subreddits[${index}]`}
+							ref={register()}
+						/>
+						<label>{subreddits[index]}</label>
+					</div>
+				))
+
+				}
 				<br/>
 				<label>Flair</label>
 
