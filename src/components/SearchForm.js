@@ -1,12 +1,13 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchData } from '../reducers/dataReducer'
 import { updateFilter } from '../reducers/filterReducer'
 
 const SearchForm = () => {
 	const { register, handleSubmit, } = useForm()
 	const dispatch = useDispatch()
+	const flairs = useSelector(state => state.data['wallstreetbets'].flairs)
 
 	const onSubmit = input => {
 		dispatch(fetchData(input.subreddit, 1))
@@ -31,12 +32,17 @@ const SearchForm = () => {
 				/>
 				<br/>
 				<label>Flair</label>
-				<input
-					type="text"
+
+				<select
 					title="Only applicable to /r/wallstreetbets"
 					name="flair"
 					ref={register()}
-				/>
+				>
+					<option value="All">All</option>
+					{flairs.map((flair, index) => (
+						<option key={index} value={flair}>{flair}</option>
+					))}
+				</select>
 				<br/>
 				<button type="submit">Search</button>
 			</form>
