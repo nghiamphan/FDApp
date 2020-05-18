@@ -5,6 +5,11 @@
 .post-card {
 	background-color: aquamarine;
 	margin: 15px 0px 0px 0px;
-	padding: 5px 15px 15px 15px;
+	padding: 15px 15px 15px 15px;
 	border-radius: 10px;
+}
+
+.toggle-button {
+	background-color: transparent;
+	border: 0px;
 }
