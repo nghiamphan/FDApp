@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import search from '../utils/search'
+import displayDate from '../utils/displayDate'
 
 const DisplayResult = () => {
 	const filter = useSelector(state => state.filter)
@@ -13,7 +14,7 @@ const DisplayResult = () => {
 				<div key={thread.id}>
 					<h3>{thread.title}</h3>
 					Subreddit: {thread.subreddit} &nbsp;
-					Date: {thread.created_utc} &nbsp;
+					Date: {displayDate(thread.created_utc)} &nbsp;
 					Ups: {thread.ups} &nbsp;
 					Flair: {thread.flair} &nbsp;
 					<a href={`https://www.reddit.com${thread.link}`} target="_">Link</a>
