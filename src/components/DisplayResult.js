@@ -11,7 +11,7 @@ const DisplayResult = () => {
 	return (
 		<div>
 			{dataToDisplay.map(thread => (
-				<div key={thread.id}>
+				<div key={thread.id} className="post-card">
 					<h3>{thread.title}</h3>
 					Subreddit: {thread.subreddit} &nbsp;
 					Date: {displayDate(thread.created_utc)} &nbsp;
