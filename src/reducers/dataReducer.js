@@ -4,6 +4,7 @@ import { subreddits } from '../utils/constants'
 const FETCH_DATA = 'FETCH_DATA'
 const FETCH_FLAIRS = 'FETCH_FLAIRS'
 const TOGGLE_DISPLAY_POST = 'TOGGLE_DISPLAY_POST'
+const UPDATE_HTML = 'UPDATE_HTML'
 
 ////////////////////////
 // Reducer
@@ -40,6 +41,15 @@ const dataReducer = (state = initialState, action) => {
 		)
 		return newState
 	}
+	case UPDATE_HTML: {
+		const newState = { ...state }
+		newState[action.subreddit].data = newState[action.subreddit].data.map(thread =>
+			thread.id === action.id
+				? { ...thread, content_html: action.contentHtml, html_processed: true }
+				: thread
+		)
+		return newState
+	}
 	default:
 		return state
 	}
@@ -59,6 +69,7 @@ export const fetchData = (subreddit, pages, flair, display_post) => {
 				...thread,
 				display_post: display_post,
 				display_comments: false,
+				html_processed: false,
 			})),
 		})
 	}
@@ -79,6 +90,13 @@ export const toggleDisplayPost = (subreddit, id) => ({
 	type: TOGGLE_DISPLAY_POST,
 	subreddit,
 	id,
+})
+
+export const updateHtml = (subreddit, id, contentHtml) => ({
+	type: UPDATE_HTML,
+	subreddit,
+	id,
+	contentHtml,
 })
 
 export default dataReducer
