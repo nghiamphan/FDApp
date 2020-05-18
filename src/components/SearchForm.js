@@ -17,8 +17,8 @@ const SearchForm = () => {
 			if (input.subreddits[i]) {
 				subredditsToFetch.push(subreddits[i])
 				subreddits[i] === wsb
-					? dispatch(fetchData(subreddits[i], 1, input.flair))
-					: dispatch(fetchData(subreddits[i], 1))
+					? dispatch(fetchData(subreddits[i], 1, input.flair, input.display_post))
+					: dispatch(fetchData(subreddits[i], 1, null, input.display_post))
 			}
 		}
 
@@ -61,6 +61,14 @@ const SearchForm = () => {
 						<option key={index} value={flair}>{flair}</option>
 					))}
 				</select>
+				<br/>
+				<label>Show Post Content</label>
+				<input
+					type="checkbox"
+					title="If chosen, post content will be shown by default"
+					name="display_post"
+					ref={register()}
+				/>
 				<br/>
 				<button type="submit">Search</button>
 			</form>

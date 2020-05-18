@@ -49,7 +49,7 @@ const dataReducer = (state = initialState, action) => {
 // Actions
 ////////////////////////
 
-export const fetchData = (subreddit, pages, flair) => {
+export const fetchData = (subreddit, pages, flair, display_post) => {
 	return async dispatch => {
 		const data = await redditFetch.fetchSubredditData(subreddit, pages, flair)
 		dispatch({
@@ -57,7 +57,7 @@ export const fetchData = (subreddit, pages, flair) => {
 			subreddit,
 			data: data.map(thread => ({
 				...thread,
-				display_post: false,
+				display_post: display_post,
 				display_comments: false,
 			})),
 		})
