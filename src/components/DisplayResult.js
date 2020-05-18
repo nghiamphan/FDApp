@@ -1,19 +1,18 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import search from '../utils/search'
 
 const DisplayResult = () => {
 	const filter = useSelector(state => state.filter)
-	const dataToDisplay = useSelector(state => {
-		return state.data[filter.subreddit]
-			?  state.data[filter.subreddit].data
-			: []
-	})
+	const data = useSelector(state => state.data)
+	const dataToDisplay = search(filter, data, true)
 
 	return (
 		<div>
 			{dataToDisplay.map(thread => (
 				<div key={thread.id}>
 					<h3>{thread.title}</h3>
+					Subreddit: {thread.subreddit} &nbsp;
 					Date: {thread.created_utc} &nbsp;
 					Ups: {thread.ups} &nbsp;
 					Flair: {thread.flair} &nbsp;
