@@ -35,4 +35,33 @@ const search = (filter, data, includeComments) => {
 	return matches
 }
 
+/**
+ * Search all tickers appearing in a post and its comments
+ * @param tickers an array of tickers
+ * @param thread data of a post including title, post content and comments
+ */
+
+export const searchTicker = (tickers, thread) => {
+	let matches = []
+	for (let i=0; i < tickers.length; i++) {
+		const ticker = tickers[i]
+		if (thread.title.match(` ${ticker}`)) {
+			matches.push(ticker)
+			continue
+		}
+		if (thread.content.match(` ${ticker}`)) {
+			matches.push(ticker)
+			continue
+		}
+		const comments = thread.comments
+		for (let j = 0; j < comments.length; j++) {
+			if (comments[j].content.match(` ${ticker}`)) {
+				matches.push(ticker)
+				break
+			}
+		}
+	}
+	return matches
+}
+
 export default search

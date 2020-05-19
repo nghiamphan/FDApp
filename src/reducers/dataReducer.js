@@ -5,6 +5,7 @@ const FETCH_DATA = 'FETCH_DATA'
 const FETCH_FLAIRS = 'FETCH_FLAIRS'
 const TOGGLE_DISPLAY_POST = 'TOGGLE_DISPLAY_POST'
 const UPDATE_HTML = 'UPDATE_HTML'
+const PROCESS_TICKERS = 'PROCESS_TICKERS'
 
 ////////////////////////
 // Reducer
@@ -50,6 +51,15 @@ const dataReducer = (state = initialState, action) => {
 		)
 		return newState
 	}
+	case PROCESS_TICKERS: {
+		const newState = { ...state }
+		newState[action.subreddit].data = newState[action.subreddit].data.map(thread =>
+			thread.id === action.id
+				? { ...thread, tickers: action.tickers }
+				: thread
+		)
+		return newState
+	}
 	default:
 		return state
 	}
@@ -70,6 +80,7 @@ export const fetchData = (subreddit, pages, flair, display_post) => {
 				display_post: display_post,
 				display_comments: false,
 				html_processed: false,
+				tickers: null, // tickers that appear in the content
 			})),
 		})
 	}
@@ -97,6 +108,13 @@ export const updateHtml = (subreddit, id, contentHtml) => ({
 	subreddit,
 	id,
 	contentHtml,
+})
+
+export const processTickers = (subreddit, id, tickers) => ({
+	type: PROCESS_TICKERS,
+	subreddit,
+	id,
+	tickers,
 })
 
 export default dataReducer
