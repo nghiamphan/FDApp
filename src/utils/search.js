@@ -45,17 +45,18 @@ export const searchTicker = (tickers, thread) => {
 	let matches = []
 	for (let i=0; i < tickers.length; i++) {
 		const ticker = tickers[i]
-		if (thread.title.match(` ${ticker}`)) {
+		const regex = ` ${ticker}[^a-zA-Z0-9_]+`
+		if (thread.title.match(regex)) {
 			matches.push(ticker)
 			continue
 		}
-		if (thread.content.match(` ${ticker}`)) {
+		if (thread.content.match(regex)) {
 			matches.push(ticker)
 			continue
 		}
 		const comments = thread.comments
 		for (let j = 0; j < comments.length; j++) {
-			if (comments[j].content.match(` ${ticker}`)) {
+			if (comments[j].content.match(regex)) {
 				matches.push(ticker)
 				break
 			}
