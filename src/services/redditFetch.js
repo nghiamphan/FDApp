@@ -34,7 +34,7 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 
 		for (let i = 0; i < finished.length; i++) {
 			for (let j = 0; j < finished[i].data[1].data.children.length; j++) {
-				preorderTreeTraversal(data[i].comments, finished[i].data[1].data.children[j])
+				preorderTreeTraversal(data[i].comments, finished[i].data[1].data.children[j], 0)
 			}
 		}
 		aggregateData = aggregateData.concat(data)
@@ -62,7 +62,7 @@ const fetchFlairs = async (subreddit) => {
 // Helpers
 //////////////////////////////
 
-const preorderTreeTraversal = (array, root) => {
+const preorderTreeTraversal = (array, root, commentLevel) => {
 	if (root) {
 		if (root.data.body)
 			array.push({
@@ -72,10 +72,11 @@ const preorderTreeTraversal = (array, root) => {
 				ups: root.data.ups,
 				link: root.data.permalink,
 				created_utc: root.data.created_utc,
+				comment_level: commentLevel,
 			})
 		if (root.data.replies) {
 			for (let i = 0; i < root.data.replies.data.children.length; i++) {
-				preorderTreeTraversal(array, root.data.replies.data.children[i])
+				preorderTreeTraversal(array, root.data.replies.data.children[i], commentLevel+1)
 			}
 		}
 	}
