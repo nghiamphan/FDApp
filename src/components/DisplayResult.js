@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import search, { searchTicker } from '../utils/search'
 import displayDate from '../utils/displayDate'
-import { toggleDisplayPost, processTickers } from '../reducers/dataReducer'
+import { toggleDisplayPost, processTickers, toggleDisplayComments } from '../reducers/dataReducer'
 import companies from '../utils/tickers.json'
 
 const DisplayResult = () => {
@@ -54,6 +54,27 @@ const DisplayResult = () => {
 						{thread.content_html &&
 						<div dangerouslySetInnerHTML={{ __html: new DOMParser().parseFromString(thread.content_html, 'text/html').documentElement.textContent }}/>
 						}
+						<button
+							className="toggle-button"
+							onClick={() => dispatch(toggleDisplayComments(thread.subreddit, thread.id))}
+						>
+							{thread.display_comments
+								? <FontAwesomeIcon icon={faChevronDown} title="Hide Comments"/>
+								: <FontAwesomeIcon icon={faChevronRight} title="Show Comments"/>
+							}
+						</button>
+						{thread.display_comments && (
+							thread.comments.length > 0
+								? thread.comments.map(comment =>  (
+									<div
+										key={comment.id}
+										style={{ paddingLeft: comment.comment_level * 10 }}
+									>
+										{comment.content}
+									</div>
+								))
+								: <div>No comments yet</div>
+						)}
 					</div>
 					}
 				</div>
