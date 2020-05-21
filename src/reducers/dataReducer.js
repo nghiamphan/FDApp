@@ -4,6 +4,7 @@ import { subreddits } from '../utils/constants'
 const FETCH_DATA = 'FETCH_DATA'
 const FETCH_FLAIRS = 'FETCH_FLAIRS'
 const TOGGLE_DISPLAY_POST = 'TOGGLE_DISPLAY_POST'
+const TOGGLE_DISPLAY_COMMENTS = 'TOGGLE_DISPLAY_COMMENTS'
 const UPDATE_HTML = 'UPDATE_HTML'
 const PROCESS_TICKERS = 'PROCESS_TICKERS'
 
@@ -38,6 +39,15 @@ const dataReducer = (state = initialState, action) => {
 		newState[action.subreddit].data = newState[action.subreddit].data.map(thread =>
 			thread.id === action.id
 				? { ...thread, display_post: !thread.display_post }
+				: thread
+		)
+		return newState
+	}
+	case TOGGLE_DISPLAY_COMMENTS: {
+		const newState = { ...state }
+		newState[action.subreddit].data = newState[action.subreddit].data.map(thread =>
+			thread.id === action.id
+				? { ...thread, display_comments: !thread.display_comments }
 				: thread
 		)
 		return newState
@@ -99,6 +109,12 @@ export const fetchFlairs = (subreddit) => {
 
 export const toggleDisplayPost = (subreddit, id) => ({
 	type: TOGGLE_DISPLAY_POST,
+	subreddit,
+	id,
+})
+
+export const toggleDisplayComments = (subreddit, id) => ({
+	type: TOGGLE_DISPLAY_COMMENTS,
 	subreddit,
 	id,
 })
