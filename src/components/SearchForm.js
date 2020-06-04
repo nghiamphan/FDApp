@@ -17,8 +17,8 @@ const SearchForm = () => {
 			if (input.subreddits[i]) {
 				subredditsToFetch.push(subreddits[i])
 				subreddits[i] === wsb
-					? dispatch(fetchData(subreddits[i], 1, input.flair, input.display_post))
-					: dispatch(fetchData(subreddits[i], 1, null, input.display_post))
+					? dispatch(fetchData(subreddits[i], input.pages, input.flair, input.display_post))
+					: dispatch(fetchData(subreddits[i], input.pages, null, input.display_post))
 			}
 		}
 
@@ -60,6 +60,18 @@ const SearchForm = () => {
 					{flairs.map((flair, index) => (
 						<option key={index} value={flair}>{flair}</option>
 					))}
+				</select>
+
+				<br/>
+				<label>Fetched datasize</label>
+				<select
+					title="The amount of threads to be fetched from each subreddit"
+					name="pages"
+					ref={register()}
+				>
+					<option title="100 entries" value="1">Small (recommended)</option>
+					<option title="200 entries" value="2">Medium</option>
+					<option title="300 entries" value="3">Large</option>
 				</select>
 				<br/>
 				<label>Show Post Content</label>
