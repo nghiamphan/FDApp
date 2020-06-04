@@ -27,7 +27,7 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 		}))
 
 		const promiseArray = response.data.data.children.map(thread => {
-			const threadUrl = baseUrl + thread.data.permalink.substring(0, thread.data.permalink.length-1) + '.json'
+			const threadUrl = baseUrl + thread.data.permalink.substring(0, thread.data.permalink.length-1) + '.json?'
 			return axios.get(threadUrl)
 		})
 		const finished = await Promise.all(promiseArray)
