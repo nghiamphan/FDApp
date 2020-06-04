@@ -14,10 +14,27 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 	let after = ''
 
 	for (let i = 0; i < pages; i++) {
-		const url = (flairQuery && flairQuery !== 'All')
-			? `${baseUrl}/r/${subreddit}/search.json?sort=new&q=flair:${flairQuery}&restrict_sr=on&limit=100&after=${after}`
-			: `${baseUrl}/r/${subreddit}.json?limit=100&after=${after}`
-		const response = await axios.get(url)
+		let response
+		if (flairQuery && flairQuery !== 'All') {
+			const url = `${baseUrl}/r/${subreddit}/search.json`
+			response = await axios.get(url, {
+				params: {
+					sort: 'new',
+					q: `flair:${flairQuery}`,
+					restrict_sr: 'on',
+					limit: '100',
+					after: after,
+				}
+			})
+		} else {
+			const url = `${baseUrl}/r/${subreddit}.json`
+			response = await axios.get(url, {
+				params: {
+					limit: '100',
+					after: after,
+				}
+			})
+		}
 		after = response.data.data.after
 
 		const data = response.data.data.children.map(thread => ({
@@ -57,7 +74,9 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 
 const fetchFlairs = async (subreddit) => {
 	let flairs = []
-	const response = await axios.get(`${baseUrl}/r/${subreddit}.json?limit=100`)
+	const response = await axios.get(`${baseUrl}/r/${subreddit}.json`, {
+		params: { limit: '100' }
+	})
 	response.data.data.children.map(thread => {
 		const flair = thread.data.link_flair_text
 		if (!flairs.includes(flair) && flair) {
