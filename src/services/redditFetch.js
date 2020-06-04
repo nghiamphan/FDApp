@@ -2,6 +2,13 @@ import axios from 'axios'
 
 const baseUrl = 'https://www.reddit.com'
 
+/**
+ * Fetch threads from a subreddit, and for each thread, fetch its comments up to level 10. Return the fetch data.
+ * @param subreddit the subreddit to be fetched
+ * @param pages number of pages to be fetched (each page contains 100 threads)
+ * @param flairQuery fetch threads based on their flair (only applicable to WallStreetBets)
+ */
+
 const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 	let aggregateData = []
 	let after = ''
@@ -42,6 +49,11 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 
 	return aggregateData
 }
+
+/**
+ * Return flairs of the 100 hottest threads in a subreddit (only applicable to WallStreetBets).
+ * @param subreddit
+ */
 
 const fetchFlairs = async (subreddit) => {
 	let flairs = []

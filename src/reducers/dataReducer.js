@@ -107,11 +107,20 @@ export const fetchFlairs = (subreddit) => {
 	}
 }
 
+/**
+ * @param subreddit
+ * @param id the id of a thread whose post content is to be toggled on or off
+ */
 export const toggleDisplayPost = (subreddit, id) => ({
 	type: TOGGLE_DISPLAY_POST,
 	subreddit,
 	id,
 })
+
+/**
+ * @param subreddit
+ * @param id the id of a thread whose comments are to be toggled on or off
+ */
 
 export const toggleDisplayComments = (subreddit, id) => ({
 	type: TOGGLE_DISPLAY_COMMENTS,

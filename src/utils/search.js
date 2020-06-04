@@ -1,3 +1,10 @@
+/**
+ * Return a list of threads in given subreddits that contain the searched ticker.
+ * @param filter contains two pieces of information to be used in the function: ticker (case insensitive) and subreddits
+ * @param data Redux store data that includes threads' post and comments
+ * @param {*} includeComments whether to search against the comments
+ */
+
 const search = (filter, data, includeComments) => {
 	const query = filter.ticker
 		? filter.ticker.toLowerCase()
@@ -36,8 +43,8 @@ const search = (filter, data, includeComments) => {
 }
 
 /**
- * Search all tickers appearing in a post and its comments
- * @param tickers an array of tickers
+ * Return all tickers appearing in a post and its comments.
+ * @param tickers an array of predefined tickers (case sensitive)
  * @param thread data of a post including title, post content and comments
  */
 
