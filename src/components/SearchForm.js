@@ -54,72 +54,91 @@ const SearchForm = () => {
 	return (
 		<div>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<label>Ticker</label>
-				<input
-					list="companies"
-					type="text"
-					autoComplete="off"
-					name="ticker"
-					ref={register()}
-				/>
-				<datalist id="companies">
-					{filter().map(match => {
-						return(
-							<option key={match.company.symbol} value={match.company.symbol}>
-								{match.company.name}
-							</option>
-						)})
-					}
-				</datalist>
-				<br/>
-				<label>Subreddits</label>
-				{subreddits.map((subreddit, index) => (
-					<div key={index}>
-						<input
-							type="checkbox"
-							name={`subreddits[${index}]`}
-							ref={register()}
-						/>
-						<label>{subreddits[index]}</label>
+				<div className="flex-container search-form-section">
+					<label className="search-form-section-label">Ticker</label>
+
+					<input
+						className="search-item-input input-styles"
+						list="companies"
+						type="text"
+						placeholder="Search... (optional)"
+						autoComplete="off"
+						name="ticker"
+						ref={register()}
+					/>
+
+					<datalist id="companies">
+						{filter().map(match => {
+							return(
+								<option key={match.company.symbol} value={match.company.symbol}>
+									{match.company.name}
+								</option>
+							)})
+						}
+					</datalist>
+				</div>
+
+				<div className="flex-container search-form-section">
+					<label className="subreddits-section-label">Subreddits</label>
+
+					<div className="subreddits-options">
+						{subreddits.map((subreddit, index) => (
+							<div className="flex-container" key={index}>
+								<input
+									type="checkbox"
+									name={`subreddits[${index}]`}
+									ref={register()}
+								/>
+								<label className="subreddit-option-label">{subreddits[index]}</label>
+							</div>
+						))
+						}
 					</div>
-				))
+				</div>
 
-				}
-				<br/>
-				<label>Flair</label>
+				<div className="flex-container search-form-section">
+					<label className="search-form-section-label">Flair</label>
 
-				<select
-					title="Only applicable to /r/wallstreetbets"
-					name="flair"
-					ref={register()}
-				>
-					<option value="All">All</option>
-					{flairs.map((flair, index) => (
-						<option key={index} value={flair}>{flair}</option>
-					))}
-				</select>
+					<select
+						className="flair-select input-styles"
+						title="Only applicable to /r/wallstreetbets"
+						name="flair"
+						ref={register()}
+					>
+						<option value="All">All</option>
+						{flairs.map((flair, index) => (
+							<option key={index} value={flair}>{flair}</option>
+						))}
+					</select>
+				</div>
 
-				<br/>
-				<label>Fetched datasize</label>
-				<select
-					title="The amount of threads to be fetched from each subreddit"
-					name="pages"
-					ref={register()}
-				>
-					<option title="100 entries" value="1">Small (recommended)</option>
-					<option title="200 entries" value="2">Medium</option>
-					<option title="300 entries" value="3">Large</option>
-				</select>
-				<br/>
-				<label>Show Post Content</label>
-				<input
-					type="checkbox"
-					title="If chosen, post content will be shown by default"
-					name="display_post"
-					ref={register()}
-				/>
-				<br/>
-				<button type="submit">Search</button>
+				<div className="flex-container search-form-section">
+					<label className="search-form-section-label">Fetched datasize</label>
+
+					<select
+						className="datasize-select input-styles"
+						title="The amount of threads to be fetched from each subreddit"
+						name="pages"
+						ref={register()}
+					>
+						<option title="100 entries" value="1">Small (recommended)</option>
+						<option title="200 entries" value="2">Medium</option>
+						<option title="300 entries" value="3">Large</option>
+					</select>
+				</div>
+
+				<div className="flex-container search-form-section">
+					<label className="search-form-section-label">Show Post Content</label>
+
+					<input
+						type="checkbox"
+						title="If chosen, post content will be shown by default"
+						name="display_post"
+						ref={register()}
+					/>
+				</div>
+
+				<button className="search-button" type="submit">Search</button>
 			</form>
 		</div>
 	)

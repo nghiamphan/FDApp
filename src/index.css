@@ -2,6 +2,68 @@
 	padding: 50px 50px 50px 100px;
 }
 
+.flex-container {
+	display: flex;
+}
+
+/********************************
+* Search Form
+********************************/
+.search-form-section {
+	padding-top: 10px;
+}
+
+.input-styles {
+	padding: 5px;
+	font-size: 14px;
+	color: white;
+	background-color: #343a40;
+	border: 1px solid #ced4da;
+	border-radius: 5px;
+}
+
+.search-form-section-label, .subreddits-section-label {
+	flex-basis: 15%;
+	align-self: center;
+	font-weight: 600;
+}
+
+.search-item-input {
+	width: 25%;
+}
+
+.subreddits-section-label {
+	align-self: flex-start;
+}
+
+.subreddits-options {
+	display: flex;
+	flex-direction: column;
+}
+
+.subreddit-option-label {
+	color: #343a40;
+}
+
+.flair-select, .datasize-select {
+	flex-basis: calc(25% + 12px);
+}
+
+.search-button {
+	margin-top: 10px;
+	padding: 5px;
+	width: 80px;
+	border-radius: 5px;
+	color: white;
+	background-color: #343a40;
+	border-color: #343a40;
+}
+
+.search-button:hover {
+  background-color: #000000;
+	border-color: #000000;
+}
+
 .post-card {
 	background-color: aquamarine;
 	margin: 15px 0px 0px 0px;
