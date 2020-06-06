@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VisibilitySensor from 'react-visibility-sensor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import search, { searchTicker } from '../utils/search'
 import displayDate from '../utils/displayDate'
 import { toggleDisplayPost, processTickers, toggleDisplayComments } from '../reducers/dataReducer'
@@ -38,17 +38,58 @@ const DisplayResult = () => {
 				<div key={thread.id} className="post-card">
 					<VisibilitySensor onChange={isVisible => onScrollChange(isVisible, thread)}>
 						<div>
-							<button
-								className="toggle-button"
-								onClick={() => dispatch(toggleDisplayPost(thread.subreddit, thread.id))}
-							>
-								{thread.display_post
-									? <FontAwesomeIcon icon={faChevronDown} title="Hide Post"/>
-									: <FontAwesomeIcon icon={faChevronRight} title="Show Post"/>
-								}
-							</button>
-							{thread.title}
-							<br/>
+							<div className="thread-title">
+								<a
+									href={`https://www.reddit.com${thread.link}`}
+									target="_blank"
+									rel="noopener noreferrer"
+									title="Go to post in Reddit"
+								>
+									{thread.title}
+								</a>
+							</div>
+
+							<div className="thread-details flex-container">
+								<button
+									className="toggle-button"
+									onClick={() => dispatch(toggleDisplayPost(thread.subreddit, thread.id))}
+								>
+									{thread.display_post
+										? <FontAwesomeIcon icon={faChevronDown} title="Hide Post"/>
+										: <FontAwesomeIcon icon={faChevronRight} title="Show Post"/>
+									}
+								</button>
+
+								<div className="thread-subreddit">
+									<a
+										className="thread-subreddit-link"
+										href={`https://www.reddit.com/r/${thread.subreddit}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										title="Subreddit"
+									>
+										{thread.subreddit}
+									</a>
+								</div>
+
+								<div className="thread-date">{displayDate(thread.created_utc)}</div>
+
+								<div className="thread-upvotes" title="Upvotes">
+									<FontAwesomeIcon icon={faArrowUp}/>
+									&nbsp;{thread.ups} ({thread.upvote_ratio*100}%)
+								</div>
+
+								<div className="thread-flair">
+									<a
+										href={`https://www.reddit.com/r/${thread.subreddit}/search?sort=new&restrict_sr=on&q=flair:${thread.flair}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										title="Flair"
+									>
+										{thread.flair}
+									</a>
+								</div>
+							</div>
 
 							{(thread.tickers && thread.tickers.length > 0) &&
 							<>Tickers mentioned: {thread.tickers.map(ticker => (stocks[ticker] && stocks[ticker].show)
@@ -87,18 +128,7 @@ const DisplayResult = () => {
 					</VisibilitySensor>
 					{thread.display_post &&
 					<div>
-						Subreddit: {thread.subreddit} &nbsp;
-						Date: {displayDate(thread.created_utc)} &nbsp;
-						Ups: {thread.ups} &nbsp;
-						Flair: {thread.flair} &nbsp;
-						<a
-							href={`https://www.reddit.com${thread.link}`}
-							target="_blank"
-							rel="noopener noreferrer"
-							title="Go to post in Reddit"
-						>
-							Reddit
-						</a>
+
 						<br/>
 						{thread.content_html &&
 						<div dangerouslySetInnerHTML={{ __html: new DOMParser().parseFromString(thread.content_html, 'text/html').documentElement.textContent }}/>
