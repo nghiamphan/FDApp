@@ -158,12 +158,16 @@ a:hover {
 	background-color: rgb(25, 25, 25);
 	color: lightgray;
 	margin: 5px 0px 5px 0px;
-	padding: 10px 10px 10px 15px;
+	padding: 10px 15px 10px 15px;
 	border-radius: 10px;
 }
 
 .quote-heading {
 	margin-bottom: 10px;
+}
+
+.quote-close-btn {
+	float: right;
 }
 
 .quote-stat {

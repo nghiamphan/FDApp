@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
 
 const StockQuotes = ({ tickers }) => {
@@ -13,13 +15,24 @@ const StockQuotes = ({ tickers }) => {
 		}
 	}
 
+	const onCloseTicker = ticker => {
+		const newState = { ...stocks }
+		newState[ticker].show = false
+		setStocks(newState)
+	}
+
 	return (
 		<div>
 			Mentioned tickers:
 			{(tickers && tickers.length > 0) &&
 			<span>{tickers.map(ticker => (stocks[ticker] && stocks[ticker].show)
 				? <div key={ticker} className="stock-quote-card">
-					<div className="quote-heading"><strong>{ticker}</strong> - {stocks[ticker].description}</div>
+					<div className="quote-heading">
+						<strong>{ticker}</strong> - {stocks[ticker].description}
+						<span className="quote-close-btn" onClick={() => onCloseTicker(ticker)}>
+							<FontAwesomeIcon icon={faTimes}/>
+						</span>
+					</div>
 
 					<div className="flex-container">
 						<div className="quote-stat">
