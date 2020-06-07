@@ -116,9 +116,37 @@ a:hover {
 	border-radius: 2px;
 }
 
+.thread-post {
+	background-color: rgb(5, 5, 5);
+	margin-top: 10px;
+	padding: 10px 10px 10px 15px;
+	border-radius: 10px;
+}
+
+.thread-comment {
+	background-color: rgb(25, 25, 25);
+	margin-top: 10px;
+	padding: 10px 10px 1px 15px;
+	border-radius: 10px;
+}
+
+.comment-details {
+	font-size: 12px;
+}
+
+.comment-date {
+	flex-basis: 15%;
+}
+
+.comment-upvotes {
+	flex-basis: 5%;
+}
+
 .toggle-button {
+	color: white;
 	background-color: transparent;
 	border: 0px;
 	outline: none;
+	padding-left: 0px;
 	width: 25px;
 }

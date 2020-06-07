@@ -126,33 +126,57 @@ const DisplayResult = () => {
 							}
 						</div>
 					</VisibilitySensor>
+
 					{thread.display_post &&
 					<div>
+						{thread.content_html
+							? <div className="thread-post">
+								<div dangerouslySetInnerHTML={{ __html: new DOMParser().parseFromString(thread.content_html, 'text/html').documentElement.textContent }}/>
 
-						<br/>
-						{thread.content_html &&
-						<div dangerouslySetInnerHTML={{ __html: new DOMParser().parseFromString(thread.content_html, 'text/html').documentElement.textContent }}/>
+								<button
+									className="toggle-button"
+									onClick={() => dispatch(toggleDisplayComments(thread.subreddit, thread.id))}
+								>
+									{thread.display_comments
+										? <FontAwesomeIcon icon={faChevronDown} title="Hide Comments"/>
+										: <FontAwesomeIcon icon={faChevronRight} title="Show Comments"/>
+									}
+								</button>
+							</div>
+							: <div className="thread-post">This post does not have any text...</div>
 						}
-						<button
-							className="toggle-button"
-							onClick={() => dispatch(toggleDisplayComments(thread.subreddit, thread.id))}
-						>
-							{thread.display_comments
-								? <FontAwesomeIcon icon={faChevronDown} title="Hide Comments"/>
-								: <FontAwesomeIcon icon={faChevronRight} title="Show Comments"/>
-							}
-						</button>
+
 						{thread.display_comments && (
 							thread.comments.length > 0
 								? thread.comments.map(comment =>  (
 									<div
 										key={comment.id}
-										style={{ paddingLeft: comment.comment_level * 10 }}
+										className="thread-comment"
+										style={{ marginLeft: comment.comment_level * 10 }}
 									>
-										{comment.content}
+										<div className="comment-details flex-container">
+											<div className="comment-date">{displayDate(comment.created_utc)}</div>
+
+											<div className="comment-upvotes" title="Upvotes">
+												<FontAwesomeIcon icon={faArrowUp}/>
+												&nbsp;{comment.ups}
+											</div>
+
+											<div>
+												<a
+													href={`https://www.reddit.com${comment.link}`}
+													target="_blank"
+													rel="noopener noreferrer"
+												>
+													Link
+												</a>
+											</div>
+										</div>
+
+										<div dangerouslySetInnerHTML={{ __html: new DOMParser().parseFromString(comment.content_html, 'text/html').documentElement.textContent }}/>
 									</div>
 								))
-								: <div>No comments yet</div>
+								: <div className="thread-comment">No comments yet...</div>
 						)}
 					</div>
 					}
