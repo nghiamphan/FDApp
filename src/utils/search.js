@@ -49,9 +49,14 @@ const search = (filter, data, includeComments) => {
  */
 
 export const searchTicker = (tickers, thread) => {
+	const ignored = ['A', 'AN', 'ATH', 'AWAY', 'BUY', 'CEO', 'DD', 'GDP', 'IMO', 'ITM', 'RH', 'YOLO']
+
 	let matches = []
 	for (let i=0; i < tickers.length; i++) {
 		const ticker = tickers[i]
+		if (ignored.includes(ticker))
+			continue
+
 		const regex = ` ${ticker}[^a-zA-Z0-9_]+`
 		if (thread.title.match(regex)) {
 			matches.push(ticker)
