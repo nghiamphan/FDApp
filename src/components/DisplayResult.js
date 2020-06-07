@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VisibilitySensor from 'react-visibility-sensor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,8 +6,8 @@ import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-soli
 import search, { searchTicker } from '../utils/search'
 import displayDate from '../utils/displayDate'
 import { toggleDisplayPost, processTickers, toggleDisplayComments } from '../reducers/dataReducer'
-import stockService from '../services/stockService'
 import companies from '../utils/tickers.json'
+import StockQuotes from './StockQuotes'
 
 const DisplayResult = () => {
 	const dispatch = useDispatch()
@@ -16,20 +16,9 @@ const DisplayResult = () => {
 	const dataToDisplay = search(filter, data, true)
 	const tickers = companies.map(company => company.symbol)
 
-	const [stocks, setStocks] = useState({})
-
 	const onScrollChange = (isVisible, thread) => {
 		if (isVisible && !thread.tickers)
 			dispatch(processTickers(thread.subreddit, thread.id, searchTicker(tickers, thread)))
-	}
-
-	const onClickTicker = async ticker => {
-		const quote = await stockService.fetchQuote(ticker)
-		if (quote[ticker]) {
-			const newState = { ...stocks }
-			newState[ticker] = { ...quote[ticker] , show: true }
-			setStocks(newState)
-		}
 	}
 
 	return (
@@ -91,39 +80,7 @@ const DisplayResult = () => {
 								</div>
 							</div>
 
-							{(thread.tickers && thread.tickers.length > 0) &&
-							<>Tickers mentioned: {thread.tickers.map(ticker => (stocks[ticker] && stocks[ticker].show)
-								? <div key={ticker}>
-									{ticker}
-									<br/>
-									Last: {stocks[ticker].lastPrice} <br/>
-									Change: {stocks[ticker].netChange} ({stocks[ticker].netPercentChangeInDouble}%) <br/>
-									Previous Close: {stocks[ticker].closePrice} <br/>
-									Open: {stocks[ticker].openPrice} <br/>
-									Low: {stocks[ticker].lowPrice} <br/>
-									High: {stocks[ticker].highPrice} <br/>
-									52wk Low: {stocks[ticker]['52WkHigh']} <br/>
-									52wk High: {stocks[ticker]['52WkLow']} <br/>
-									P/E: {stocks[ticker].peRatio} <br/>
-									Div. Yield: {stocks[ticker].divYield} <br/>
-									<a
-										href={`https://robinhood.com/stocks/${ticker}`}
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										Robinhood
-									</a> <br/>
-									<a
-										href={`https://finance.yahoo.com/quote/${ticker}`}
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										Yahoo Finance
-									</a>
-								</div>
-								: <span key={ticker} onClick={() => onClickTicker(ticker)}> {ticker}</span>
-							)}</>
-							}
+							<StockQuotes tickers={thread.tickers}/>
 						</div>
 					</VisibilitySensor>
 

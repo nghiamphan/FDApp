@@ -143,10 +143,30 @@ a:hover {
 }
 
 .toggle-button {
-	color: white;
+	color: lightgray;
 	background-color: transparent;
 	border: 0px;
 	outline: none;
 	padding-left: 0px;
 	width: 25px;
+}
+
+/********************************
+* Stock Quote
+********************************/
+.stock-quote-card {
+	background-color: rgb(25, 25, 25);
+	color: lightgray;
+	margin: 5px 0px 5px 0px;
+	padding: 10px 10px 10px 15px;
+	border-radius: 10px;
+}
+
+.quote-heading {
+	margin-bottom: 10px;
+}
+
+.quote-stat {
+	flex-basis: 20%;
+	margin-bottom: 10px;
 }
