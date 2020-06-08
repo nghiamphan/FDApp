@@ -95,7 +95,7 @@ a:hover {
 	font-size: 14px;
 }
 
-.thread-subreddit {
+.thread-author, .thread-subreddit {
 	flex-basis: 10%;
 	align-self: center;
 }
@@ -132,6 +132,10 @@ a:hover {
 
 .comment-details {
 	font-size: 12px;
+}
+
+.comment-author {
+	flex-basis: 10%;
 }
 
 .comment-date {

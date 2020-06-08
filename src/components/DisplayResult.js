@@ -49,9 +49,19 @@ const DisplayResult = () => {
 									}
 								</button>
 
+								<div className="thread-author">
+									<a
+										href={`https://www.reddit.com/user/${thread.author}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										title="Author"
+									>
+										{thread.author}
+									</a>
+								</div>
+
 								<div className="thread-subreddit">
 									<a
-										className="thread-subreddit-link"
 										href={`https://www.reddit.com/r/${thread.subreddit}`}
 										target="_blank"
 										rel="noopener noreferrer"
@@ -112,6 +122,17 @@ const DisplayResult = () => {
 										style={{ marginLeft: comment.comment_level * 10 }}
 									>
 										<div className="comment-details flex-container">
+											<div className="comment-author">
+												<a
+													href={`https://www.reddit.com/user/${comment.author}`}
+													target="_blank"
+													rel="noopener noreferrer"
+													title="Author"
+												>
+													{comment.author}
+												</a>
+											</div>
+
 											<div className="comment-date">{displayDate(comment.created_utc)}</div>
 
 											<div className="comment-upvotes" title="Upvotes">

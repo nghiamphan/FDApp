@@ -39,6 +39,7 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 
 		const data = response.data.data.children.map(thread => ({
 			id: thread.data.id,
+			author: thread.data.author,
 			title: thread.data.title,
 			content: thread.data.selftext,
 			content_html: thread.data.selftext_html,
@@ -98,6 +99,7 @@ const preorderTreeTraversal = (array, root, commentLevel) => {
 		if (root.data.body)
 			array.push({
 				id: root.data.id,
+				author: root.data.author,
 				content: root.data.body,
 				content_html: root.data.body_html,
 				ups: root.data.ups,
