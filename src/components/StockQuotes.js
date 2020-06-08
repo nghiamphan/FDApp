@@ -80,6 +80,11 @@ const StockQuotes = ({ tickers }) => {
 
 					<div className="flex-container">
 						<div className="quote-stat">
+							<label>Volume</label>
+							<div>{stocks[ticker].totalVolume}</div>
+						</div>
+
+						<div className="quote-stat">
 							<label>Price-Earnings Ratio</label>
 							<div>{stocks[ticker].peRatio}</div>
 						</div>
@@ -97,9 +102,7 @@ const StockQuotes = ({ tickers }) => {
 							>
 						Robinhood
 							</a>
-						</div>
-
-						<div className="quote-stat">
+							<br/>
 							<a
 								href={`https://finance.yahoo.com/quote/${ticker}`}
 								target="_blank"
