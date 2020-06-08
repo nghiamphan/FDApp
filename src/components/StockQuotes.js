@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
+import { displayLargeNumber } from '../utils/dataFormat'
 
 const StockQuotes = ({ tickers }) => {
 	const [stocks, setStocks] = useState({})
@@ -81,7 +82,7 @@ const StockQuotes = ({ tickers }) => {
 					<div className="flex-container">
 						<div className="quote-stat">
 							<label>Volume</label>
-							<div>{stocks[ticker].totalVolume}</div>
+							<div>{displayLargeNumber(stocks[ticker].totalVolume)}</div>
 						</div>
 
 						<div className="quote-stat">
