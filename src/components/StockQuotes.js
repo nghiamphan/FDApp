@@ -115,7 +115,14 @@ const StockQuotes = ({ tickers }) => {
 					</div>
 
 				</div>
-				: <span key={ticker} onClick={() => onClickTicker(ticker)}>&nbsp; {ticker}</span>
+				: <span
+					key={ticker}
+					className="mentioned-ticker"
+					title="Get more information about this ticker"
+					onClick={() => onClickTicker(ticker)}
+				>
+					{ticker}
+				</span>
 			)}
 			</span>
 			}

@@ -170,7 +170,22 @@ a:hover {
 	float: right;
 }
 
+.quote-close-btn:hover {
+	cursor: pointer;
+}
+
 .quote-stat {
 	flex-basis: 20%;
 	margin-bottom: 10px;
+}
+
+.mentioned-ticker {
+	display: inline-block;
+	padding: 2px 5px 2px 5px;
+	border-radius: 2px;
+}
+
+.mentioned-ticker:hover {
+	cursor: pointer;
+	background-color: rgb(25, 25, 25);;
 }
