@@ -18,7 +18,7 @@ const DisplayResult = () => {
 
 	const onScrollChange = (isVisible, thread) => {
 		if (isVisible && !thread.tickers)
-			dispatch(processTickers(thread.subreddit, thread.id, searchTicker(tickers, thread)))
+			dispatch(processTickers(thread.subreddit, thread.id, searchTicker(tickers, thread).tickers))
 	}
 
 	return (
