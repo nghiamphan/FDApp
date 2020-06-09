@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { searchTickersAndOptions } from '../utils/search'
 import { displayDate } from '../utils/dataFormat'
-import { toggleDisplayPost, processTickers, toggleDisplayComments } from '../reducers/dataReducer'
+import { toggleDisplayPost, toggleDisplayComments, updateTickersAndOptions } from '../reducers/dataReducer'
 import companies from '../utils/tickers.json'
 import StockQuotes from './StockQuotes'
 
@@ -20,11 +20,13 @@ const DisplayResult = () => {
 		if (filter.subreddits.includes(subreddit))
 			dataToDisplay = dataToDisplay.concat(data[subreddit].data)
 
-	const tickers = companies.map(company => company.symbol)
+	const symbols = companies.map(company => company.symbol)
 
 	const onScrollChange = (isVisible, thread) => {
-		if (isVisible && !thread.tickers)
-			dispatch(processTickers(thread.subreddit, thread.id, searchTickersAndOptions(tickers, thread).tickers))
+		if (isVisible && !thread.tickers) {
+			const { tickers, options } = searchTickersAndOptions(symbols, thread)
+			dispatch(updateTickersAndOptions(thread.subreddit, thread.id, tickers, options))
+		}
 	}
 
 	return (

@@ -5,7 +5,7 @@ const FETCH_DATA = 'FETCH_DATA'
 const FETCH_FLAIRS = 'FETCH_FLAIRS'
 const TOGGLE_DISPLAY_POST = 'TOGGLE_DISPLAY_POST'
 const TOGGLE_DISPLAY_COMMENTS = 'TOGGLE_DISPLAY_COMMENTS'
-const PROCESS_TICKERS = 'PROCESS_TICKERS'
+const UPDATE_TICKERS_AND_OPTIONS = 'UPDATE_TICKERS_AND_OPTIONS'
 
 ////////////////////////
 // Reducer
@@ -51,11 +51,11 @@ const dataReducer = (state = initialState, action) => {
 		)
 		return newState
 	}
-	case PROCESS_TICKERS: {
+	case UPDATE_TICKERS_AND_OPTIONS: {
 		const newState = { ...state }
 		newState[action.subreddit].data = newState[action.subreddit].data.map(thread =>
 			thread.id === action.id
-				? { ...thread, tickers: action.tickers }
+				? { ...thread, tickers: action.tickers, options: action.options }
 				: thread
 		)
 		return newState
@@ -79,7 +79,8 @@ export const fetchData = (subreddit, pages, query, flair, sort, time, display_po
 				...thread,
 				display_post: display_post,
 				display_comments: false,
-				tickers: null, // tickers that appear in the content
+				tickers: null, // an array of tickers that appear in the thread's title, post and comments
+				options: null, // an array of option positions that appear in the thread's title, post and comments
 			})),
 		})
 	}
@@ -117,11 +118,12 @@ export const toggleDisplayComments = (subreddit, id) => ({
 	id,
 })
 
-export const processTickers = (subreddit, id, tickers) => ({
-	type: PROCESS_TICKERS,
+export const updateTickersAndOptions = (subreddit, id, tickers, options) => ({
+	type: UPDATE_TICKERS_AND_OPTIONS,
 	subreddit,
 	id,
 	tickers,
+	options,
 })
 
 export default dataReducer
