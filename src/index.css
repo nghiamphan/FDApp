@@ -45,7 +45,7 @@
 	color: #343a40;
 }
 
-.flair-select, .datasize-select {
+.search-form-section select {
 	flex-basis: calc(25% + 12px);
 }
 

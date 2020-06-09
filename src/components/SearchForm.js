@@ -43,8 +43,8 @@ const SearchForm = () => {
 			if (input.subreddits[i]) {
 				subredditsToFetch.push(subreddits[i])
 				subreddits[i] === wsb
-					? dispatch(fetchData(subreddits[i], input.pages, input.flair, input.display_post))
-					: dispatch(fetchData(subreddits[i], input.pages, null, input.display_post))
+					? dispatch(fetchData(subreddits[i], input.pages, input.query, input.flair, input.sort, input.time, input.display_post))
+					: dispatch(fetchData(subreddits[i], input.pages, input.query, null, input.sort, input.time, input.display_post))
 			}
 		}
 
@@ -62,6 +62,7 @@ const SearchForm = () => {
 						list="companies"
 						type="text"
 						placeholder="Search... (optional)"
+						title="Can search any string, not necessarily a ticker"
 						autoComplete="off"
 						name="ticker"
 						ref={register()}
@@ -100,7 +101,7 @@ const SearchForm = () => {
 					<label className="search-form-section-label">Flair</label>
 
 					<select
-						className="flair-select input-styles"
+						className="input-styles"
 						title="Only applicable to /r/wallstreetbets"
 						name="flair"
 						ref={register()}
@@ -113,11 +114,45 @@ const SearchForm = () => {
 				</div>
 
 				<div className="flex-container search-form-section">
+					<label className="search-form-section-label">Sort</label>
+
+					<select
+						className="input-styles"
+						title="Only applicable if ticker is not empty or flair is not 'All'"
+						name="sort"
+						ref={register()}
+					>
+						<option value="new">New</option>
+						<option value="relevance">Relevance</option>
+						<option value="top">Top</option>
+					</select>
+				</div>
+
+				<div className="flex-container search-form-section">
+					<label className="search-form-section-label">Time</label>
+
+					<select
+						className="input-styles"
+						title="Only applicable if ticker is not empty or flair is not 'All'"
+						defaultValue="week"
+						name="time"
+						ref={register()}
+					>
+						<option value="hour">Past hour</option>
+						<option value="day">Past 24 hours</option>
+						<option value="week">Past week</option>
+						<option value="month">Past month</option>
+						<option value="year">Past year</option>
+						<option value="all">All time</option>
+					</select>
+				</div>
+
+				<div className="flex-container search-form-section">
 					<label className="search-form-section-label">Fetched datasize</label>
 
 					<select
-						className="datasize-select input-styles"
-						title="The amount of threads to be fetched from each subreddit"
+						className="input-styles"
+						title="The maximum amount of threads to be fetched from each subreddit"
 						name="pages"
 						ref={register()}
 					>
