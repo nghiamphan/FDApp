@@ -8,7 +8,7 @@
 export const searchTickersAndOptions = (tickers, thread) => {
 	const ignored = ['A', 'AN', 'ATH', 'AWAY', 'BUY', 'CEO', 'DD', 'GDP', 'IMO', 'ITM', 'RH', 'YOLO']
 
-	let matches = []
+	let tickerMatches = []
 	let optionMatches = []
 	for (const ticker of tickers) {
 		if (ignored.includes(ticker))
@@ -16,24 +16,24 @@ export const searchTickersAndOptions = (tickers, thread) => {
 
 		const regex = ` ${ticker}[^a-zA-Z0-9_]+`
 		if (thread.title.match(regex)) {
-			matches.push(ticker)
+			tickerMatches.push(ticker)
 			optionMatches = optionMatches.concat(searchOptions(ticker, thread.title))
 		}
 		if (thread.content.match(regex)) {
-			if (ticker !== matches[matches.length-1])
-				matches.push(ticker)
+			if (ticker !== tickerMatches[tickerMatches.length-1])
+				tickerMatches.push(ticker)
 			optionMatches = optionMatches.concat(searchOptions(ticker, thread.content))
 		}
 		const comments = thread.comments
 		for (const comment of comments) {
 			if (comment.content.match(regex)) {
-				if (ticker !== matches[matches.length-1])
-					matches.push(ticker)
+				if (ticker !== tickerMatches[tickerMatches.length-1])
+					tickerMatches.push(ticker)
 				optionMatches = optionMatches.concat(searchOptions(ticker, comment.content))
 			}
 		}
 	}
-	return { tickers: matches, options: optionMatches }
+	return { tickers: tickerMatches, options: optionMatches }
 }
 
 /**
