@@ -13,7 +13,7 @@ const baseUrl = 'https://www.reddit.com'
  */
 
 const fetchSubredditData = async (subreddit, pages, query, flair, sort, time) => {
-	let aggregateData = []
+	let returnedThreads = []
 	let after // used to fetched multiple pages
 
 	let queryStr
@@ -49,7 +49,7 @@ const fetchSubredditData = async (subreddit, pages, query, flair, sort, time) =>
 		}
 		after = response.data.data.after
 
-		const data = response.data.data.children.map(thread => ({
+		const savedThread = response.data.data.children.map(thread => ({
 			id: thread.data.id,
 			subreddit: subreddit,
 			author: thread.data.author,
@@ -72,13 +72,13 @@ const fetchSubredditData = async (subreddit, pages, query, flair, sort, time) =>
 
 		for (let i = 0; i < finished.length; i++) {
 			for (let j = 0; j < finished[i].data[1].data.children.length; j++) {
-				preorderTreeTraversal(data[i].comments, finished[i].data[1].data.children[j], 0)
+				preorderTreeTraversal(savedThread[i].comments, finished[i].data[1].data.children[j], 0)
 			}
 		}
-		aggregateData = aggregateData.concat(data)
+		returnedThreads = returnedThreads.concat(savedThread)
 	}
 
-	return aggregateData
+	return returnedThreads
 }
 
 /**

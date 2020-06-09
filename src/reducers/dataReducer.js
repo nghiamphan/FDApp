@@ -15,7 +15,7 @@ const initialState = {}
 
 subreddits.map(subreddit => {
 	initialState[subreddit] = {
-		data: [],
+		threads: [],
 		flairs: [],
 	}
 	return 0
@@ -25,7 +25,7 @@ const dataReducer = (state = initialState, action) => {
 	switch (action.type) {
 	case FETCH_DATA: {
 		const newState = { ...state }
-		newState[action.subreddit].data = action.data
+		newState[action.subreddit].threads = action.threads
 		return newState
 	}
 	case FETCH_FLAIRS: {
@@ -35,7 +35,7 @@ const dataReducer = (state = initialState, action) => {
 	}
 	case TOGGLE_DISPLAY_POST: {
 		const newState = { ...state }
-		newState[action.subreddit].data = newState[action.subreddit].data.map(thread =>
+		newState[action.subreddit].threads = newState[action.subreddit].threads.map(thread =>
 			thread.id === action.id
 				? { ...thread, display_post: !thread.display_post }
 				: thread
@@ -44,7 +44,7 @@ const dataReducer = (state = initialState, action) => {
 	}
 	case TOGGLE_DISPLAY_COMMENTS: {
 		const newState = { ...state }
-		newState[action.subreddit].data = newState[action.subreddit].data.map(thread =>
+		newState[action.subreddit].threads = newState[action.subreddit].threads.map(thread =>
 			thread.id === action.id
 				? { ...thread, display_comments: !thread.display_comments }
 				: thread
@@ -53,7 +53,7 @@ const dataReducer = (state = initialState, action) => {
 	}
 	case UPDATE_TICKERS_AND_OPTIONS: {
 		const newState = { ...state }
-		newState[action.subreddit].data = newState[action.subreddit].data.map(thread =>
+		newState[action.subreddit].threads = newState[action.subreddit].threads.map(thread =>
 			thread.id === action.id
 				? { ...thread, tickers: action.tickers, options: action.options }
 				: thread
@@ -71,11 +71,11 @@ const dataReducer = (state = initialState, action) => {
 
 export const fetchData = (subreddit, pages, query, flair, sort, time, display_post) => {
 	return async dispatch => {
-		const data = await redditFetch.fetchSubredditData(subreddit, pages, query, flair, sort, time)
+		const threads = await redditFetch.fetchSubredditData(subreddit, pages, query, flair, sort, time)
 		dispatch({
 			type: FETCH_DATA,
 			subreddit,
-			data: data.map(thread => ({
+			threads: threads.map(thread => ({
 				...thread,
 				display_post: display_post,
 				display_comments: false,

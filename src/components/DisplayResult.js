@@ -14,11 +14,11 @@ const DisplayResult = () => {
 	const filter = useSelector(state => state.filter)
 	const data = useSelector(state => state.data)
 
-	let dataToDisplay = []
+	let threadsToDisplay = []
 	const subreddits = Object.keys(data)
 	for (const subreddit of subreddits)
 		if (filter.subreddits.includes(subreddit))
-			dataToDisplay = dataToDisplay.concat(data[subreddit].data)
+			threadsToDisplay = threadsToDisplay.concat(data[subreddit].threads)
 
 	const symbols = companies.map(company => company.symbol)
 
@@ -31,7 +31,7 @@ const DisplayResult = () => {
 
 	return (
 		<div>
-			{dataToDisplay.map(thread => (
+			{threadsToDisplay.map(thread => (
 				<div key={thread.id} className="post-card">
 					<VisibilitySensor onChange={isVisible => onScrollChange(isVisible, thread)}>
 						<div>
