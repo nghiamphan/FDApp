@@ -8,13 +8,13 @@ import companies from '../utils/tickers.json'
 
 const SearchForm = () => {
 	const { register, handleSubmit, watch, } = useForm()
-	let searchItem = watch('ticker')
+	let searchItem = watch('query')
 
 	const dispatch = useDispatch()
 	const flairs = useSelector(state => state.data[WSB].flairs)
 
 	// Search the searchItem against the list of companies' symbols and names, and return up to the best six matches
-	const filter = () => {
+	const filterTickers = () => {
 		let matches = []
 		let goodMatches = 0
 
@@ -56,21 +56,21 @@ const SearchForm = () => {
 		<div>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="flex-container search-form-section">
-					<label className="search-form-section-label">Ticker</label>
+					<label className="search-form-section-label">Query</label>
 
 					<input
 						className="search-item-input input-styles"
 						list="companies"
 						type="text"
 						placeholder="Search... (optional)"
-						title="Can search any string, not necessarily a ticker"
+						title="Can search any string, do not need to be a ticker"
 						autoComplete="off"
-						name="ticker"
+						name="query"
 						ref={register()}
 					/>
 
 					<datalist id="companies">
-						{filter().map(match => {
+						{filterTickers().map(match => {
 							return(
 								<option key={match.company.symbol} value={match.company.symbol}>
 									{match.company.name}
