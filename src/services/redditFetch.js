@@ -71,8 +71,8 @@ const fetchSubredditData = async (subreddit, pages, query, flair, sort, time) =>
 		const finished = await Promise.all(promiseArray)
 
 		for (let i = 0; i < finished.length; i++) {
-			for (let j = 0; j < finished[i].data[1].data.children.length; j++) {
-				preorderTreeTraversal(savedThread[i].comments, finished[i].data[1].data.children[j], 0)
+			for (const comment of finished[i].data[1].data.children) {
+				preorderTreeTraversal(savedThread[i].comments, comment, 0)
 			}
 		}
 		returnedThreads = returnedThreads.concat(savedThread)
@@ -121,8 +121,8 @@ const preorderTreeTraversal = (array, root, commentLevel) => {
 				comment_level: commentLevel,
 			})
 		if (root.data.replies) {
-			for (let i = 0; i < root.data.replies.data.children.length; i++) {
-				preorderTreeTraversal(array, root.data.replies.data.children[i], commentLevel+1)
+			for (const childComment of root.data.replies.data.children) {
+				preorderTreeTraversal(array, childComment, commentLevel + 1)
 			}
 		}
 	}
