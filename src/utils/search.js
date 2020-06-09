@@ -54,8 +54,7 @@ export const searchTicker = (tickers, thread) => {
 
 	let matches = []
 	let optionMatches = []
-	for (let i=0; i < tickers.length; i++) {
-		const ticker = tickers[i]
+	for (const ticker of tickers) {
 		if (ignored.includes(ticker))
 			continue
 
@@ -70,11 +69,11 @@ export const searchTicker = (tickers, thread) => {
 			optionMatches = optionMatches.concat(searchOptions(ticker, thread.content))
 		}
 		const comments = thread.comments
-		for (let j = 0; j < comments.length; j++) {
-			if (comments[j].content.match(regex)) {
+		for (const comment of comments) {
+			if (comment.content.match(regex)) {
 				if (ticker !== matches[matches.length-1])
 					matches.push(ticker)
-				optionMatches = optionMatches.concat(searchOptions(ticker, comments[j].content))
+				optionMatches = optionMatches.concat(searchOptions(ticker, comment.content))
 			}
 		}
 	}
