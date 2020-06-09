@@ -81,9 +81,9 @@ const SearchForm = () => {
 				</div>
 
 				<div className="flex-container search-form-section">
-					<label className="subreddits-section-label">Subreddits</label>
+					<label className="checkboxes-section-label">Subreddits</label>
 
-					<div className="subreddits-options">
+					<div className="vertical-flex-container">
 						{SUBREDDITS.map((subreddit, index) => (
 							<div className="flex-container" key={index}>
 								<input
@@ -91,7 +91,7 @@ const SearchForm = () => {
 									name={`subreddits[${index}]`}
 									ref={register()}
 								/>
-								<label className="subreddit-option-label">{SUBREDDITS[index]}</label>
+								<label className="checkbox-label">{SUBREDDITS[index]}</label>
 							</div>
 						))
 						}
@@ -164,14 +164,29 @@ const SearchForm = () => {
 				</div>
 
 				<div className="flex-container search-form-section">
-					<label className="search-form-section-label">Show Post Content</label>
+					<label className="checkboxes-section-label">Display</label>
 
-					<input
-						type="checkbox"
-						title="If chosen, post content will be shown by default"
-						name="display_post"
-						ref={register()}
-					/>
+					<div className="vertical-flex-container">
+						<div className="flex-container">
+							<input
+								type="checkbox"
+								title="If chosen, threads' post content will be shown by default"
+								name="display_post"
+								ref={register()}
+							/>
+							<label  className="checkbox-label">Show Post Content</label>
+						</div>
+
+						<div  className="flex-container">
+							<input
+								type="checkbox"
+								title="If chosen, thread with no text will not be filtered out"
+								name="hide_notext_threads"
+								ref={register()}
+							/>
+							<label  className="checkbox-label">Show no-text Threads</label>
+						</div>
+					</div>
 				</div>
 
 				<button className="search-button" type="submit">Search</button>
