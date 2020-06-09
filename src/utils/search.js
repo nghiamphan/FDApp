@@ -5,7 +5,7 @@
  * @param thread data of a post including title, post content and comments
  */
 
-export const searchTicker = (tickers, thread) => {
+export const searchTickersAndOptions = (tickers, thread) => {
 	const ignored = ['A', 'AN', 'ATH', 'AWAY', 'BUY', 'CEO', 'DD', 'GDP', 'IMO', 'ITM', 'RH', 'YOLO']
 
 	let matches = []

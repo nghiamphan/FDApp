@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import VisibilitySensor from 'react-visibility-sensor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { searchTicker } from '../utils/search'
+import { searchTickersAndOptions } from '../utils/search'
 import { displayDate } from '../utils/dataFormat'
 import { toggleDisplayPost, processTickers, toggleDisplayComments } from '../reducers/dataReducer'
 import companies from '../utils/tickers.json'
@@ -24,7 +24,7 @@ const DisplayResult = () => {
 
 	const onScrollChange = (isVisible, thread) => {
 		if (isVisible && !thread.tickers)
-			dispatch(processTickers(thread.subreddit, thread.id, searchTicker(tickers, thread).tickers))
+			dispatch(processTickers(thread.subreddit, thread.id, searchTickersAndOptions(tickers, thread).tickers))
 	}
 
 	return (
