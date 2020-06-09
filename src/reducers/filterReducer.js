@@ -4,19 +4,18 @@ const UPDATE_FILTER = 'UPDATE_FILTER'
 // Reducer
 ////////////////////////
 
+/**
+ * subreddits: an array of subreddits whose data to be displayed
+ */
 const initialState = {
-	ticker: null,
 	subreddits: [],
-	flair: null,
 }
 
 const filterReducer = (state = initialState, action) => {
 	switch (action.type) {
 	case UPDATE_FILTER:
 		return {
-			ticker: action.ticker,
 			subreddits: action.subreddits,
-			flair: action.flair,
 		}
 	default:
 		return state
@@ -27,11 +26,9 @@ const filterReducer = (state = initialState, action) => {
 // Actions
 ////////////////////////
 
-export const updateFilter = (ticker, subreddits, flair) => ({
+export const updateFilter = (subreddits) => ({
 	type: UPDATE_FILTER,
-	ticker,
 	subreddits,
-	flair,
 })
 
 export default filterReducer

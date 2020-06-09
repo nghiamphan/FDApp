@@ -48,7 +48,7 @@ const SearchForm = () => {
 			}
 		}
 
-		dispatch(updateFilter(input.ticker, subredditsToFetch, input.flair))
+		dispatch(updateFilter(subredditsToFetch))
 	}
 
 	return (
