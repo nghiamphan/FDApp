@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchData } from '../reducers/dataReducer'
 import { updateFilter } from '../reducers/filterReducer'
-import { subreddits, wsb } from '../utils/constants'
+import { SUBREDDITS, WSB } from '../utils/constants'
 import companies from '../utils/tickers.json'
 
 const SearchForm = () => {
@@ -11,7 +11,7 @@ const SearchForm = () => {
 	let searchItem = watch('ticker')
 
 	const dispatch = useDispatch()
-	const flairs = useSelector(state => state.data[wsb].flairs)
+	const flairs = useSelector(state => state.data[WSB].flairs)
 
 	// Search the searchItem against the list of companies' symbols and names, and return up to the best six matches
 	const filter = () => {
@@ -20,14 +20,14 @@ const SearchForm = () => {
 
 		if (searchItem) {
 			searchItem = searchItem.toUpperCase()
-			for (let i = 0; i < companies.length; i++) {
-				const point = companies[i].symbol.indexOf(searchItem)
+			for (const company of companies) {
+				const point = company.symbol.indexOf(searchItem)
 				if (point >= 0) {
-					matches.push({ point: point, company: companies[i] })
+					matches.push({ point: point, company: company })
 					if (point === 0)
 						goodMatches++
-				} else if (companies[i].name.toUpperCase().includes(searchItem)) {
-					matches.push({ point: 10, company: companies[i] })
+				} else if (company.name.toUpperCase().includes(searchItem)) {
+					matches.push({ point: 10, company: company })
 				}
 				if (goodMatches >= 6)
 					break
@@ -39,12 +39,13 @@ const SearchForm = () => {
 
 	const onSubmit = input => {
 		let subredditsToFetch = []
-		for (let i = 0; i < subreddits.length; i++) {
+		for (let i = 0; i < SUBREDDITS.length; i++) {
 			if (input.subreddits[i]) {
-				subredditsToFetch.push(subreddits[i])
-				subreddits[i] === wsb
-					? dispatch(fetchData(subreddits[i], input.pages, input.query, input.flair, input.sort, input.time, input.display_post))
-					: dispatch(fetchData(subreddits[i], input.pages, input.query, null, input.sort, input.time, input.display_post))
+				subredditsToFetch.push(SUBREDDITS[i])
+				const flair = SUBREDDITS[i] === WSB
+					? input.flair
+					: null
+				dispatch(fetchData(SUBREDDITS[i], input.pages, input.query, flair, input.sort, input.time, input.display_post))
 			}
 		}
 
@@ -83,14 +84,14 @@ const SearchForm = () => {
 					<label className="subreddits-section-label">Subreddits</label>
 
 					<div className="subreddits-options">
-						{subreddits.map((subreddit, index) => (
+						{SUBREDDITS.map((subreddit, index) => (
 							<div className="flex-container" key={index}>
 								<input
 									type="checkbox"
 									name={`subreddits[${index}]`}
 									ref={register()}
 								/>
-								<label className="subreddit-option-label">{subreddits[index]}</label>
+								<label className="subreddit-option-label">{SUBREDDITS[index]}</label>
 							</div>
 						))
 						}

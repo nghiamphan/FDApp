@@ -1,5 +1,5 @@
 import redditFetch from '../services/redditFetch'
-import { subreddits } from '../utils/constants'
+import { SUBREDDITS } from '../utils/constants'
 
 const FETCH_DATA = 'FETCH_DATA'
 const FETCH_FLAIRS = 'FETCH_FLAIRS'
@@ -13,7 +13,7 @@ const UPDATE_TICKERS_AND_OPTIONS = 'UPDATE_TICKERS_AND_OPTIONS'
 
 const initialState = {}
 
-subreddits.map(subreddit => {
+SUBREDDITS.map(subreddit => {
 	initialState[subreddit] = {
 		threads: [],
 		flairs: [],

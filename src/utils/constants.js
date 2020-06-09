@@ -1,4 +1,4 @@
-export const subreddits = [
+export const SUBREDDITS = [
 	'WallStreetBets',
 	'Investing',
 	'Stocks',
@@ -6,4 +6,4 @@ export const subreddits = [
 	'Options',
 ]
 
-export const wsb = subreddits[0]
+export const WSB = SUBREDDITS[0]
