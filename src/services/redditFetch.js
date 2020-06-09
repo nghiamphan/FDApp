@@ -3,24 +3,36 @@ import axios from 'axios'
 const baseUrl = 'https://www.reddit.com'
 
 /**
- * Fetch threads from a subreddit, and for each thread, fetch its comments up to level 10. Return the fetch data.
+ * Fetch threads from a subreddit, and for each thread, fetch its comments up to level 10. Return an array of threads.
  * @param subreddit the subreddit to be fetched
  * @param pages number of pages to be fetched (each page contains 100 threads)
- * @param flairQuery fetch threads based on their flair (only applicable to WallStreetBets)
+ * @param query search query
+ * @param flair fetch threads based on their flair. Only applicable to WallStreetBets.
+ * @param sort sort the fetched threads by: 'new', 'relevance' or 'top'. Only relevant if either query is not null or flair is not null or 'All'.
+ * @param time time limit for fetched threads: 'hour', 'day', 'week', 'month', 'year', 'all'. Only relevant if either query is not null or flair is not null or 'All'.
  */
 
-const fetchSubredditData = async (subreddit, pages, flairQuery) => {
+const fetchSubredditData = async (subreddit, pages, query, flair, sort, time) => {
 	let aggregateData = []
-	let after = ''
+	let after // used to fetched multiple pages
+
+	let queryStr
+	if (query && flair && flair !== 'All')
+		queryStr = `${query} flair:${flair}`
+	else if (query)
+		queryStr = `${query}`
+	else if (flair && flair !== 'All')
+		queryStr = `flair:${flair}`
 
 	for (let i = 0; i < pages; i++) {
 		let response
-		if (flairQuery && flairQuery !== 'All') {
+		if (queryStr) {
 			const url = `${baseUrl}/r/${subreddit}/search.json`
 			response = await axios.get(url, {
 				params: {
-					sort: 'new',
-					q: `flair:${flairQuery}`,
+					sort: sort || 'new',
+					q: queryStr,
+					t: time || 'week',
 					restrict_sr: 'on',
 					limit: '100',
 					after: after,
@@ -39,6 +51,7 @@ const fetchSubredditData = async (subreddit, pages, flairQuery) => {
 
 		const data = response.data.data.children.map(thread => ({
 			id: thread.data.id,
+			subreddit: subreddit,
 			author: thread.data.author,
 			title: thread.data.title,
 			content: thread.data.selftext,

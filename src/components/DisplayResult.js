@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import VisibilitySensor from 'react-visibility-sensor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import search, { searchTicker } from '../utils/search'
+import { searchTicker } from '../utils/search'
 import { displayDate } from '../utils/dataFormat'
 import { toggleDisplayPost, processTickers, toggleDisplayComments } from '../reducers/dataReducer'
 import companies from '../utils/tickers.json'
@@ -13,7 +13,13 @@ const DisplayResult = () => {
 	const dispatch = useDispatch()
 	const filter = useSelector(state => state.filter)
 	const data = useSelector(state => state.data)
-	const dataToDisplay = search(filter, data, true)
+
+	let dataToDisplay = []
+	const subreddits = Object.keys(data)
+	for (const subreddit of subreddits)
+		if (filter.subreddits.includes(subreddit))
+			dataToDisplay = dataToDisplay.concat(data[subreddit].data)
+
 	const tickers = companies.map(company => company.symbol)
 
 	const onScrollChange = (isVisible, thread) => {

@@ -1,48 +1,4 @@
 /**
- * Return a list of threads in given subreddits that contain the searched ticker.
- * @param filter contains two pieces of information to be used in the function: ticker (case insensitive) and subreddits
- * @param data Redux store data that includes threads' post and comments
- * @param {*} includeComments whether to search against the comments
- */
-
-const search = (filter, data, includeComments) => {
-	const query = filter.ticker
-		? filter.ticker.toLowerCase()
-		: ''
-	const subs = Object.keys(data)
-	let matches = []
-
-	for (let i = 0; i < subs.length; i++) {
-		const subreddit = data[subs[i]]
-		if (filter.subreddits.includes(subs[i])) {
-			for (let j = 0; j < subreddit.data.length; j++) {
-				if (subreddit.data[j].title.toLowerCase().match(query)
-				|| subreddit.data[j].content.toLowerCase().match(query)) {
-					if (includeComments) {
-						const filteredComments = subreddit.data[j].comments.filter(comment =>
-							comment.content.toLowerCase().match(query)
-						)
-						matches.push({
-							...subreddit.data[j],
-							comments: filteredComments,
-							subreddit: subs[i],
-						})
-					} else {
-						matches.push({
-							...subreddit.data[j],
-							comments: [],
-							subreddit: subs[i],
-						})
-					}
-				}
-			}
-		}
-	}
-
-	return matches
-}
-
-/**
  * Return all tickers and option positions appearing in a thread's title, post and comments.
  * More specific: Search a ticker against a thread's title, post and each comment. If it appears in each of these piece of text, search for option position of that ticker in the text that it appears.
  * @param tickers an array of predefined tickers (case sensitive)
@@ -102,5 +58,3 @@ const searchOptions = (ticker, text) => {
 
 	return optionMatches
 }
-
-export default search
