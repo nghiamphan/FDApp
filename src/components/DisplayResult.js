@@ -8,6 +8,7 @@ import { displayDate } from '../utils/dataFormat'
 import { toggleDisplayPost, toggleDisplayComments, updateTickersAndOptions } from '../reducers/dataReducer'
 import companies from '../utils/tickers.json'
 import StockQuotes from './StockQuotes'
+import OptionQuotes from './OptionQuotes'
 
 const DisplayResult = () => {
 	const dispatch = useDispatch()
@@ -97,6 +98,7 @@ const DisplayResult = () => {
 							</div>
 
 							<StockQuotes tickers={thread.tickers}/>
+							<OptionQuotes options={thread.options}/>
 						</div>
 					</VisibilitySensor>
 
