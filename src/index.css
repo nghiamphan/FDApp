@@ -49,6 +49,26 @@
 	flex-basis: 300px;
 }
 
+.search-button {
+	margin-top: 10px;
+	padding: 5px;
+	width: 80px;
+	border-radius: 5px;
+	color: white;
+	background-color: #343a40;
+	border-color: #343a40;
+}
+
+.search-button:hover {
+  background-color: #000000;
+	border-color: #000000;
+	cursor: pointer;
+}
+
+/********************************
+* Search Recommendation
+********************************/
+
 .search-recommendation {
 	font-size: 14px;
 	line-height: 18px;
@@ -65,22 +85,6 @@
 }
 
 .search-recommendation-close:hover {
-	cursor: pointer;
-}
-
-.search-button {
-	margin-top: 10px;
-	padding: 5px;
-	width: 80px;
-	border-radius: 5px;
-	color: white;
-	background-color: #343a40;
-	border-color: #343a40;
-}
-
-.search-button:hover {
-  background-color: #000000;
-	border-color: #000000;
 	cursor: pointer;
 }
 
