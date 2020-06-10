@@ -49,6 +49,25 @@
 	flex-basis: 300px;
 }
 
+.search-recommendation {
+	font-size: 14px;
+	line-height: 18px;
+	color: lightgray;
+	background-color: #343a40;
+	width: 430px;
+	margin-top: 10px;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.search-recommendation-text {
+	flex-grow: 1;
+}
+
+.search-recommendation-close:hover {
+	cursor: pointer;
+}
+
 .search-button {
 	margin-top: 10px;
 	padding: 5px;

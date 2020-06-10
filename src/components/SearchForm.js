@@ -5,6 +5,7 @@ import { fetchData } from '../reducers/dataReducer'
 import { updateFilter } from '../reducers/filterReducer'
 import { SUBREDDITS, WSB } from '../utils/constants'
 import companies from '../utils/tickers.json'
+import SearchRecommendation from './SearchRecommendation'
 
 const SearchForm = () => {
 	const { register, handleSubmit, watch, } = useForm()
@@ -188,6 +189,8 @@ const SearchForm = () => {
 						</div>
 					</div>
 				</div>
+
+				<SearchRecommendation/>
 
 				<button className="search-button" type="submit">Search</button>
 			</form>
