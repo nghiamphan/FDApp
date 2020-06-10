@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchData } from '../reducers/dataReducer'
 import { updateFilter } from '../reducers/filterReducer'
+import { setSearchingInProgress } from '../reducers/metaReducer'
 import { SUBREDDITS, WSB } from '../utils/constants'
 import companies from '../utils/tickers.json'
 import SearchRecommendation from './SearchRecommendation'
@@ -13,6 +14,7 @@ const SearchForm = () => {
 
 	const dispatch = useDispatch()
 	const flairs = useSelector(state => state.data[WSB].flairs)
+	const searchingInProgress = useSelector(state => state.meta.searching_in_progress)
 
 	// Search the searchItem against the list of companies' symbols and names, and return up to the best six matches
 	const filterTickers = () => {
@@ -51,6 +53,7 @@ const SearchForm = () => {
 		}
 
 		dispatch(updateFilter(subredditsToFetch, input.show_notext_threads))
+		dispatch(setSearchingInProgress())
 	}
 
 	return (
@@ -194,6 +197,12 @@ const SearchForm = () => {
 
 				<button className="search-button" type="submit">Search</button>
 			</form>
+
+			{searchingInProgress &&
+			<div className="search-form-section">
+				Searching in progress...
+			</div>
+			}
 		</div>
 	)
 }

@@ -1,7 +1,7 @@
 import redditFetch from '../services/redditFetch'
 import { SUBREDDITS } from '../utils/constants'
 
-const FETCH_DATA = 'FETCH_DATA'
+export const FETCH_DATA = 'FETCH_DATA'
 const FETCH_FLAIRS = 'FETCH_FLAIRS'
 const TOGGLE_DISPLAY_POST = 'TOGGLE_DISPLAY_POST'
 const TOGGLE_DISPLAY_COMMENTS = 'TOGGLE_DISPLAY_COMMENTS'
