@@ -49,7 +49,7 @@ const SearchForm = () => {
 			}
 		}
 
-		dispatch(updateFilter(subredditsToFetch))
+		dispatch(updateFilter(subredditsToFetch, input.show_notext_threads))
 	}
 
 	return (
@@ -170,7 +170,7 @@ const SearchForm = () => {
 						<div className="flex-container">
 							<input
 								type="checkbox"
-								title="If chosen, threads' post content will be shown by default"
+								title="If chosen, threads' content will be shown by default"
 								name="display_post"
 								ref={register()}
 							/>
@@ -180,8 +180,8 @@ const SearchForm = () => {
 						<div  className="flex-container">
 							<input
 								type="checkbox"
-								title="If chosen, thread with no text will not be filtered out"
-								name="hide_notext_threads"
+								title="If chosen, threads with no text will not be filtered out"
+								name="show_notext_threads"
 								ref={register()}
 							/>
 							<label  className="checkbox-label">Show no-text Threads</label>

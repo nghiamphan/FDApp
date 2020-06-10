@@ -16,6 +16,7 @@ const filterReducer = (state = initialState, action) => {
 	case UPDATE_FILTER:
 		return {
 			subreddits: action.subreddits,
+			show_notext_threads: action.show_notext_threads,
 		}
 	default:
 		return state
@@ -26,9 +27,10 @@ const filterReducer = (state = initialState, action) => {
 // Actions
 ////////////////////////
 
-export const updateFilter = (subreddits) => ({
+export const updateFilter = (subreddits, show_notext_threads) => ({
 	type: UPDATE_FILTER,
 	subreddits,
+	show_notext_threads,
 })
 
 export default filterReducer

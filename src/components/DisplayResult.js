@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import VisibilitySensor from 'react-visibility-sensor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { searchTickersAndOptions } from '../utils/search'
+import { filterThreads, searchTickersAndOptions } from '../utils/search'
 import { displayDate } from '../utils/dataFormat'
 import { toggleDisplayPost, toggleDisplayComments, updateTickersAndOptions } from '../reducers/dataReducer'
 import companies from '../utils/tickers.json'
@@ -14,11 +14,7 @@ const DisplayResult = () => {
 	const filter = useSelector(state => state.filter)
 	const data = useSelector(state => state.data)
 
-	let threadsToDisplay = []
-	const subreddits = Object.keys(data)
-	for (const subreddit of subreddits)
-		if (filter.subreddits.includes(subreddit))
-			threadsToDisplay = threadsToDisplay.concat(data[subreddit].threads)
+	const threadsToDisplay = filterThreads(filter, data)
 
 	const symbols = companies.map(company => company.symbol)
 

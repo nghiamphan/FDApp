@@ -1,4 +1,31 @@
 /**
+ * Return an array of threads to be displayed based on filtering parameters.
+ * @param filter contains two information: subreddits whose threads to be display, and whether to display no-text threads
+ * @param data Redux store data that contains fetched threads in format: { 'WallStreetBets' : { threads: [...], }, ... }
+ */
+
+export const filterThreads = (filter, data) => {
+	let threadsToDisplay = []
+
+	const subreddits = Object.keys(data)
+
+	for (const subreddit of subreddits) {
+		if (filter.subreddits.includes(subreddit)) {
+			if (filter.show_notext_threads) {
+				threadsToDisplay = threadsToDisplay.concat(data[subreddit].threads)
+			} else {
+				for (const thread of data[subreddit].threads) {
+					if (thread.content)
+						threadsToDisplay.push(thread)
+				}
+			}
+		}
+	}
+
+	return threadsToDisplay
+}
+
+/**
  * Return all tickers and option positions appearing in a thread's title, post and comments.
  * More specific: Search a ticker against a thread's title, post and each comment. If it appears in each of these piece of text, search for option position of that ticker in the text that it appears.
  * @param tickers an array of predefined tickers (case sensitive)
