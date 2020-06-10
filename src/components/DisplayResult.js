@@ -53,7 +53,7 @@ const DisplayResult = () => {
 									}
 								</button>
 
-								<div className="thread-author">
+								<div className="thread-detail-item">
 									<a
 										href={`https://www.reddit.com/user/${thread.author}`}
 										target="_blank"
@@ -64,7 +64,7 @@ const DisplayResult = () => {
 									</a>
 								</div>
 
-								<div className="thread-subreddit">
+								<div className="thread-detail-item">
 									<a
 										href={`https://www.reddit.com/r/${thread.subreddit}`}
 										target="_blank"
@@ -75,9 +75,9 @@ const DisplayResult = () => {
 									</a>
 								</div>
 
-								<div className="thread-date">{displayDate(thread.created_utc)}</div>
+								<div className="thread-detail-item">{displayDate(thread.created_utc)}</div>
 
-								<div className="thread-upvotes" title="Upvotes">
+								<div className="thread-detail-item" title="Upvotes">
 									<FontAwesomeIcon icon={faArrowUp}/>
 									&nbsp;{thread.ups} ({thread.upvote_ratio*100}%)
 								</div>
@@ -128,7 +128,7 @@ const DisplayResult = () => {
 										style={{ marginLeft: comment.comment_level * 10 }}
 									>
 										<div className="comment-details flex-container">
-											<div className="comment-author">
+											<div className="comment-detail-item">
 												<a
 													href={`https://www.reddit.com/user/${comment.author}`}
 													target="_blank"
@@ -139,9 +139,9 @@ const DisplayResult = () => {
 												</a>
 											</div>
 
-											<div className="comment-date">{displayDate(comment.created_utc)}</div>
+											<div className="comment-detail-item">{displayDate(comment.created_utc)}</div>
 
-											<div className="comment-upvotes" title="Upvotes">
+											<div className="comment-detail-item" title="Upvotes">
 												<FontAwesomeIcon icon={faArrowUp}/>
 												&nbsp;{comment.ups}
 											</div>
