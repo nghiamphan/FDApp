@@ -82,6 +82,7 @@ const DisplayResult = () => {
 									&nbsp;{thread.ups} ({thread.upvote_ratio*100}%)
 								</div>
 
+								{thread.flair &&
 								<div className="thread-flair">
 									<a
 										href={`https://www.reddit.com/r/${thread.subreddit}/search?sort=new&restrict_sr=on&q=flair:${thread.flair}`}
@@ -92,6 +93,7 @@ const DisplayResult = () => {
 										{thread.flair}
 									</a>
 								</div>
+								}
 							</div>
 
 							<StockQuotes tickers={thread.tickers}/>
