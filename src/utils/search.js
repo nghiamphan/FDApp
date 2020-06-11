@@ -79,9 +79,60 @@ const searchOptions = (ticker, text) => {
 	for (const pattern of patterns) {
 		const regex = new RegExp(pattern, 'gi')
 		const matches = text.match(regex)
-		if (matches)
-			optionMatches = optionMatches.concat(matches)
+		if (matches) {
+			for (const match of matches) {
+				const option = extractOption(ticker, match)
+				if (option) {
+					optionMatches.push(option)
+				}
+			}
+		}
 	}
 
 	return optionMatches
+}
+
+/**
+ * Extract information about an option position from the given text: type, strike price and expiration date.
+ * If the expiration date is invalid, return false.
+ * Otherwise, return an option object with the extracted information as its properties.
+ * @param ticker the ticker whose option position appears in the @param text
+ * @param text the string that already contains an option position patterns
+ */
+
+const extractOption = (ticker, text) => {
+	const type = (text.match(new RegExp('C', 'i')) || text.match(new RegExp('Call', 'i')))
+		? 'CALL'
+		: 'PUT'
+
+	const strike = text
+		.match(new RegExp('[0-9.]{1,5}[ ]{0,1}(C|P|Call|Put)', 'gi'))[0]
+		.match(new RegExp('[0-9.]{1,5}', 'g'))[0]
+
+	let [month, day, year] = text
+		.match(new RegExp('[0-9]{1,2}[/][0-9]{1,2}([/][0-9]{1,4}){0,1}', 'gi'))[0]
+		.split('/')
+
+	if (!year)
+		year = new Date().getFullYear()
+	if (month.length === 1)
+		month = '0' + month
+	if (day.length === 1)
+		day.length = '0' + day
+
+	let date = `${year}-${month}-${day}`
+
+	const expiration = new Date(date)
+	if (isNaN(expiration.getTime())) {
+		return false
+	} else if (expiration.getTime() < new Date().getTime()) {
+		date = `${++year}-${month}-${day}`
+	}
+
+	return {
+		ticker: ticker,
+		type: type,
+		strike: strike,
+		date: date,
+	}
 }
