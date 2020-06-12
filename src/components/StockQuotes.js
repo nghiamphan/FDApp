@@ -24,7 +24,7 @@ const StockQuotes = ({ tickers }) => {
 
 	return (
 		<div>
-			Mentioned tickers:
+			<span className="mentioned-tickers-label">Mentioned tickers:</span>
 			{(tickers && tickers.length > 0) &&
 			<span>{tickers.map(ticker => (stocks[ticker] && stocks[ticker].show)
 				? <div key={ticker} className="stock-quote-card">
