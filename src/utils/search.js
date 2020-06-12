@@ -118,7 +118,7 @@ const extractOption = (ticker, text) => {
 	if (month.length === 1)
 		month = '0' + month
 	if (day.length === 1)
-		day.length = '0' + day
+		day = '0' + day
 
 	let date = `${year}-${month}-${day}`
 
