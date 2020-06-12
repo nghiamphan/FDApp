@@ -18,7 +18,7 @@ const fetchQuote = async ticker => {
  * If @param strikeCount == null, the array contains exactly one option at @param strike price.
  * If @param strikeCount > 1, return that amount of options around the at-the-money price (@param strike has no effect).
  */
-export const fetchOptions = async (ticker, type, strike, date, strikeCount) => {
+const fetchOptions = async (ticker, type, strike, date, strikeCount) => {
 	const url = `${baseUrl}/chains`
 	const response = await axios.get(url, {
 		params: {
@@ -83,4 +83,5 @@ const processOptionResponse = (data, type, strike, date) => {
 
 export default {
 	fetchQuote,
+	fetchOptions,
 }

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import VisibilitySensor from 'react-visibility-sensor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { fetchOptions } from '../services/stockService'
+import stockService from '../services/stockService'
 import { filterThreads, searchTickersAndOptions } from '../utils/search'
 import { displayDate } from '../utils/dataFormat'
 import { toggleDisplayPost, toggleDisplayComments, updateTickersAndOptions } from '../reducers/dataReducer'
@@ -27,7 +27,7 @@ const DisplayResult = () => {
 
 			let fetchedOptions = []
 			for (const option of options) {
-				const response = await fetchOptions(option.ticker, option.type, option.strike, option.date)
+				const response = await stockService.fetchOptions(option.ticker, option.type, option.strike, option.date)
 				fetchedOptions.push(response[0])
 			}
 
