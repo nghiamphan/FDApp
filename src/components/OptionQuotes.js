@@ -7,7 +7,7 @@ const OptionQuotes = ({ options }) => {
 			<div>
 				Positions:
 				{options.map((option, index) => (
-					<div key={index}>{option.ticker} {option.type} {option.strike} {option.date}</div>
+					<div key={index}>{option.ticker} {option.type} {option.strike} {option.date} {option.last}</div>
 				))}
 			</div>
 			}
