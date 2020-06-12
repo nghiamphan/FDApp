@@ -28,7 +28,8 @@ const DisplayResult = () => {
 			let fetchedOptions = []
 			for (const option of options) {
 				const response = await stockService.fetchOptions(option.ticker, option.type, option.strike, option.date)
-				fetchedOptions.push(response[0])
+				if (response)
+					fetchedOptions.push(response[0])
 			}
 
 			dispatch(updateTickersAndOptions(thread.subreddit, thread.id, tickers, fetchedOptions))

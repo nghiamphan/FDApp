@@ -33,6 +33,9 @@ const fetchOptions = async (ticker, type, strike, date, strikeCount) => {
 		}
 	})
 
+	if (response.data.status !== 'SUCCESS')
+		return null
+
 	return processOptionResponse(response.data, type, strike, date)
 }
 
