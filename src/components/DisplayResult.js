@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import VisibilitySensor from 'react-visibility-sensor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import stockService from '../services/stockService'
 import { filterThreads, searchTickersAndOptions } from '../utils/search'
 import { displayDate } from '../utils/dataFormat'
 import { toggleDisplayPost, toggleDisplayComments, updateTickersAndOptions } from '../reducers/dataReducer'
@@ -24,15 +23,7 @@ const DisplayResult = () => {
 		// If thread.tickers == null, the thread's content hasn't been scanned for appearance of tickers and options yet.
 		if (isVisible && !thread.tickers) {
 			const { tickers, options } = searchTickersAndOptions(symbols, thread)
-
-			let fetchedOptions = []
-			for (const option of options) {
-				const response = await stockService.fetchOptions(option.ticker, option.type, option.strike, option.date)
-				if (response)
-					fetchedOptions.push(response[0])
-			}
-
-			dispatch(updateTickersAndOptions(thread.subreddit, thread.id, tickers, fetchedOptions))
+			dispatch(updateTickersAndOptions(thread.subreddit, thread.id, tickers, options))
 		}
 	}
 
