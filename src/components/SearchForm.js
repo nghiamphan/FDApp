@@ -206,7 +206,13 @@ const SearchForm = () => {
 
 				{error && <div className="red-text">Choose at least one subrredit.</div>}
 
-				<button className="search-button" type="submit">Search</button>
+				<button
+					className="search-button"
+					type="submit"
+					disabled={searchingInProgress}
+				>
+					Search
+				</button>
 			</form>
 
 			{searchingInProgress &&

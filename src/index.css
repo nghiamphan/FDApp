@@ -64,9 +64,15 @@
 }
 
 .search-button:hover {
-  background-color: #000000;
+	background-color: #000000;
 	border-color: #000000;
 	cursor: pointer;
+}
+
+.search-button:disabled {
+	background-color: #343a40;
+	border-color: #343a40;
+	cursor: not-allowed;
 }
 
 /********************************
