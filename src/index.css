@@ -11,6 +11,10 @@
 	flex-direction: column;
 }
 
+.red-text {
+	color: red;
+}
+
 /********************************
 * Search Form
 ********************************/
@@ -75,7 +79,7 @@
 	color: lightgray;
 	background-color: #343a40;
 	width: 430px;
-	margin-top: 10px;
+	margin: 10px 0px 10px 0px;
 	padding: 10px;
 	border-radius: 5px;
 }

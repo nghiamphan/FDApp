@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchData } from '../reducers/dataReducer'
@@ -9,6 +9,8 @@ import companies from '../utils/tickers.json'
 import SearchRecommendation from './SearchRecommendation'
 
 const SearchForm = () => {
+	const [error, setError] = useState(false)
+
 	const { register, handleSubmit, watch, } = useForm()
 	let searchItem = watch('query')
 
@@ -50,6 +52,13 @@ const SearchForm = () => {
 					: null
 				dispatch(fetchData(SUBREDDITS[i], input.pages, input.query, flair, input.sort, input.time, input.display_post))
 			}
+		}
+
+		if (subredditsToFetch.length === 0) {
+			setError(true)
+			return
+		} else {
+			setError(false)
 		}
 
 		dispatch(updateFilter(subredditsToFetch, input.show_notext_threads))
@@ -194,6 +203,8 @@ const SearchForm = () => {
 				</div>
 
 				<SearchRecommendation/>
+
+				{error && <div className="red-text">Choose at least one subrredit.</div>}
 
 				<button className="search-button" type="submit">Search</button>
 			</form>
