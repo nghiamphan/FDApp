@@ -40,7 +40,7 @@ const DisplayResult = () => {
 									rel="noopener noreferrer"
 									title="Go to post in Reddit"
 								>
-									{thread.title}
+									<div dangerouslySetInnerHTML={{ __html: thread.title }}/>
 								</a>
 							</div>
 
