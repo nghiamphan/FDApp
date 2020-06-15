@@ -176,7 +176,8 @@ a:hover {
 
 .mentioned-tickers-label {
 	display: inline-block;
-	padding: 2px 5px 2px 0px;
+	width: 120px;
+	padding: 2px 0px 2px 0px;
 }
 
 .quote-heading {
@@ -205,4 +206,33 @@ a:hover {
 .mentioned-ticker:hover {
 	cursor: pointer;
 	background-color: rgb(25, 25, 25);;
+}
+
+/********************************
+* Option Quote
+********************************/
+.option-quotes-div {
+	margin-top: 10px;
+}
+
+.positions-label {
+	width: 115px;
+}
+
+.option-display {
+	margin: 0px 0px 10px 0px;
+	padding: 5px 5px 0px 9px;
+	border: lavender solid 1px;
+}
+
+.option-position {
+	display: inline-block;
+	width: 300px;
+	margin-bottom: 15px;
+	font-weight: 600;
+}
+
+.option-stat {
+	width: 100px;
+	margin-bottom: 10px;
 }
