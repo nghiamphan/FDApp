@@ -73,6 +73,11 @@ const dataReducer = (state = initialState, action) => {
 export const fetchData = (subreddit, pages, query, flair, sort, time, display_post) => {
 	return async dispatch => {
 		const threads = await redditFetch.fetchSubredditData(subreddit, pages, query, flair, sort, time)
+		dispatch ({
+			type: FETCH_DATA,
+			subreddit,
+			threads: [],
+		})
 		dispatch({
 			type: FETCH_DATA,
 			subreddit,
