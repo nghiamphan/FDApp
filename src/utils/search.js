@@ -33,33 +33,72 @@ export const filterThreads = (filter, data) => {
  */
 
 export const searchTickersAndOptions = (tickers, thread) => {
-	const ignored = ['A', 'AN', 'ANY', 'AT', 'ATH', 'AWAY', 'BUY', 'CAN', 'CEO', 'DD', 'GDP', 'EPS', 'HUGE', 'IMO', 'IPO', 'IT', 'ITM', 'PM', 'RH', 'TV', 'UI', 'USD', 'YOLO']
+	const commons = [
+		'A', 'ALL', 'AN', 'ANY', 'ARE', 'AT', 'ATH', 'AWAY',
+		'BE', 'BEAT', 'BUY', 'CAN', 'CDC', 'CEO', 'DD', 'DON', 'GDP',
+		'EDIT', 'EPS', 'EV', 'EVER', 'FOR', 'GL', 'GO', 'HOME', 'HOLD', 'HUGE',
+		'IMO', 'ING', 'IP', 'IPO', 'IRS', 'IT', 'ITM', 'JP',
+		'LOAN', 'MEET', 'MS', 'MUST', 'NEW', 'NEXT',
+		'OI', 'ONE', 'OUT', 'PE', 'PM', 'RH', 'TA','TV', 'UI', 'USD', 'VERY', 'YOLO'
+	]
 
 	let tickerMatches = []
 	let optionMatches = []
 	for (const ticker of tickers) {
-		if (ignored.includes(ticker))
-			continue
+		const pattern = `(\\s|^)[$]{0,1}${ticker}[^a-zA-Z0-9_]+`
+		let tickerScore = 0
 
-		const regex = `( |^)[$]{0,1}${ticker}[^a-zA-Z0-9_]+`
-		if (thread.title.match(regex)) {
-			tickerMatches.push(ticker)
-			optionMatches = optionMatches.concat(searchOptions(ticker, thread.title))
+		const titleMatches = thread.title.match(new RegExp(pattern, 'g'))
+		if (titleMatches) {
+			for (const match of titleMatches) {
+				if (match.includes('$'))
+					tickerScore += 10
+				else
+					tickerScore += 3
+			}
+			const options = searchOptions(ticker, thread.title)
+			optionMatches = optionMatches.concat(options)
+			if (options.length > 0)
+				tickerScore += 10
 		}
-		if (thread.content.match(regex)) {
-			if (ticker !== tickerMatches[tickerMatches.length-1])
-				tickerMatches.push(ticker)
-			optionMatches = optionMatches.concat(searchOptions(ticker, thread.content))
+
+		const postMatches = thread.content.match(new RegExp(pattern, 'g'))
+		if (postMatches) {
+			for (const match of postMatches) {
+				if (match.includes('$'))
+					tickerScore += 10
+				else
+					tickerScore += 2
+			}
+			const options = searchOptions(ticker, thread.content)
+			optionMatches = optionMatches.concat(options)
+			if (options.length > 0)
+				tickerScore += 10
 		}
+
 		const comments = thread.comments
 		for (const comment of comments) {
-			if (comment.content.match(regex)) {
-				if (ticker !== tickerMatches[tickerMatches.length-1])
-					tickerMatches.push(ticker)
-				optionMatches = optionMatches.concat(searchOptions(ticker, comment.content))
+			const commentsMatches = comment.content.match(new RegExp(pattern, 'g'))
+			if (commentsMatches) {
+				if (comments.length >= 10)
+					tickerScore += commentsMatches.length * 5 / comments.length
+				else
+					tickerScore += commentsMatches.length
+				const options = searchOptions(ticker, comment.content)
+				optionMatches = optionMatches.concat(options)
+				if (options.length > 0)
+					tickerScore += 10
 			}
 		}
+
+		if (ticker.length === 1 || commons.includes(ticker)) {
+			if (tickerScore >= 10)
+				tickerMatches.push(ticker)
+		}
+		else if (tickerScore >= 2)
+			tickerMatches.push(ticker)
 	}
+
 	return { tickers: tickerMatches, options: optionMatches }
 }
 
