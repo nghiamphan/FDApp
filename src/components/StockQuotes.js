@@ -44,106 +44,107 @@ const StockQuotes = ({ tickers }) => {
 
 	return (
 		<div>
-			<span className="mentioned-tickers-label">Important tickers:</span>
 			{(stocks.length > 0) &&
-			<span>{stocks.map(stock => stock.display
-				? <div key={stock.ticker} className="stock-quote-card">
-					<div className="quote-heading">
-						<strong>{stock.ticker}</strong> - {stock.description}
-						<span className="quote-close-btn" onClick={() => onCloseTicker(stock.ticker)}>
-							<FontAwesomeIcon icon={faTimes}/>
-						</span>
+			<span>
+				<span className="mentioned-tickers-label">Important tickers:</span>
+				{stocks.map(stock => stock.display
+					? <div key={stock.ticker} className="stock-quote-card">
+						<div className="quote-heading">
+							<strong>{stock.ticker}</strong> - {stock.description}
+							<span className="quote-close-btn" onClick={() => onCloseTicker(stock.ticker)}>
+								<FontAwesomeIcon icon={faTimes}/>
+							</span>
+						</div>
+
+						<div className="flex-container">
+							<div className="quote-stat">
+								<label>Last Price</label>
+								<div>{stock.lastPrice}</div>
+							</div>
+
+							<div className="quote-stat">
+								<label>Change</label>
+								<div>{stock.netChange} ({stock.netPercentChangeInDouble}%)</div>
+							</div>
+
+							<div className="quote-stat">
+								<label>Previous Close</label>
+								<div>{stock.closePrice}</div>
+							</div>
+
+							<div className="quote-stat">
+								<label>Open</label>
+								<div>{stock.openPrice}</div>
+							</div>
+						</div>
+
+						<div className="flex-container">
+							<div className="quote-stat">
+								<label>Low Today</label>
+								<div>{stock.lowPrice}</div>
+							</div>
+
+							<div className="quote-stat">
+								<label>High Today</label>
+								<div>{stock.highPrice}</div>
+							</div>
+
+							<div className="quote-stat">
+								<label>52 Weekk Low</label>
+								<div>{stock['52WkLow']}</div>
+							</div>
+
+							<div className="quote-stat">
+								<label>52 Week High</label>
+								<div>{stock['52WkHigh']}</div>
+							</div>
+						</div>
+
+						<div className="flex-container">
+							<div className="quote-stat">
+								<label>Volume</label>
+								<div>{displayLargeNumber(stock.totalVolume)}</div>
+							</div>
+
+							<div className="quote-stat">
+								<label>Price-Earnings Ratio</label>
+								<div>{stock.peRatio}</div>
+							</div>
+
+							<div className="quote-stat">
+								<label>Dividend Yield</label>
+								<div>{stock.divYield}</div>
+							</div>
+
+							<div className="quote-stat">
+								<a
+									href={`https://robinhood.com/stocks/${stock.ticker}`}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									Robinhood
+								</a>
+								<br/>
+								<a
+									href={`https://finance.yahoo.com/quote/${stock.ticker}`}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									Yahoo Finance
+								</a>
+							</div>
+						</div>
+
 					</div>
-
-					<div className="flex-container">
-						<div className="quote-stat">
-							<label>Last Price</label>
-							<div>{stock.lastPrice}</div>
-						</div>
-
-						<div className="quote-stat">
-							<label>Change</label>
-							<div>{stock.netChange} ({stock.netPercentChangeInDouble}%)</div>
-						</div>
-
-						<div className="quote-stat">
-							<label>Previous Close</label>
-							<div>{stock.closePrice}</div>
-						</div>
-
-						<div className="quote-stat">
-							<label>Open</label>
-							<div>{stock.openPrice}</div>
-						</div>
-					</div>
-
-					<div className="flex-container">
-						<div className="quote-stat">
-							<label>Low Today</label>
-							<div>{stock.lowPrice}</div>
-						</div>
-
-						<div className="quote-stat">
-							<label>High Today</label>
-							<div>{stock.highPrice}</div>
-						</div>
-
-						<div className="quote-stat">
-							<label>52 Weekk Low</label>
-							<div>{stock['52WkLow']}</div>
-						</div>
-
-						<div className="quote-stat">
-							<label>52 Week High</label>
-							<div>{stock['52WkHigh']}</div>
-						</div>
-					</div>
-
-					<div className="flex-container">
-						<div className="quote-stat">
-							<label>Volume</label>
-							<div>{displayLargeNumber(stock.totalVolume)}</div>
-						</div>
-
-						<div className="quote-stat">
-							<label>Price-Earnings Ratio</label>
-							<div>{stock.peRatio}</div>
-						</div>
-
-						<div className="quote-stat">
-							<label>Dividend Yield</label>
-							<div>{stock.divYield}</div>
-						</div>
-
-						<div className="quote-stat">
-							<a
-								href={`https://robinhood.com/stocks/${stock.ticker}`}
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Robinhood
-							</a>
-							<br/>
-							<a
-								href={`https://finance.yahoo.com/quote/${stock.ticker}`}
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Yahoo Finance
-							</a>
-						</div>
-					</div>
-
-				</div>
-				: <span
-					key={stock.ticker}
-					className="mentioned-ticker"
-					title="Get more information about this ticker"
-					onClick={() => onClickTicker(stock.ticker)}
-				>
-					{stock.ticker}
-				</span>
-			)}
+					: <span
+						key={stock.ticker}
+						className="mentioned-ticker"
+						title="Get more information about this ticker"
+						onClick={() => onClickTicker(stock.ticker)}
+					>
+						{stock.ticker}
+					</span>
+				)}
 			</span>
 			}
 		</div>
