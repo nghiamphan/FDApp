@@ -232,7 +232,9 @@ a:hover {
 .option-display-open {
 	margin: 5px 0px 5px 0px;
 	padding: 5px 5px 0px 9px;
+	background-color: rgb(25, 25, 25);
 	border: lavender solid 1px;
+	border-radius: 5px;
 }
 
 .option-display-close {
