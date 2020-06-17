@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
-import { displayLargeNumber } from '../utils/dataFormat'
+import { displayLargeNumber, textColorStyle } from '../utils/dataFormat'
 
 const StockQuotes = ({ tickers }) => {
 	/**
@@ -59,12 +59,12 @@ const StockQuotes = ({ tickers }) => {
 						<div className="flex-container">
 							<div className="quote-stat">
 								<label>Last Price</label>
-								<div>{stock.lastPrice}</div>
+								<div style={textColorStyle(stock.netChange)}>{stock.lastPrice}</div>
 							</div>
 
 							<div className="quote-stat">
 								<label>Change</label>
-								<div>{stock.netChange} ({stock.netPercentChangeInDouble}%)</div>
+								<div style={textColorStyle(stock.netChange)}>{stock.netChange} ({stock.netPercentChangeInDouble}%)</div>
 							</div>
 
 							<div className="quote-stat">

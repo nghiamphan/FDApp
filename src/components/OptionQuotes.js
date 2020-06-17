@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
+import { textColorStyle } from '../utils/dataFormat'
 
 const OptionQuotes = ({ optionsParam }) => {
 	/**
@@ -71,12 +72,12 @@ const OptionQuotes = ({ optionsParam }) => {
 									<div className="flex-container">
 										<div className="option-stat">
 											<label>Last</label>
-											<div>{option.last}</div>
+											<div style={textColorStyle(option.percentChange)}>{option.last}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Change</label>
-											<div>{option.percentChange}%</div>
+											<div style={textColorStyle(option.percentChange)}>{option.percentChange}%</div>
 										</div>
 
 										<div className="option-stat">

@@ -12,3 +12,11 @@ export const displayLargeNumber = n => {
 	} else
 		return n
 }
+
+export const textColorStyle = change => {
+	if (change >= 0) {
+		return { color: 'green' }
+	} else {
+		return { color: 'red' }
+	}
+}
