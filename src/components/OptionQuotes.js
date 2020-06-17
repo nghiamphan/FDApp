@@ -147,6 +147,24 @@ const OptionQuotes = ({ optionsParam }) => {
 											<label>Rho</label>
 											<div>{option.rho}</div>
 										</div>
+
+										<div className="option-stat">
+											<a
+												href={`https://robinhood.com/stocks/${option.ticker}`}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												Robinhood
+											</a>
+											<br/>
+											<a
+												href={`https://finance.yahoo.com/quote/${option.ticker}`}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												Yahoo Finance
+											</a>
+										</div>
 									</div>
 								</div>
 								: <span
