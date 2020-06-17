@@ -6,11 +6,16 @@ const baseUrl = 'https://api.tdameritrade.com/v1/marketdata/'
 const apiKey = process.env.REACT_APP_TD_API_KEY
 
 const fetchQuote = async ticker => {
-	const url = `${baseUrl}${ticker}/quotes`
-	const response = await axios.get(url, {
-		params: { apikey: apiKey }
-	})
-	return response.data[ticker]
+	try {
+		const url = `${baseUrl}${ticker}/quotes`
+		const response = await axios.get(url, {
+			params: { apikey: apiKey }
+		})
+		return response.data[ticker]
+	} catch (error) {
+		console.log(error.message)
+		return null
+	}
 }
 
 /**
@@ -19,24 +24,29 @@ const fetchQuote = async ticker => {
  * If @param strikeCount > 1, return that amount of options around the at-the-money price (@param strike has no effect).
  */
 const fetchOptions = async (ticker, type, strike, date, strikeCount) => {
-	const url = `${baseUrl}/chains`
-	const response = await axios.get(url, {
-		params: {
-			apikey: apiKey,
-			symbol: ticker,
-			contractType: type,
-			strike: strike,
-			fromDate: date,
-			toDate: date,
-			strikeCount: strikeCount,
-			includeQuotes: true,
-		}
-	})
+	try {
+		const url = `${baseUrl}/chains`
+		const response = await axios.get(url, {
+			params: {
+				apikey: apiKey,
+				symbol: ticker,
+				contractType: type,
+				strike: strike,
+				fromDate: date,
+				toDate: date,
+				strikeCount: strikeCount,
+				includeQuotes: true,
+			}
+		})
 
-	if (response.data.status !== 'SUCCESS')
+		if (response.data.status !== 'SUCCESS')
+			return null
+
+		return processOptionResponse(response.data, type, strike, date)
+	} catch (error) {
+		console.log(error.message)
 		return null
-
-	return processOptionResponse(response.data, type, strike, date)
+	}
 }
 
 

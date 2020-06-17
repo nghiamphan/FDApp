@@ -14,68 +14,73 @@ const baseUrl = 'https://www.reddit.com'
 
 const fetchSubredditData = async (subreddit, pages, query, flair, sort, time) => {
 	let returnedThreads = []
-	let after // used to fetched multiple pages
 
-	let queryStr
-	if (query && flair && flair !== 'All')
-		queryStr = `${query} flair:${flair}`
-	else if (query)
-		queryStr = `${query}`
-	else if (flair && flair !== 'All')
-		queryStr = `flair:${flair}`
+	try {
+		let after // used to fetched multiple pages
 
-	for (let i = 0; i < pages; i++) {
-		let response
-		if (queryStr) {
-			const url = `${baseUrl}/r/${subreddit}/search.json`
-			response = await axios.get(url, {
-				params: {
-					sort: sort || 'new',
-					q: queryStr,
-					t: time || 'week',
-					restrict_sr: 'on',
-					limit: '100',
-					after: after,
-				}
-			})
-		} else {
-			const url = `${baseUrl}/r/${subreddit}.json`
-			response = await axios.get(url, {
-				params: {
-					limit: '100',
-					after: after,
-				}
-			})
-		}
-		after = response.data.data.after
+		let queryStr
+		if (query && flair && flair !== 'All')
+			queryStr = `${query} flair:${flair}`
+		else if (query)
+			queryStr = `${query}`
+		else if (flair && flair !== 'All')
+			queryStr = `flair:${flair}`
 
-		const savedThread = response.data.data.children.map(thread => ({
-			id: thread.data.id,
-			subreddit: subreddit,
-			author: thread.data.author,
-			title: thread.data.title,
-			content: thread.data.selftext,
-			content_html: thread.data.selftext_html,
-			flair: thread.data.link_flair_text,
-			ups: thread.data.ups,
-			upvote_ratio: thread.data.upvote_ratio,
-			link: thread.data.permalink,
-			created_utc: thread.data.created_utc,
-			comments: []
-		}))
-
-		const promiseArray = response.data.data.children.map(thread => {
-			const threadUrl = baseUrl + thread.data.permalink.substring(0, thread.data.permalink.length-1) + '.json?'
-			return axios.get(threadUrl)
-		})
-		const finished = await Promise.all(promiseArray)
-
-		for (let i = 0; i < finished.length; i++) {
-			for (const comment of finished[i].data[1].data.children) {
-				preorderTreeTraversal(savedThread[i].comments, comment, 0)
+		for (let i = 0; i < pages; i++) {
+			let response
+			if (queryStr) {
+				const url = `${baseUrl}/r/${subreddit}/search.json`
+				response = await axios.get(url, {
+					params: {
+						sort: sort || 'new',
+						q: queryStr,
+						t: time || 'week',
+						restrict_sr: 'on',
+						limit: '100',
+						after: after,
+					}
+				})
+			} else {
+				const url = `${baseUrl}/r/${subreddit}.json`
+				response = await axios.get(url, {
+					params: {
+						limit: '100',
+						after: after,
+					}
+				})
 			}
+			after = response.data.data.after
+
+			const savedThread = response.data.data.children.map(thread => ({
+				id: thread.data.id,
+				subreddit: subreddit,
+				author: thread.data.author,
+				title: thread.data.title,
+				content: thread.data.selftext,
+				content_html: thread.data.selftext_html,
+				flair: thread.data.link_flair_text,
+				ups: thread.data.ups,
+				upvote_ratio: thread.data.upvote_ratio,
+				link: thread.data.permalink,
+				created_utc: thread.data.created_utc,
+				comments: []
+			}))
+
+			const promiseArray = response.data.data.children.map(thread => {
+				const threadUrl = baseUrl + thread.data.permalink.substring(0, thread.data.permalink.length-1) + '.json?'
+				return axios.get(threadUrl)
+			})
+			const finished = await Promise.all(promiseArray)
+
+			for (let i = 0; i < finished.length; i++) {
+				for (const comment of finished[i].data[1].data.children) {
+					preorderTreeTraversal(savedThread[i].comments, comment, 0)
+				}
+			}
+			returnedThreads = returnedThreads.concat(savedThread)
 		}
-		returnedThreads = returnedThreads.concat(savedThread)
+	} catch (error) {
+		console.log(error.message)
 	}
 
 	return returnedThreads
@@ -88,17 +93,21 @@ const fetchSubredditData = async (subreddit, pages, query, flair, sort, time) =>
 
 const fetchFlairs = async (subreddit) => {
 	let flairs = []
-	const response = await axios.get(`${baseUrl}/r/${subreddit}.json`, {
-		params: { limit: '100' }
-	})
-	response.data.data.children.map(thread => {
-		const flair = thread.data.link_flair_text
-		if (!flairs.includes(flair) && flair) {
-			flairs.push(flair)
-		}
-		return 0
-	})
-	flairs.sort()
+	try {
+		const response = await axios.get(`${baseUrl}/r/${subreddit}.json`, {
+			params: { limit: '100' }
+		})
+		response.data.data.children.map(thread => {
+			const flair = thread.data.link_flair_text
+			if (!flairs.includes(flair) && flair) {
+				flairs.push(flair)
+			}
+			return 0
+		})
+		flairs.sort()
+	} catch (error) {
+		console.log(error.message)
+	}
 
 	return flairs
 }
