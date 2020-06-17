@@ -215,7 +215,7 @@ a:hover {
 
 .mentioned-ticker:hover {
 	cursor: pointer;
-	background-color: rgb(25, 25, 25);;
+	background-color: rgb(25, 25, 25);
 }
 
 /********************************
@@ -229,10 +229,22 @@ a:hover {
 	width: 115px;
 }
 
-.option-display {
-	margin: 0px 0px 10px 0px;
+.option-display-open {
+	margin: 5px 0px 5px 0px;
 	padding: 5px 5px 0px 9px;
 	border: lavender solid 1px;
+}
+
+.option-display-close {
+	display: inline-block;
+	margin: 0px 0px 0px 5px;
+	padding: 2px 5px 2px 5px;
+	border-radius: 2px;
+}
+
+.option-display-close:hover {
+	cursor: pointer;
+	background-color: rgb(25, 25, 25);
 }
 
 .option-position {
