@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
@@ -10,19 +10,23 @@ const OptionQuotes = ({ options }) => {
 			initialDisplays.push(false)
 	}
 
-	const [optionDisplays, setOptionDisplays] = useState(initialDisplays)
+	const [optionDisplays, setOptionDisplays] = useState([])
+	useEffect(() => {
+		setOptionDisplays(initialDisplays)
+	}, [options])
+	console.log(options, initialDisplays, optionDisplays)
 
 	const onOpenOptionDisplay = async index => {
 		const option = options[index]
 		const response = await stockService.fetchOptions(option.ticker, option.type, option.strike, option.date)
 		if (response) {
 			options[index] = response[0]
-			const newState = { ...optionDisplays }
+			const newState = [ ...optionDisplays ]
 			newState[index] = true
 			setOptionDisplays(newState)
 		} else {
 			options.splice(index, 1)
-			const newState = { ...optionDisplays }
+			const newState = [ ...optionDisplays ]
 			newState.splice(index, 1)
 			setOptionDisplays(newState)
 			alert(`The option position: ${option.ticker} ${option.type} $${option.strike} ${option.date} is invalid!`)
@@ -30,7 +34,7 @@ const OptionQuotes = ({ options }) => {
 	}
 
 	const onCloseOptionDisplay = index => {
-		const newState = { ...optionDisplays }
+		const newState = [ ...optionDisplays ]
 		newState[index] = false
 		setOptionDisplays(newState)
 	}
