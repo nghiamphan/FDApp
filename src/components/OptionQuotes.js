@@ -4,11 +4,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
 
 const OptionQuotes = ({ optionsParam }) => {
-	if (optionsParam) {
-		for (const option of optionsParam)
-			option.display = false
-	}
-
 	/**
 	 * @constant options is an array of option position, each contains information of that option position to be displayed.
 	 * Initially, each item in @constant options is an option object:
@@ -21,7 +16,10 @@ const OptionQuotes = ({ optionsParam }) => {
 	 */
 	const [options, setOptions] = useState([])
 	useEffect(() => {
-		setOptions(optionsParam)
+		if (optionsParam) {
+			const initialOptions = optionsParam.map(option => ({ ...option, display: false }))
+			setOptions(initialOptions)
+		}
 	}, [optionsParam])
 
 	const onOpenOptionDisplay = async index => {
