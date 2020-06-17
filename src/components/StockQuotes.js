@@ -9,9 +9,9 @@ const StockQuotes = ({ tickers }) => {
 
 	const onClickTicker = async ticker => {
 		const quote = await stockService.fetchQuote(ticker)
-		if (quote[ticker]) {
+		if (quote) {
 			const newState = { ...stocks }
-			newState[ticker] = { ...quote[ticker] , show: true }
+			newState[ticker] = { ...quote , show: true }
 			setStocks(newState)
 		}
 	}

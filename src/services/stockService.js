@@ -10,7 +10,7 @@ const fetchQuote = async ticker => {
 	const response = await axios.get(url, {
 		params: { apikey: apiKey }
 	})
-	return response.data
+	return response.data[ticker]
 }
 
 /**
