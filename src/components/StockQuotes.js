@@ -1,36 +1,56 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
 import { displayLargeNumber } from '../utils/dataFormat'
 
 const StockQuotes = ({ tickers }) => {
-	const [stocks, setStocks] = useState({})
+	/**
+	 * @constant stocks is an array of stock objects, each contains information of a stock to be displayed.
+	 * Initially, each item in @constant stocks is an object:
+	 * 	{ @constant ticker, @constant display}
+	 * whereas @constant display (@default false) signifies if the stock's data will be displayed.
+	 *
+	 * @constant display is toggled on and off by @function onClickTicker and @function onCloseTicker.
+	 *
+	 * In @function onClickTicker, data for a stock will be fetched, and that stock object will be updated with those additional properties.
+	 */
+	const [stocks, setStocks] = useState([])
+	useEffect(() => {
+		if (tickers) {
+			const initialStocks = tickers.map(ticker => ({ ticker: ticker, display: false }))
+			setStocks(initialStocks)
+		}
+	}, [tickers])
 
 	const onClickTicker = async ticker => {
 		const quote = await stockService.fetchQuote(ticker)
 		if (quote) {
-			const newState = { ...stocks }
-			newState[ticker] = { ...quote , show: true }
-			setStocks(newState)
+			const newStocks = stocks.map(stock => stock.ticker === ticker
+				? { ...quote, ticker: ticker, display: true }
+				: stock
+			)
+			setStocks(newStocks)
 		}
 	}
 
 	const onCloseTicker = ticker => {
-		const newState = { ...stocks }
-		newState[ticker].show = false
-		setStocks(newState)
+		const newStocks = stocks.map(stock => stock.ticker === ticker
+			? { ...stock, display: false }
+			: stock
+		)
+		setStocks(newStocks)
 	}
 
 	return (
 		<div>
 			<span className="mentioned-tickers-label">Important tickers:</span>
-			{(tickers && tickers.length > 0) &&
-			<span>{tickers.map(ticker => (stocks[ticker] && stocks[ticker].show)
-				? <div key={ticker} className="stock-quote-card">
+			{(stocks.length > 0) &&
+			<span>{stocks.map(stock => stock.display
+				? <div key={stock.ticker} className="stock-quote-card">
 					<div className="quote-heading">
-						<strong>{ticker}</strong> - {stocks[ticker].description}
-						<span className="quote-close-btn" onClick={() => onCloseTicker(ticker)}>
+						<strong>{stock.ticker}</strong> - {stock.description}
+						<span className="quote-close-btn" onClick={() => onCloseTicker(stock.ticker)}>
 							<FontAwesomeIcon icon={faTimes}/>
 						</span>
 					</div>
@@ -38,90 +58,90 @@ const StockQuotes = ({ tickers }) => {
 					<div className="flex-container">
 						<div className="quote-stat">
 							<label>Last Price</label>
-							<div>{stocks[ticker].lastPrice}</div>
+							<div>{stock.lastPrice}</div>
 						</div>
 
 						<div className="quote-stat">
 							<label>Change</label>
-							<div>{stocks[ticker].netChange} ({stocks[ticker].netPercentChangeInDouble}%)</div>
+							<div>{stock.netChange} ({stock.netPercentChangeInDouble}%)</div>
 						</div>
 
 						<div className="quote-stat">
 							<label>Previous Close</label>
-							<div>{stocks[ticker].closePrice}</div>
+							<div>{stock.closePrice}</div>
 						</div>
 
 						<div className="quote-stat">
 							<label>Open</label>
-							<div>{stocks[ticker].openPrice}</div>
+							<div>{stock.openPrice}</div>
 						</div>
 					</div>
 
 					<div className="flex-container">
 						<div className="quote-stat">
 							<label>Low Today</label>
-							<div>{stocks[ticker].lowPrice}</div>
+							<div>{stock.lowPrice}</div>
 						</div>
 
 						<div className="quote-stat">
 							<label>High Today</label>
-							<div>{stocks[ticker].highPrice}</div>
+							<div>{stock.highPrice}</div>
 						</div>
 
 						<div className="quote-stat">
 							<label>52 Weekk Low</label>
-							<div>{stocks[ticker]['52WkLow']}</div>
+							<div>{stock['52WkLow']}</div>
 						</div>
 
 						<div className="quote-stat">
 							<label>52 Week High</label>
-							<div>{stocks[ticker]['52WkHigh']}</div>
+							<div>{stock['52WkHigh']}</div>
 						</div>
 					</div>
 
 					<div className="flex-container">
 						<div className="quote-stat">
 							<label>Volume</label>
-							<div>{displayLargeNumber(stocks[ticker].totalVolume)}</div>
+							<div>{displayLargeNumber(stock.totalVolume)}</div>
 						</div>
 
 						<div className="quote-stat">
 							<label>Price-Earnings Ratio</label>
-							<div>{stocks[ticker].peRatio}</div>
+							<div>{stock.peRatio}</div>
 						</div>
 
 						<div className="quote-stat">
 							<label>Dividend Yield</label>
-							<div>{stocks[ticker].divYield}</div>
+							<div>{stock.divYield}</div>
 						</div>
 
 						<div className="quote-stat">
 							<a
-								href={`https://robinhood.com/stocks/${ticker}`}
+								href={`https://robinhood.com/stocks/${stock.ticker}`}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-						Robinhood
+								Robinhood
 							</a>
 							<br/>
 							<a
-								href={`https://finance.yahoo.com/quote/${ticker}`}
+								href={`https://finance.yahoo.com/quote/${stock.ticker}`}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-						Yahoo Finance
+								Yahoo Finance
 							</a>
 						</div>
 					</div>
 
 				</div>
 				: <span
-					key={ticker}
+					key={stock.ticker}
 					className="mentioned-ticker"
 					title="Get more information about this ticker"
-					onClick={() => onClickTicker(ticker)}
+					onClick={() => onClickTicker(stock.ticker)}
 				>
-					{ticker}
+					{stock.ticker}
 				</span>
 			)}
 			</span>
