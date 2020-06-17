@@ -1,5 +1,4 @@
 import redditFetch from '../services/redditFetch'
-import stockService from '../services/stockService'
 import { SUBREDDITS } from '../utils/constants'
 
 export const FETCH_DATA = 'FETCH_DATA'
@@ -131,22 +130,7 @@ export const updateTickersAndOptions = (subreddit, id, tickers, options) => {
 			subreddit,
 			id,
 			tickers,
-			options: [],
-		})
-
-		let fetchedOptions = []
-		for (const option of options) {
-			const response = await stockService.fetchOptions(option.ticker, option.type, option.strike, option.date)
-			if (response)
-				fetchedOptions.push(response[0])
-		}
-
-		dispatch({
-			type: UPDATE_TICKERS_AND_OPTIONS,
-			subreddit,
-			id,
-			tickers,
-			options: fetchedOptions,
+			options,
 		})
 	}
 }
