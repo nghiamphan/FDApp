@@ -99,7 +99,7 @@ const DisplayResult = () => {
 							</div>
 
 							<StockQuotes tickers={thread.tickers}/>
-							<OptionQuotes options={thread.options}/>
+							<OptionQuotes optionsParam={thread.options}/>
 						</div>
 					</VisibilitySensor>
 

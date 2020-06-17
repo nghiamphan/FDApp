@@ -3,40 +3,49 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
 
-const OptionQuotes = ({ options }) => {
-	let initialDisplays = []
-	if (options) {
-		for (let i = 0; i < options.length; i++)
-			initialDisplays.push(false)
+const OptionQuotes = ({ optionsParam }) => {
+	if (optionsParam) {
+		for (const option of optionsParam)
+			option.display = false
 	}
 
-	const [optionDisplays, setOptionDisplays] = useState([])
+	/**
+	 * @constant options is an array of option position, each contains information of that option position to be displayed.
+	 * Initially, each item in @constant options is an option object:
+	 * 	{ @constant ticker, @constant type, @constant strike, @constant date, @constant display}
+	 * whereas @constant display (@default false) signifies if the position's data will be displayed.
+	 *
+	 * @constant display is toggled on and off by @function onOpenOptionDisplay and @function onCloseOptionDisplay.
+	 *
+	 * In @function onOpenOptionDisplay, additional data for an option position will be fetched, and that option object will be updated with those additional properties.
+	 */
+	const [options, setOptions] = useState([])
 	useEffect(() => {
-		setOptionDisplays(initialDisplays)
-	}, [options])
-	console.log(options, initialDisplays, optionDisplays)
+		setOptions(optionsParam)
+	}, [optionsParam])
 
 	const onOpenOptionDisplay = async index => {
 		const option = options[index]
 		const response = await stockService.fetchOptions(option.ticker, option.type, option.strike, option.date)
 		if (response) {
-			options[index] = response[0]
-			const newState = [ ...optionDisplays ]
-			newState[index] = true
-			setOptionDisplays(newState)
+			const newOptions = options.map((option, i) => i === index
+				? { ...response[0], display: true }
+				: option
+			)
+			setOptions(newOptions)
 		} else {
-			options.splice(index, 1)
-			const newState = [ ...optionDisplays ]
-			newState.splice(index, 1)
-			setOptionDisplays(newState)
+			const newOptions = options.filter((option, i) => i !== index)
+			setOptions(newOptions)
 			alert(`The option position: ${option.ticker} ${option.type} $${option.strike} ${option.date} is invalid!`)
 		}
 	}
 
 	const onCloseOptionDisplay = index => {
-		const newState = [ ...optionDisplays ]
-		newState[index] = false
-		setOptionDisplays(newState)
+		const newOptions = options.map((option, i) => i === index
+			? { ...option, display: false }
+			: option
+		)
+		setOptions(newOptions)
 	}
 
 	return (
@@ -47,7 +56,7 @@ const OptionQuotes = ({ options }) => {
 				<div>
 					{options.map((option, index) => (
 						<div key={index}>
-							{optionDisplays[index]
+							{option.display
 								? <div className="option-display-open">
 									<div>
 										<span className="option-position">
