@@ -1,3 +1,5 @@
+import commons from './commonWords.json'
+
 /**
  * Return an array of threads to be displayed based on filtering parameters.
  * @param filter contains two information: subreddits whose threads to be display, and whether to display no-text threads
@@ -33,70 +35,72 @@ export const filterThreads = (filter, data) => {
  */
 
 export const searchTickersAndOptions = (tickers, thread) => {
-	const commons = [
-		'A', 'ALL', 'AN', 'ANY', 'ARE', 'AT', 'ATH', 'AWAY',
-		'BE', 'BEAT', 'BUY', 'CAN', 'CDC', 'CEO', 'DD', 'DON', 'GDP',
-		'EDIT', 'EPS', 'EV', 'EVER', 'FOR', 'GL', 'GO', 'HOME', 'HOLD', 'HUGE',
-		'IMO', 'ING', 'IP', 'IPO', 'IRS', 'IT', 'ITM', 'JP',
-		'LOAN', 'MEET', 'MS', 'MUST', 'NEW', 'NEXT',
-		'OI', 'ONE', 'OUT', 'PE', 'PM', 'RH', 'TA','TV', 'UI', 'USD', 'VERY', 'YOLO'
-	]
-
 	let tickerMatches = []
 	let optionMatches = []
+
 	for (const ticker of tickers) {
-		const pattern = `(\\s|^)[$]{0,1}${ticker}[^a-zA-Z0-9_]+`
-		let tickerScore = 0
-
-		const titleMatches = thread.title.match(new RegExp(pattern, 'g'))
-		if (titleMatches) {
-			for (const match of titleMatches) {
-				if (match.includes('$'))
-					tickerScore += 10
-				else
-					tickerScore += 3
-			}
-			const options = searchOptions(ticker, thread.title)
-			optionMatches = optionMatches.concat(options)
-			if (options.length > 0)
-				tickerScore += 10
-		}
-
-		const postMatches = thread.content.match(new RegExp(pattern, 'g'))
-		if (postMatches) {
-			for (const match of postMatches) {
-				if (match.includes('$'))
-					tickerScore += 10
-				else
-					tickerScore += 2
-			}
-			const options = searchOptions(ticker, thread.content)
-			optionMatches = optionMatches.concat(options)
-			if (options.length > 0)
-				tickerScore += 10
-		}
-
-		const comments = thread.comments
-		for (const comment of comments) {
-			const commentsMatches = comment.content.match(new RegExp(pattern, 'g'))
-			if (commentsMatches) {
-				if (comments.length >= 10)
-					tickerScore += commentsMatches.length * 5 / comments.length
-				else
-					tickerScore += commentsMatches.length
-				const options = searchOptions(ticker, comment.content)
-				optionMatches = optionMatches.concat(options)
-				if (options.length > 0)
-					tickerScore += 10
-			}
-		}
+		const pattern = `(\\s|^|\\.)[$]{0,1}${ticker}([^a-zA-Z0-9_]+|$)`
+		let isDetected = false
 
 		if (ticker.length === 1 || commons.includes(ticker)) {
-			if (tickerScore >= 10)
+			const stricterPattern = `[$]${ticker}`
+
+			if (thread.title.match(pattern)) {
+				if (thread.title.match(stricterPattern))
+					isDetected = true
+				const options = searchOptions(ticker, thread.title)
+				if (options.length > 0) {
+					isDetected = true
+					optionMatches = optionMatches.concat(options)
+				}
+			}
+
+			if (thread.content.match(pattern)) {
+				if (thread.content.match(stricterPattern))
+					isDetected = true
+				const options = searchOptions(ticker, thread.content)
+				if (options.length > 0) {
+					isDetected = true
+					optionMatches = optionMatches.concat(options)
+				}
+			}
+
+			for (const comment of thread.comments) {
+				if (comment.content.match(pattern)) {
+					if (comment.content.match(stricterPattern))
+						isDetected = true
+					const options = searchOptions(ticker, comment.content)
+					if (options.length > 0) {
+						isDetected = true
+						optionMatches = optionMatches.concat(options)
+					}
+				}
+			}
+
+			if (isDetected)
+				tickerMatches.push(ticker)
+
+		} else {
+			if (thread.title.match(pattern)) {
+				isDetected = true
+				optionMatches = optionMatches.concat(searchOptions(ticker, thread.title))
+			}
+
+			if (thread.content.match(pattern)) {
+				isDetected = true
+				optionMatches = optionMatches.concat(searchOptions(ticker, thread.content))
+			}
+
+			for (const comment of thread.comments) {
+				if (comment.content.match(pattern)) {
+					isDetected = true
+					optionMatches = optionMatches.concat(searchOptions(ticker, comment.content))
+				}
+			}
+
+			if (isDetected)
 				tickerMatches.push(ticker)
 		}
-		else if (tickerScore >= 2)
-			tickerMatches.push(ticker)
 	}
 
 	return { tickers: tickerMatches, options: optionMatches }
