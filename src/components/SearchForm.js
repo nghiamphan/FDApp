@@ -5,7 +5,6 @@ import { fetchData } from '../reducers/dataReducer'
 import { updateFilter } from '../reducers/filterReducer'
 import { setSearchingInProgress } from '../reducers/metaReducer'
 import { SUBREDDITS, WSB } from '../utils/constants'
-import companies from '../utils/tickers.json'
 import SearchRecommendation from './SearchRecommendation'
 
 const SearchForm = () => {
@@ -17,6 +16,7 @@ const SearchForm = () => {
 	const dispatch = useDispatch()
 	const flairs = useSelector(state => state.data[WSB].flairs)
 	const searchingInProgress = useSelector(state => state.meta.searching_in_progress)
+	const companies = useSelector(state => state.companies)
 
 	// Search the searchItem against the list of companies' symbols and names, and return up to the best six matches
 	const filterTickers = () => {

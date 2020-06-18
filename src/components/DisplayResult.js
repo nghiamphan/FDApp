@@ -6,7 +6,6 @@ import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-soli
 import { filterThreads, searchTickersAndOptions } from '../utils/search'
 import { displayDate } from '../utils/dataFormat'
 import { toggleDisplayPost, toggleDisplayComments, updateTickersAndOptions } from '../reducers/dataReducer'
-import companies from '../utils/tickers.json'
 import StockQuotes from './StockQuotes'
 import OptionQuotes from './OptionQuotes'
 
@@ -14,10 +13,9 @@ const DisplayResult = () => {
 	const dispatch = useDispatch()
 	const filter = useSelector(state => state.filter)
 	const data = useSelector(state => state.data)
+	const symbols = useSelector(state => state.companies).map(company => company.symbol)
 
 	const threadsToDisplay = filterThreads(filter, data)
-
-	const symbols = companies.map(company => company.symbol)
 
 	const onScrollChange = async (isVisible, thread) => {
 		// If thread.tickers == null, the thread's content hasn't been scanned for appearance of tickers and options yet.
