@@ -91,6 +91,10 @@ export const fetchData = (subreddit, pages, query, flair, sort, time, display_po
 	}
 }
 
+/**
+ * Call the service to fetch the flairs of a @param subreddit and returns the data. Only used for WSB.
+ * @param subreddit
+ */
 export const fetchFlairs = (subreddit) => {
 	return async dispatch => {
 		const flairs = await redditFetch.fetchFlairs(subreddit)
@@ -116,23 +120,25 @@ export const toggleDisplayPost = (subreddit, id) => ({
  * @param subreddit
  * @param id the id of a thread whose comments are to be toggled on or off
  */
-
 export const toggleDisplayComments = (subreddit, id) => ({
 	type: TOGGLE_DISPLAY_COMMENTS,
 	subreddit,
 	id,
 })
 
-export const updateTickersAndOptions = (subreddit, id, tickers, options) => {
-	return async dispatch => {
-		dispatch({
-			type: UPDATE_TICKERS_AND_OPTIONS,
-			subreddit,
-			id,
-			tickers,
-			options,
-		})
-	}
-}
+/**
+ * Update the properties @param tickers and @param options of a thread given its @param subreddit and @param id
+ * @param subreddit
+ * @param id
+ * @param tickers
+ * @param options
+ */
+export const updateTickersAndOptions = (subreddit, id, tickers, options) => ({
+	type: UPDATE_TICKERS_AND_OPTIONS,
+	subreddit,
+	id,
+	tickers,
+	options,
+})
 
 export default dataReducer
