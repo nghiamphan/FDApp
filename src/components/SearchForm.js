@@ -66,7 +66,7 @@ const SearchForm = () => {
 	}
 
 	return (
-		<div>
+		<div className="search-form-div">
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="flex-container search-form-section">
 					<label className="search-form-section-label">Query</label>

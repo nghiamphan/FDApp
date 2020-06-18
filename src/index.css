@@ -1,5 +1,10 @@
+body {
+	margin: 0px;
+}
+
 #root {
-	padding: 50px 50px 50px 100px;
+	padding: 0px 50px 10px 100px;
+	background-color: rgb(150, 150, 150);
 }
 
 .flex-container {
@@ -16,8 +21,41 @@
 }
 
 /********************************
+* Navigation
+********************************/
+.navigation {
+	position: sticky;
+	top: 0px;
+	margin: 0px -50px 0px -100px;
+	padding-left: 100px;
+	height: 35px;
+	color: white;
+	background-color: #343a40;
+}
+
+.navigation-item {
+	padding-top: 8px;
+	width: 150px;
+	font-size: 18px;
+	text-align: center;
+	border-radius: 5px;
+}
+
+.navigation-item:hover {
+	cursor: pointer;
+	background-color: rgb(45, 45, 45);
+}
+
+/********************************
 * Search Form
 ********************************/
+.search-form-div {
+	position: sticky;
+	top: 35px;
+	padding: 0px 0px 10px 10px;
+	background-color: rgb(150, 150, 150);
+}
+
 .search-form-section {
 	padding-top: 10px;
 }
