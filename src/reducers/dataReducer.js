@@ -1,11 +1,13 @@
 import redditFetch from '../services/redditFetch'
-import { SUBREDDITS } from '../utils/constants'
+import { SUBREDDITS, WSB } from '../utils/constants'
 
 export const FETCH_DATA = 'FETCH_DATA'
 const FETCH_FLAIRS = 'FETCH_FLAIRS'
 const TOGGLE_DISPLAY_POST = 'TOGGLE_DISPLAY_POST'
 const TOGGLE_DISPLAY_COMMENTS = 'TOGGLE_DISPLAY_COMMENTS'
 const UPDATE_TICKERS_AND_OPTIONS = 'UPDATE_TICKERS_AND_OPTIONS'
+const KEY = 'fdapp_wsbflairs'
+const ONE_DAY = 86400000
 
 ////////////////////////
 // Reducer
@@ -97,7 +99,16 @@ export const fetchData = (subreddit, pages, query, flair, sort, time, display_po
  */
 export const fetchFlairs = (subreddit) => {
 	return async dispatch => {
-		const flairs = await redditFetch.fetchFlairs(subreddit)
+		const local = JSON.parse(window.localStorage.getItem(KEY))
+		const flairs = (subreddit === WSB && local && local.expiry >= new Date().getTime())
+			? local.wsbflairs
+			: await redditFetch.fetchFlairs(subreddit)
+
+		window.localStorage.setItem(KEY, JSON.stringify({
+			wsbflairs: flairs,
+			expiry: new Date().getTime() + ONE_DAY,
+		}))
+
 		dispatch({
 			type: FETCH_FLAIRS,
 			subreddit,
