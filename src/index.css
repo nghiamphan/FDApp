@@ -173,6 +173,10 @@ a:hover {
 	width: 25px;
 }
 
+.toggle-button:hover {
+	cursor: pointer;
+}
+
 /********************************
 * Stock Quote
 ********************************/
