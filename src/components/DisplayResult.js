@@ -95,9 +95,13 @@ const DisplayResult = () => {
 								</div>
 								}
 							</div>
-
-							<StockQuotes tickers={thread.tickers}/>
-							<OptionQuotes optionsParam={thread.options}/>
+							{thread.tickers
+								? <>
+									<StockQuotes tickers={thread.tickers}/>
+									<OptionQuotes optionsParam={thread.options}/>
+								</>
+								: <div>Processing...</div>
+							}
 						</div>
 					</VisibilitySensor>
 
