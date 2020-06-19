@@ -7,10 +7,15 @@ import { setSearchingInProgress } from '../reducers/metaReducer'
 import { SUBREDDITS, WSB } from '../utils/constants'
 import SearchRecommendation from './SearchRecommendation'
 
+const KEY = 'fdapp_reddit_form_params'
+
 const SearchForm = () => {
 	const [error, setError] = useState(false)
 
-	const { register, handleSubmit, watch, } = useForm()
+	const storedParams = JSON.parse(window.localStorage.getItem(KEY))
+	const { register, handleSubmit, watch, } = useForm({
+		defaultValues: storedParams ? storedParams : ''
+	})
 	let searchItem = watch('query')
 
 	const dispatch = useDispatch()
@@ -43,6 +48,7 @@ const SearchForm = () => {
 	}
 
 	const onSubmit = input => {
+		localStorage.setItem(KEY, JSON.stringify(input))
 		let subredditsToFetch = []
 		for (let i = 0; i < SUBREDDITS.length; i++) {
 			if (input.subreddits[i]) {
