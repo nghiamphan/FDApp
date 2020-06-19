@@ -1,10 +1,10 @@
 body {
 	margin: 0px;
+	background-color: rgb(150, 150, 150);
 }
 
 #root {
 	padding: 0px 50px 10px 100px;
-	background-color: rgb(150, 150, 150);
 }
 
 .flex-container {
@@ -30,7 +30,7 @@ body {
 	padding-left: 100px;
 	height: 35px;
 	color: white;
-	background-color: #343a40;
+	background-color: rgb(65, 65, 65);
 }
 
 .navigation-item {
@@ -53,7 +53,12 @@ body {
 	position: sticky;
 	top: 35px;
 	padding: 0px 0px 10px 10px;
-	background-color: rgb(150, 150, 150);
+	background-color: rgb(120, 120, 120);
+}
+
+.form-column {
+	width: 340px;
+	margin-right: 50px;
 }
 
 .search-form-section {
@@ -70,13 +75,13 @@ body {
 }
 
 .search-form-section-label, .checkboxes-section-label {
-	flex-basis: 150px;
+	width: 120px;
 	align-self: center;
 	font-weight: 600;
 }
 
 .search-item-input {
-	width: 288px;
+	width: 208px;
 }
 
 .checkboxes-section-label {
@@ -84,11 +89,11 @@ body {
 }
 
 .checkbox-label {
-	color: #343a40;
+	color: lightgrey;
 }
 
 .search-form-section select {
-	flex-basis: 300px;
+	flex-basis: 220px;
 }
 
 .search-button {
@@ -113,6 +118,10 @@ body {
 	cursor: not-allowed;
 }
 
+.search-in-progress {
+	margin-left: 40px;
+}
+
 /********************************
 * Search Recommendation
 ********************************/
@@ -122,7 +131,6 @@ body {
 	line-height: 18px;
 	color: lightgray;
 	background-color: #343a40;
-	width: 430px;
 	margin: 10px 0px 10px 0px;
 	padding: 10px;
 	border-radius: 5px;

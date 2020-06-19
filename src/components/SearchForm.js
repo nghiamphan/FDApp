@@ -67,159 +67,163 @@ const SearchForm = () => {
 
 	return (
 		<div className="search-form-div">
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="flex-container search-form-section">
-					<label className="search-form-section-label">Query</label>
+			<form className="flex-container" onSubmit={handleSubmit(onSubmit)}>
+				<div className="form-column">
+					<div className="flex-container search-form-section">
+						<label className="search-form-section-label">Query</label>
 
-					<input
-						className="search-item-input input-styles"
-						list="companies"
-						type="text"
-						placeholder="Search... (optional)"
-						title="Can search any string, do not need to be a ticker"
-						autoComplete="off"
-						name="query"
-						ref={register()}
-					/>
+						<input
+							className="search-item-input input-styles"
+							list="companies"
+							type="text"
+							placeholder="Search... (optional)"
+							title="Can search any string, do not need to be a ticker"
+							autoComplete="off"
+							name="query"
+							ref={register()}
+						/>
 
-					<datalist id="companies">
-						{filterTickers().map(match => {
-							return(
-								<option key={match.company.symbol} value={match.company.symbol}>
-									{match.company.name}
-								</option>
-							)})
-						}
-					</datalist>
+						<datalist id="companies">
+							{filterTickers().map(match => {
+								return(
+									<option key={match.company.symbol} value={match.company.symbol}>
+										{match.company.name}
+									</option>
+								)})
+							}
+						</datalist>
+					</div>
+
+					<div className="flex-container search-form-section">
+						<label className="checkboxes-section-label">Subreddits</label>
+
+						<div className="vertical-flex-container">
+							{SUBREDDITS.map((subreddit, index) => (
+								<div className="flex-container" key={index}>
+									<input
+										type="checkbox"
+										name={`subreddits[${index}]`}
+										ref={register()}
+									/>
+									<label className="checkbox-label">{SUBREDDITS[index]}</label>
+								</div>
+							))
+							}
+						</div>
+					</div>
+
+					<div className="flex-container search-form-section">
+						<label className="search-form-section-label">Flair</label>
+
+						<select
+							className="input-styles"
+							title="Only applicable to /r/wallstreetbets"
+							name="flair"
+							ref={register()}
+						>
+							<option value="All">All</option>
+							{flairs.map((flair, index) => (
+								<option key={index} value={flair}>{flair}</option>
+							))}
+						</select>
+					</div>
+
+					{error && <div className="red-text">Choose at least one subrredit.</div>}
+
+					<button
+						className="search-button"
+						type="submit"
+						disabled={searchingInProgress}
+					>
+						Search
+					</button>
+
+					{searchingInProgress &&
+					<span className="search-in-progress red-text">
+						Searching in progress...
+					</span>
+					}
 				</div>
+				<div className="form-column">
+					<div className="flex-container search-form-section">
+						<label className="search-form-section-label">Sort</label>
 
-				<div className="flex-container search-form-section">
-					<label className="checkboxes-section-label">Subreddits</label>
+						<select
+							className="input-styles"
+							title="Only applicable if ticker is not empty or flair is not 'All'"
+							name="sort"
+							ref={register()}
+						>
+							<option value="new">New</option>
+							<option value="relevance">Relevance</option>
+							<option value="top">Top</option>
+						</select>
+					</div>
 
-					<div className="vertical-flex-container">
-						{SUBREDDITS.map((subreddit, index) => (
-							<div className="flex-container" key={index}>
+					<div className="flex-container search-form-section">
+						<label className="search-form-section-label">Time</label>
+
+						<select
+							className="input-styles"
+							title="Only applicable if ticker is not empty or flair is not 'All'"
+							defaultValue="week"
+							name="time"
+							ref={register()}
+						>
+							<option value="hour">Past hour</option>
+							<option value="day">Past 24 hours</option>
+							<option value="week">Past week</option>
+							<option value="month">Past month</option>
+							<option value="year">Past year</option>
+							<option value="all">All time</option>
+						</select>
+					</div>
+
+					<div className="flex-container search-form-section">
+						<label className="search-form-section-label">Fetched datasize</label>
+
+						<select
+							className="input-styles"
+							title="The maximum amount of threads to be fetched from each subreddit"
+							name="pages"
+							ref={register()}
+						>
+							<option title="100 entries" value="1">Small (recommended)</option>
+							<option title="200 entries" value="2">Medium</option>
+							<option title="300 entries" value="3">Large</option>
+						</select>
+					</div>
+
+					<div className="flex-container search-form-section">
+						<label className="checkboxes-section-label">Display</label>
+
+						<div className="vertical-flex-container">
+							<div className="flex-container">
 								<input
 									type="checkbox"
-									name={`subreddits[${index}]`}
+									title="If chosen, threads' content will be shown by default"
+									name="display_post"
 									ref={register()}
 								/>
-								<label className="checkbox-label">{SUBREDDITS[index]}</label>
+								<label  className="checkbox-label">Show Post Content</label>
 							</div>
-						))
-						}
-					</div>
-				</div>
 
-				<div className="flex-container search-form-section">
-					<label className="search-form-section-label">Flair</label>
-
-					<select
-						className="input-styles"
-						title="Only applicable to /r/wallstreetbets"
-						name="flair"
-						ref={register()}
-					>
-						<option value="All">All</option>
-						{flairs.map((flair, index) => (
-							<option key={index} value={flair}>{flair}</option>
-						))}
-					</select>
-				</div>
-
-				<div className="flex-container search-form-section">
-					<label className="search-form-section-label">Sort</label>
-
-					<select
-						className="input-styles"
-						title="Only applicable if ticker is not empty or flair is not 'All'"
-						name="sort"
-						ref={register()}
-					>
-						<option value="new">New</option>
-						<option value="relevance">Relevance</option>
-						<option value="top">Top</option>
-					</select>
-				</div>
-
-				<div className="flex-container search-form-section">
-					<label className="search-form-section-label">Time</label>
-
-					<select
-						className="input-styles"
-						title="Only applicable if ticker is not empty or flair is not 'All'"
-						defaultValue="week"
-						name="time"
-						ref={register()}
-					>
-						<option value="hour">Past hour</option>
-						<option value="day">Past 24 hours</option>
-						<option value="week">Past week</option>
-						<option value="month">Past month</option>
-						<option value="year">Past year</option>
-						<option value="all">All time</option>
-					</select>
-				</div>
-
-				<div className="flex-container search-form-section">
-					<label className="search-form-section-label">Fetched datasize</label>
-
-					<select
-						className="input-styles"
-						title="The maximum amount of threads to be fetched from each subreddit"
-						name="pages"
-						ref={register()}
-					>
-						<option title="100 entries" value="1">Small (recommended)</option>
-						<option title="200 entries" value="2">Medium</option>
-						<option title="300 entries" value="3">Large</option>
-					</select>
-				</div>
-
-				<div className="flex-container search-form-section">
-					<label className="checkboxes-section-label">Display</label>
-
-					<div className="vertical-flex-container">
-						<div className="flex-container">
-							<input
-								type="checkbox"
-								title="If chosen, threads' content will be shown by default"
-								name="display_post"
-								ref={register()}
-							/>
-							<label  className="checkbox-label">Show Post Content</label>
-						</div>
-
-						<div  className="flex-container">
-							<input
-								type="checkbox"
-								title="If chosen, threads with no text will not be filtered out"
-								name="show_notext_threads"
-								ref={register()}
-							/>
-							<label  className="checkbox-label">Show no-text Threads</label>
+							<div  className="flex-container">
+								<input
+									type="checkbox"
+									title="If chosen, threads with no text will not be filtered out"
+									name="show_notext_threads"
+									ref={register()}
+								/>
+								<label  className="checkbox-label">Show no-text Threads</label>
+							</div>
 						</div>
 					</div>
 				</div>
 
 				<SearchRecommendation/>
-
-				{error && <div className="red-text">Choose at least one subrredit.</div>}
-
-				<button
-					className="search-button"
-					type="submit"
-					disabled={searchingInProgress}
-				>
-					Search
-				</button>
 			</form>
 
-			{searchingInProgress &&
-			<div className="search-form-section">
-				Searching in progress...
-			</div>
-			}
 		</div>
 	)
 }
