@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { turnOffSearchRecommendation } from '../reducers/metaReducer'
 
 const SearchRecommendation = () => {
-	const [show, setShow] = useState(true)
+	const dispatch = useDispatch()
+	const showSearchRecommendation = useSelector(state => state.meta.show_search_recommendation)
 
-	if (show) {
+	if (showSearchRecommendation) {
 		return (
 			<div className="search-recommendation flex-container">
 				<div className="search-recommendation-text">
@@ -20,7 +23,7 @@ const SearchRecommendation = () => {
 				</div>
 				<div
 					className="search-recommendation-close"
-					onClick={() => setShow(false)}
+					onClick={() => dispatch(turnOffSearchRecommendation())}
 				>
 					<FontAwesomeIcon icon={faTimes}/>
 				</div>
