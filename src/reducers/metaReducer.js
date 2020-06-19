@@ -24,6 +24,7 @@ const metaReducer = (state = initialState, action) => {
 	case FETCH_DATA:
 		return {
 			...state,
+			navigation_tab: null,
 			searching_in_progress: false
 		}
 	case SET_NAVIGATION_TAB:
