@@ -43,7 +43,7 @@ export const searchTickersAndOptions = (tickers, thread) => {
 		let isDetected = false
 
 		if (ticker.length === 1 || commons.includes(ticker)) {
-			const stricterPattern = `[$]${ticker}`
+			const stricterPattern = `[$]${ticker}([^a-zA-Z0-9_]+|$)`
 
 			if (thread.title.match(pattern)) {
 				if (thread.title.match(stricterPattern))
