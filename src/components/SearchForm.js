@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchData } from '../reducers/dataReducer'
 import { updateFilter } from '../reducers/filterReducer'
 import { setSearchingInProgress } from '../reducers/metaReducer'
+import { filterTickers } from '../utils/search'
 import { SUBREDDITS, WSB } from '../utils/constants'
 import SearchRecommendation from './SearchRecommendation'
 
@@ -22,30 +23,6 @@ const SearchForm = () => {
 	const flairs = useSelector(state => state.data[WSB].flairs)
 	const searchingInProgress = useSelector(state => state.meta.searching_in_progress)
 	const companies = useSelector(state => state.companies)
-
-	// Search the searchItem against the list of companies' symbols and names, and return up to the best six matches
-	const filterTickers = () => {
-		let matches = []
-		let goodMatches = 0
-
-		if (searchItem) {
-			searchItem = searchItem.toUpperCase()
-			for (const company of companies) {
-				const point = company.symbol.indexOf(searchItem)
-				if (point >= 0) {
-					matches.push({ point: point, company: company })
-					if (point === 0)
-						goodMatches++
-				} else if (company.name.toUpperCase().includes(searchItem)) {
-					matches.push({ point: 10, company: company })
-				}
-				if (goodMatches >= 6)
-					break
-			}
-		}
-		matches.sort((x, y) => x.point - y.point)
-		return matches.slice(0, 6)
-	}
 
 	const onSubmit = input => {
 		localStorage.setItem(KEY, JSON.stringify(input))
@@ -90,7 +67,7 @@ const SearchForm = () => {
 						/>
 
 						<datalist id="companies">
-							{filterTickers().map(match => {
+							{filterTickers(searchItem, companies).map(match => {
 								return(
 									<option key={match.company.symbol} value={match.company.symbol}>
 										{match.company.name}
