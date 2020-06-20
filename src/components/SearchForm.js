@@ -56,7 +56,7 @@ const SearchForm = () => {
 						<label className="search-form-section-label">Query</label>
 
 						<input
-							className="search-item-input input-styles"
+							className="input-text input-styles"
 							list="companies"
 							type="text"
 							placeholder="Search... (optional)"

@@ -66,7 +66,6 @@ body {
 }
 
 .input-styles {
-	padding: 5px;
 	font-size: 14px;
 	color: white;
 	background-color: #343a40;
@@ -80,10 +79,6 @@ body {
 	font-weight: 600;
 }
 
-.search-item-input {
-	width: 208px;
-}
-
 .checkboxes-section-label {
 	align-self: flex-start;
 }
@@ -92,8 +87,21 @@ body {
 	color: lightgrey;
 }
 
-.search-form-section select {
-	flex-basis: 220px;
+.input-text {
+	height: 20px;
+	width: 211px;
+	padding-left: 5px;
+}
+
+.input-date {
+	height: 22px;
+	width: 213px;
+	padding-left: 5px;
+}
+
+.search-form-section > select {
+	height: 24px;
+	width: 220px;
 }
 
 .search-button {

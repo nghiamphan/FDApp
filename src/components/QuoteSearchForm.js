@@ -29,7 +29,7 @@ const QuoteSearchForm = () => {
 						<label className="search-form-section-label">Ticker</label>
 
 						<input
-							className="search-item-input input-styles"
+							className="input-text input-styles"
 							list="companies"
 							type="text"
 							placeholder="required"
@@ -71,7 +71,7 @@ const QuoteSearchForm = () => {
 						<label className="search-form-section-label">Strike</label>
 
 						<input
-							className="search-item-input input-styles"
+							className="input-text input-styles"
 							type="number"
 							placeholder="optional"
 							title="Choose option's strike price"
@@ -94,7 +94,7 @@ const QuoteSearchForm = () => {
 						<label className="search-form-section-label">From</label>
 
 						<input
-							className="search-item-input input-styles"
+							className="input-date input-styles"
 							type="date"
 							title="Set option's expiration date on or after this date (optional)"
 							name="fromDate"
@@ -106,7 +106,7 @@ const QuoteSearchForm = () => {
 						<label className="search-form-section-label">To</label>
 
 						<input
-							className="search-item-input input-styles"
+							className="input-date input-styles"
 							type="date"
 							title="Set option's expiration date on or before this date (optional)"
 							name="toDate"
@@ -118,7 +118,7 @@ const QuoteSearchForm = () => {
 						<label className="search-form-section-label">Strike Count</label>
 
 						<input
-							className="search-item-input input-styles"
+							className="input-text input-styles"
 							type="number"
 							placeholder="optional"
 							title="Choose the number of strikes around the in-the-money price"
