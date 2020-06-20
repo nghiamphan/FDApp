@@ -173,10 +173,15 @@ const extractOption = (ticker, text) => {
 	}
 
 	return {
-		ticker: ticker,
-		type: type,
-		strike: strike,
-		date: date,
+		underlying: {},
+		positions: [
+			{
+				ticker: ticker,
+				type: type,
+				strike: strike,
+				date: date,
+			}
+		]
 	}
 }
 

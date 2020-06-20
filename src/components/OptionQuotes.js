@@ -24,18 +24,18 @@ const OptionQuotes = ({ optionsParam }) => {
 	}, [optionsParam])
 
 	const onOpenOptionDisplay = async index => {
-		const option = options[index]
-		const response = await stockService.fetchOptions(option.ticker, option.type, option.strike, option.date)
+		const position = options[index].positions[0]
+		const response = await stockService.fetchOptions(position.ticker, position.type, position.strike, position.date)
 		if (response) {
 			const newOptions = options.map((option, i) => i === index
-				? { ...response[0], display: true }
+				? { ...response, display: true }
 				: option
 			)
 			setOptions(newOptions)
 		} else {
 			const newOptions = options.filter((option, i) => i !== index)
 			setOptions(newOptions)
-			alert(`The option position: ${option.ticker} ${option.type} $${option.strike} ${option.date} is invalid!`)
+			alert(`The option position: ${position.ticker} ${position.type} $${position.strike} ${position.date} is invalid!`)
 		}
 	}
 
@@ -59,10 +59,10 @@ const OptionQuotes = ({ optionsParam }) => {
 								? <div className="option-display-open">
 									<div>
 										<span className="option-position">
-											{option.ticker} &nbsp; {option.type} &nbsp; ${option.strike} &nbsp; {option.date}
+											{option.positions[0].ticker} &nbsp; {option.positions[0].type} &nbsp; ${option.positions[0].strike} &nbsp; {option.positions[0].date}
 										</span>
 
-										Stock: {option.stockPrice} ({option.stockChange}, {option.stockPercentChange}%)
+										Stock: {option.underlying.last} ({option.underlying.change}, {option.underlying.percentChange}%)
 
 										<span className="quote-close-btn" onClick={() => onCloseOptionDisplay(index)}>
 											<FontAwesomeIcon icon={faTimes}/>
@@ -72,84 +72,84 @@ const OptionQuotes = ({ optionsParam }) => {
 									<div className="flex-container">
 										<div className="option-stat">
 											<label>Last</label>
-											<div style={textColorStyle(option.percentChange)}>{option.last}</div>
+											<div style={textColorStyle(option.positions[0].percentChange)}>{option.positions[0].last}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Change</label>
-											<div style={textColorStyle(option.percentChange)}>{option.percentChange}%</div>
+											<div style={textColorStyle(option.positions[0].percentChange)}>{option.positions[0].percentChange}%</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Bid</label>
-											<div>{option.bid} x {option.bidSize}</div>
+											<div>{option.positions[0].bid} x {option.positions[0].bidSize}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Ask</label>
-											<div>{option.ask} x {option.askSize}</div>
+											<div>{option.positions[0].ask} x {option.positions[0].askSize}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Volume</label>
-											<div>{option.volume}</div>
+											<div>{option.positions[0].volume}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Open Int.</label>
-											<div>{option.openInterest}</div>
+											<div>{option.positions[0].openInterest}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Low</label>
-											<div>{option.low}</div>
+											<div>{option.positions[0].low}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>High</label>
-											<div>{option.high}</div>
+											<div>{option.positions[0].high}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Prev. Close</label>
-											<div>{option.previousClose}</div>
+											<div>{option.positions[0].previousClose}</div>
 										</div>
 									</div>
 
 									<div className="flex-container">
 										<div className="option-stat">
 											<label>IV</label>
-											<div>{option.volatility}</div>
+											<div>{option.positions[0].volatility}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Delta</label>
-											<div>{option.delta}</div>
+											<div>{option.positions[0].delta}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Gamma</label>
-											<div>{option.gamma}</div>
+											<div>{option.positions[0].gamma}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Theta</label>
-											<div>{option.theta}</div>
+											<div>{option.positions[0].theta}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Vega</label>
-											<div>{option.vega}</div>
+											<div>{option.positions[0].vega}</div>
 										</div>
 
 										<div className="option-stat">
 											<label>Rho</label>
-											<div>{option.rho}</div>
+											<div>{option.positions[0].rho}</div>
 										</div>
 
 										<div className="option-stat">
 											<a
-												href={`https://robinhood.com/stocks/${option.ticker}`}
+												href={`https://robinhood.com/stocks/${option.positions[0].ticker}`}
 												target="_blank"
 												rel="noopener noreferrer"
 											>
@@ -157,7 +157,7 @@ const OptionQuotes = ({ optionsParam }) => {
 											</a>
 											<br/>
 											<a
-												href={`https://finance.yahoo.com/quote/${option.ticker}`}
+												href={`https://finance.yahoo.com/quote/${option.positions[0].ticker}`}
 												target="_blank"
 												rel="noopener noreferrer"
 											>
@@ -170,7 +170,7 @@ const OptionQuotes = ({ optionsParam }) => {
 									className="option-display-close"
 									onClick={() => onOpenOptionDisplay(index)}
 								>
-									{option.ticker} &nbsp; {option.type} &nbsp; ${option.strike} &nbsp; {option.date}
+									{option.positions[0].ticker} &nbsp; {option.positions[0].type} &nbsp; ${option.positions[0].strike} &nbsp; {option.positions[0].date}
 								</span>
 							}
 						</div>

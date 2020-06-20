@@ -45,7 +45,7 @@ const fetchOptions = async (ticker, type, strike, date, strikeCount) => {
 		if (response.data.status !== 'SUCCESS')
 			return null
 
-		return processOptionResponse(response.data, type, strike, date)
+		return processOptionResponse(response.data)
 	} catch (error) {
 		console.log(error.message)
 		return null
@@ -56,45 +56,49 @@ const fetchOptions = async (ticker, type, strike, date, strikeCount) => {
 //////////////////
 // Helpers
 //////////////////
-const processOptionResponse = (data, type, strike, date) => {
-	let options = []
-
-	const expDateMap = type === 'CALL'
-		? data.callExpDateMap
-		: data.putExpDateMap
-
-	const dateKey = Object.keys(expDateMap)[0]
-	const strikeKeys = Object.keys(expDateMap[dateKey])
-	for (const strikeKey of strikeKeys) {
-		const optionStat = expDateMap[dateKey][strikeKey][0]
-		options.push({
-			ticker: data.symbol,
-			type: type,
-			strike: strike,
-			date: date,
-			stockPrice: data.underlying.last,
-			stockChange: data.underlying.change,
-			stockPercentChange: data.underlying.percentChange,
-			bid: optionStat.bid,
-			ask: optionStat.ask,
-			last: optionStat.last,
-			bidSize: optionStat.bidSize,
-			askSize: optionStat.askSize,
-			high: optionStat.highPrice,
-			low: optionStat.lowPrice,
-			previousClose: optionStat.closePrice,
-			percentChange: optionStat.percentChange,
-			volume: optionStat.totalVolume,
-			openInterest: optionStat.openInterest,
-			volatility: optionStat.volatility,
-			delta: optionStat.delta,
-			gamma: optionStat.gamma,
-			theta: optionStat.theta,
-			vega: optionStat.vega,
-			rho: optionStat.rho
-		})
+const processOptionResponse = (data) => {
+	let option = {
+		underlying: data.underlying,
+		positions: [],
 	}
-	return options
+
+	const types = ['callExpDateMap', 'putExpDateMap']
+	for (const type of types) {
+		if (data[type] !== {}) {
+			const dates = Object.keys(data[type])
+			for (const date of dates) {
+				const strikes = Object.keys(data[type][date])
+				for (const strike of strikes) {
+					const optionStat = data[type][date][strike][0]
+					option.positions.push({
+						ticker: data.symbol,
+						type: optionStat.putCall,
+						strike: strike,
+						date: date.split(':')[0],
+						bid: optionStat.bid,
+						ask: optionStat.ask,
+						last: optionStat.last,
+						bidSize: optionStat.bidSize,
+						askSize: optionStat.askSize,
+						high: optionStat.highPrice,
+						low: optionStat.lowPrice,
+						previousClose: optionStat.closePrice,
+						percentChange: optionStat.percentChange,
+						volume: optionStat.totalVolume,
+						openInterest: optionStat.openInterest,
+						volatility: optionStat.volatility,
+						delta: optionStat.delta,
+						gamma: optionStat.gamma,
+						theta: optionStat.theta,
+						vega: optionStat.vega,
+						rho: optionStat.rho
+					})
+				}
+			}
+		}
+	}
+
+	return option
 }
 
 export default {
