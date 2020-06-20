@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateTickers } from './reducers/tickersReducer'
 import { fetchFlairs } from './reducers/dataReducer'
 import Navigation from './components/Navigation'
-import SearchForm from './components/SearchForm'
+import RedditSearchForm from './components/RedditSearchForm'
 import QuoteSearchForm from './components/QuoteSearchForm'
 import DisplayResult from './components/DisplayResult'
 import { WSB, REDDIT_TAB, STOCK_TAB } from './utils/constants'
@@ -19,7 +19,7 @@ const App = () => {
 	let component
 	switch (curTab) {
 	case REDDIT_TAB:
-		component = <SearchForm/>
+		component = <RedditSearchForm/>
 		break
 	case STOCK_TAB:
 		component = <QuoteSearchForm/>

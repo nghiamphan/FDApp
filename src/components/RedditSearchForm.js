@@ -10,7 +10,7 @@ import SearchRecommendation from './SearchRecommendation'
 
 const KEY = 'fdapp_reddit_form_params'
 
-const SearchForm = () => {
+const RedditSearchForm = () => {
 	const [error, setError] = useState(false)
 
 	const storedParams = JSON.parse(window.localStorage.getItem(KEY))
@@ -211,4 +211,4 @@ const SearchForm = () => {
 	)
 }
 
-export default SearchForm
+export default RedditSearchForm
