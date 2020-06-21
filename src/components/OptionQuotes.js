@@ -25,7 +25,7 @@ const OptionQuotes = ({ optionsParam }) => {
 
 	const onOpenOptionDisplay = async index => {
 		const position = options[index].positions[0]
-		const response = await stockService.fetchOptions(position.ticker, position.type, position.strike, position.date)
+		const response = await stockService.fetchOptions(position.ticker, position.type, position.strike, position.date, position.date)
 		if (response && response !== 'FAILED') {
 			const newOptions = options.map((option, i) => i === index
 				? { ...response, display: true }
