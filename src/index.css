@@ -54,6 +54,7 @@ body {
 	top: 35px;
 	padding: 0px 0px 10px 10px;
 	background-color: rgb(120, 120, 120);
+	border: lavender 2px solid;
 }
 
 .form-column {
@@ -150,7 +151,7 @@ body {
 	line-height: 18px;
 	color: lightgray;
 	background-color: #343a40;
-	margin: 10px 0px 10px 0px;
+	margin: 10px 20px 10px 0px;
 	padding: 10px;
 	border-radius: 5px;
 }

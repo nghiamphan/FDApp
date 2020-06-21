@@ -2,6 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { filterTickers } from '../utils/search'
+import SearchRecommendation from './SearchRecommendation'
 
 const QuoteSearchForm = () => {
 	const { register, handleSubmit, watch, } = useForm()
@@ -127,6 +128,8 @@ const QuoteSearchForm = () => {
 						/>
 					</div>
 				</div>
+
+				<SearchRecommendation/>
 			</form>
 		</div>
 	)
