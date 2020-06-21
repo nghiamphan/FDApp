@@ -73,7 +73,7 @@ const processOptionResponse = (data) => {
 					option.positions.push({
 						ticker: data.symbol,
 						type: optionStat.putCall,
-						strike: strike,
+						strike: strike / 1,
 						date: date.split(':')[0],
 						bid: optionStat.bid,
 						ask: optionStat.ask,
