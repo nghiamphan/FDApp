@@ -62,7 +62,9 @@ const OptionQuotes = ({ optionsParam }) => {
 											{option.positions[0].ticker} &nbsp; {option.positions[0].type} &nbsp; ${option.positions[0].strike} &nbsp; {option.positions[0].date}
 										</span>
 
-										Stock: {option.underlying.last} ({option.underlying.change}, {option.underlying.percentChange}%)
+										Stock: &nbsp;
+										<span style={textColorStyle(option.underlying.change)}>{option.underlying.last}</span> &nbsp;
+										(<span style={textColorStyle(option.underlying.change)}>{option.underlying.change}</span>, <span style={textColorStyle(option.underlying.change)}>{option.underlying.percentChange}%</span>)
 
 										<span className="quote-close-btn" onClick={() => onCloseOptionDisplay(index)}>
 											<FontAwesomeIcon icon={faTimes}/>
