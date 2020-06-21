@@ -31,7 +31,7 @@ const SearchRecommendation = () => {
 		content =
 		<>
 			If only ticker is specified, only stock&apos;s data will be fetched. Otherwise, option(s) will also be fetched.
-			<p>Example search: Ticker: SPY - Type: ALL - Strike: 300 - From & To: next Monday.</p>
+			<p>Example search: Ticker: SPY - Type: All - Strike: 300 - From & To: next Monday.</p>
 		</>
 
 		onClose = () => dispatch(turnOffStockSearchRecommendation())
