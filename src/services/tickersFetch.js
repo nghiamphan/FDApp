@@ -4,8 +4,8 @@ const url = 'https://cloud.iexapis.com/stable/ref-data/symbols'
 // eslint-disable-next-line no-undef
 const apiKey = process.env.REACT_APP_IEX_API_KEY
 
-// Filter tickers of types: common stock (cs), ETF (et), ADR (ad), REIT (re), and warrant (wt)
-const types = ['cs', 'et', 'ad', 're', 'wt']
+// Filter tickers of types: common stock (cs), ETF (et), ADR (ad), REIT (re), warrant (wt) and unit (ut)
+const types = ['cs', 'et', 'ad', 're', 'wt', 'ut']
 
 /**
  * Fetch tickers from iex api.
