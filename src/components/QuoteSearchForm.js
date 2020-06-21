@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
+import stockService from '../services/stockService'
 import { filterTickers } from '../utils/search'
 import SearchRecommendation from './SearchRecommendation'
+import StockCompactDisplay from './StockCompactDisplay'
 
 const QuoteSearchForm = () => {
+	const [fetchedData, setFetchedData] = useState(null)
+
 	const { register, handleSubmit, watch, } = useForm()
 	const optionType = watch('type')
 	const searchItem = watch('ticker')
@@ -18,8 +22,23 @@ const QuoteSearchForm = () => {
 		}
 	}
 
-	const onSubmit = input => {
+	const onSubmit = async input => {
+		input.ticker = input.ticker.toUpperCase()
 		console.log(input)
+
+		const underlying = await stockService.fetchQuote(input.ticker)
+		const response = {
+			underlying: { ...underlying, ticker: input.ticker },
+			positions: []
+		}
+
+		if (input.type || input.strike || input.fromDate || input.toDate || input.strikeCount) {
+			const optionResponse = await stockService.fetchOptions(input.ticker, input.type, input.strike, input.fromDate, input.toDate, input.strikeCount)
+			response.positions = optionResponse.positions
+		}
+
+		setFetchedData(response)
+		console.log(response)
 	}
 
 	return (
@@ -76,6 +95,8 @@ const QuoteSearchForm = () => {
 							type="number"
 							placeholder="optional"
 							title="Choose option's strike price"
+							min="0.5"
+							step="0.5"
 							name="strike"
 							ref={register()}
 						/>
@@ -123,6 +144,8 @@ const QuoteSearchForm = () => {
 							type="number"
 							placeholder="optional"
 							title="Choose the number of strikes around the in-the-money price"
+							min="1"
+							step="1"
 							name="strikeCount"
 							ref={register()}
 						/>
@@ -131,6 +154,10 @@ const QuoteSearchForm = () => {
 
 				<SearchRecommendation/>
 			</form>
+
+			{fetchedData &&
+			<StockCompactDisplay stock={fetchedData.underlying}/>
+			}
 		</div>
 	)
 }
