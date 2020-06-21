@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'https://api.tdameritrade.com/v1/marketdata/'
+const baseUrl = 'https://api.tdameritrade.com/v1/'
 // eslint-disable-next-line no-undef
 const apiKey = process.env.REACT_APP_TD_API_KEY
 
@@ -10,11 +10,25 @@ const apiKey = process.env.REACT_APP_TD_API_KEY
  */
 const fetchQuote = async ticker => {
 	try {
-		const url = `${baseUrl}${ticker}/quotes`
+		const url = `${baseUrl}marketdata/${ticker}/quotes`
 		const response = await axios.get(url, {
 			params: { apikey: apiKey }
 		})
-		return response.data[ticker]
+
+		const fundamentalUrl = `${baseUrl}/instruments`
+		const fundamentalResponse = await axios.get(fundamentalUrl, {
+			params: {
+				apikey: apiKey,
+				symbol: ticker,
+				projection: 'fundamental'
+			}
+		})
+
+		const marketCap = fundamentalResponse.data[ticker].fundamental.marketCap !== 0
+			? fundamentalResponse.data[ticker].fundamental.marketCap * 1E6
+			: response.data[ticker].lastPrice * fundamentalResponse.data[ticker].fundamental.sharesOutstanding
+
+		return { ...response.data[ticker], marketCap: marketCap }
 	} catch (error) {
 		console.log(error.message)
 		return null
@@ -28,7 +42,7 @@ const fetchQuote = async ticker => {
  */
 const fetchOptions = async (ticker, type, strike, date, strikeCount) => {
 	try {
-		const url = `${baseUrl}/chains`
+		const url = `${baseUrl}marketdata/chains`
 		const response = await axios.get(url, {
 			params: {
 				apikey: apiKey,

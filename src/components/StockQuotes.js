@@ -102,6 +102,11 @@ const StockQuotes = ({ tickers }) => {
 
 						<div className="flex-container">
 							<div className="quote-stat">
+								<label>Market Cap</label>
+								<div>{displayLargeNumber(stock.marketCap)}</div>
+							</div>
+
+							<div className="quote-stat">
 								<label>Volume</label>
 								<div>{displayLargeNumber(stock.totalVolume)}</div>
 							</div>
