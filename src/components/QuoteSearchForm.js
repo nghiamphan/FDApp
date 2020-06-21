@@ -5,6 +5,7 @@ import stockService from '../services/stockService'
 import { filterTickers } from '../utils/search'
 import SearchRecommendation from './SearchRecommendation'
 import StockCompactDisplay from './StockCompactDisplay'
+import OptionTable from './OptionTable'
 
 const QuoteSearchForm = () => {
 	const [fetchedData, setFetchedData] = useState(null)
@@ -24,7 +25,6 @@ const QuoteSearchForm = () => {
 
 	const onSubmit = async input => {
 		input.ticker = input.ticker.toUpperCase()
-		console.log(input)
 
 		const underlying = await stockService.fetchQuote(input.ticker)
 		const response = {
@@ -38,7 +38,6 @@ const QuoteSearchForm = () => {
 		}
 
 		setFetchedData(response)
-		console.log(response)
 	}
 
 	return (
@@ -157,6 +156,10 @@ const QuoteSearchForm = () => {
 
 			{fetchedData &&
 			<StockCompactDisplay stock={fetchedData.underlying}/>
+			}
+
+			{fetchedData && fetchedData.positions.length > 0 &&
+			<OptionTable positions={fetchedData.positions}/>
 			}
 		</div>
 	)
