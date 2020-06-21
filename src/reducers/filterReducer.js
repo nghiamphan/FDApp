@@ -9,6 +9,7 @@ const UPDATE_FILTER = 'UPDATE_FILTER'
  */
 const initialState = {
 	subreddits: [],
+	show_notext_threads: false,
 }
 
 const filterReducer = (state = initialState, action) => {

@@ -14,6 +14,7 @@ const DisplayResult = () => {
 	const filter = useSelector(state => state.filter)
 	const data = useSelector(state => state.data)
 	const symbols = useSelector(state => state.companies).map(company => company.symbol)
+	const searchingInProgress = useSelector(state => state.meta.searching_in_progress)
 
 	const threadsToDisplay = filterThreads(filter, data)
 
@@ -23,6 +24,14 @@ const DisplayResult = () => {
 			const { tickers, options } = searchTickersAndOptions(symbols, thread)
 			dispatch(updateTickersAndOptions(thread.subreddit, thread.id, tickers, options))
 		}
+	}
+
+	if (threadsToDisplay.length === 0 && filter.subreddits.length !== 0 && !searchingInProgress) {
+		return (
+			<div className="red-text" style={{ marginTop: '10px' }}>
+				No results found.
+			</div>
+		)
 	}
 
 	return (
