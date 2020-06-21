@@ -2,13 +2,13 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
-import { turnOffSearchRecommendation } from '../reducers/metaReducer'
+import { turnOffRedditSearchRecommendation } from '../reducers/metaReducer'
 
 const SearchRecommendation = () => {
 	const dispatch = useDispatch()
-	const showSearchRecommendation = useSelector(state => state.meta.show_search_recommendation)
+	const showRedditSearchRecommendation = useSelector(state => state.meta.show_reddit_search_recommendation)
 
-	if (showSearchRecommendation) {
+	if (showRedditSearchRecommendation) {
 		return (
 			<div className="search-recommendation flex-container">
 				<div className="search-recommendation-text">
@@ -23,7 +23,7 @@ const SearchRecommendation = () => {
 				</div>
 				<div
 					className="search-recommendation-close"
-					onClick={() => dispatch(turnOffSearchRecommendation())}
+					onClick={() => dispatch(turnOffRedditSearchRecommendation())}
 				>
 					<FontAwesomeIcon icon={faTimes}/>
 				</div>
