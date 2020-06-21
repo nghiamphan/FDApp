@@ -43,7 +43,7 @@ const fetchOptions = async (ticker, type, strike, date, strikeCount) => {
 		})
 
 		if (response.data.status !== 'SUCCESS')
-			return null
+			return 'FAILED'
 
 		return processOptionResponse(response.data)
 	} catch (error) {
