@@ -125,7 +125,7 @@ const QuoteSearchForm = () => {
 					<button
 						className="search-button"
 						type="submit"
-						disabled={!searchItem}
+						disabled={!searchItem || fetchingStockInProgress}
 					>
 						Apply
 					</button>
