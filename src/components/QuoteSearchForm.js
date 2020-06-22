@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import stockService from '../services/stockService'
-import { setFetchingStockInProgress } from '../reducers/metaReducer'
+import { setFetchingStockInProgress, saveFetchedStockData } from '../reducers/metaReducer'
 import { filterTickers } from '../utils/search'
 import { FAILED, NOT_FETCHED } from '../utils/constants'
 import SearchRecommendation from './SearchRecommendation'
@@ -12,7 +12,7 @@ import OptionTable from './OptionTable'
 const KEY = 'fdapp_stock_form_params'
 
 const QuoteSearchForm = () => {
-	const [fetchedData, setFetchedData] = useState(null)
+	const fetchedData = useSelector(state => state.meta.fetched_stock_data)
 
 	const storedParams = JSON.parse(window.localStorage.getItem(KEY))
 	const { register, handleSubmit, watch, } = useForm({
@@ -40,11 +40,11 @@ const QuoteSearchForm = () => {
 
 		const underlying = await stockService.fetchQuote(input.ticker)
 		if (underlying === FAILED) {
-			setFetchedData(
+			dispatch(saveFetchedStockData(
 				{
 					underlying: FAILED,
 					positions: NOT_FETCHED,
-				})
+				}))
 			dispatch(setFetchingStockInProgress(false))
 			return
 		}
@@ -63,7 +63,7 @@ const QuoteSearchForm = () => {
 				response.positions = FAILED
 		}
 
-		setFetchedData(response)
+		dispatch(saveFetchedStockData(response))
 		dispatch(setFetchingStockInProgress(false))
 	}
 

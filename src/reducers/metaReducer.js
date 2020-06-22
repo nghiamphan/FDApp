@@ -6,6 +6,7 @@ const FETCHING_STOCK_IN_PROGRESS = 'FETCHING_STOCK_IN_PROGRESS'
 const SET_NAVIGATION_TAB = 'SET_NAVIGATION_TAB'
 const TURN_OFF_REDDIT_SEARCH_RECOMMENDATION = 'TURN_OFF_REDDIT_SEARCH_RECOMMENDATION'
 const TURN_OFF_STOCK_SEARCH_RECOMMENDATION = 'TURN_OFF_STOCK_SEARCH_RECOMMENDATION'
+const SAVE_FETCHED_STOCK_DATA = 'SAVE_FETCHED_STOCK_DATA'
 
 ////////////////////////
 // Reducer
@@ -16,6 +17,7 @@ const initialState = {
 	navigation_tab: REDDIT_TAB,
 	show_reddit_search_recommendation: true,
 	show_stock_search_recommendation: true,
+	fetched_stock_data: null // stock's data fetched in Quote Search Form
 }
 
 const metaReducer = (state = initialState, action) => {
@@ -51,6 +53,11 @@ const metaReducer = (state = initialState, action) => {
 			...state,
 			show_stock_search_recommendation: false,
 		}
+	case SAVE_FETCHED_STOCK_DATA:
+		return {
+			...state,
+			fetched_stock_data: action.fetchedData,
+		}
 	default:
 		return state
 	}
@@ -81,4 +88,8 @@ export const turnOffStockSearchRecommendation = () => ({
 	type: TURN_OFF_STOCK_SEARCH_RECOMMENDATION,
 })
 
+export const saveFetchedStockData = fetchedData => ({
+	type: SAVE_FETCHED_STOCK_DATA,
+	fetchedData,
+})
 export default metaReducer
