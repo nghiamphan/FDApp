@@ -169,7 +169,7 @@ const QuoteSearchForm = () => {
 							className="input-text input-styles"
 							type="number"
 							placeholder="optional"
-							title="Choose the number of strikes around the in-the-money price"
+							title="Choose the number of strikes around the in-the-money price. If strike count is specified, the strike input will have no effect."
 							min="1"
 							step="1"
 							name="strikeCount"
