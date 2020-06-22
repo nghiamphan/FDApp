@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import stockService from '../services/stockService'
+import { setFetchingStockInProgress } from '../reducers/metaReducer'
 import { filterTickers } from '../utils/search'
 import { FAILED, NOT_FETCHED } from '../utils/constants'
 import SearchRecommendation from './SearchRecommendation'
@@ -16,6 +17,9 @@ const QuoteSearchForm = () => {
 	const searchItem = watch('ticker')
 	const companies = useSelector(state => state.companies)
 
+	const dispatch = useDispatch()
+	const fetchingStockInProgress = useSelector(state => state.meta.fetching_stock_in_progress)
+
 	const textColorStyle = () => {
 		if (!optionType) {
 			return {
@@ -25,6 +29,7 @@ const QuoteSearchForm = () => {
 	}
 
 	const onSubmit = async input => {
+		dispatch(setFetchingStockInProgress(true))
 		input.ticker = input.ticker.toUpperCase()
 
 		const underlying = await stockService.fetchQuote(input.ticker)
@@ -34,6 +39,7 @@ const QuoteSearchForm = () => {
 					underlying: FAILED,
 					positions: NOT_FETCHED,
 				})
+			dispatch(setFetchingStockInProgress(false))
 			return
 		}
 
@@ -52,6 +58,7 @@ const QuoteSearchForm = () => {
 		}
 
 		setFetchedData(response)
+		dispatch(setFetchingStockInProgress(false))
 	}
 
 	return (
@@ -122,6 +129,12 @@ const QuoteSearchForm = () => {
 					>
 						Apply
 					</button>
+
+					{fetchingStockInProgress &&
+					<span className="search-in-progress red-text">
+						Searching in progress...
+					</span>
+					}
 				</div>
 
 				<div className="form-column">
