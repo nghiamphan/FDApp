@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchData } from '../reducers/dataReducer'
 import { updateFilter } from '../reducers/filterReducer'
-import { setSearchingInProgress } from '../reducers/metaReducer'
+import { setFetchingRedditInProgress } from '../reducers/metaReducer'
 import { filterTickers } from '../utils/search'
 import { SUBREDDITS, WSB } from '../utils/constants'
 import SearchRecommendation from './SearchRecommendation'
@@ -21,7 +21,7 @@ const RedditSearchForm = () => {
 
 	const dispatch = useDispatch()
 	const flairs = useSelector(state => state.data[WSB].flairs)
-	const searchingInProgress = useSelector(state => state.meta.searching_in_progress)
+	const fetchingRedditInProgress = useSelector(state => state.meta.fetching_reddit_in_progress)
 	const companies = useSelector(state => state.companies)
 
 	const onSubmit = input => {
@@ -45,7 +45,7 @@ const RedditSearchForm = () => {
 		}
 
 		dispatch(updateFilter(subredditsToFetch, input.show_notext_threads))
-		dispatch(setSearchingInProgress())
+		dispatch(setFetchingRedditInProgress())
 	}
 
 	return (
@@ -116,12 +116,12 @@ const RedditSearchForm = () => {
 					<button
 						className="search-button"
 						type="submit"
-						disabled={searchingInProgress}
+						disabled={fetchingRedditInProgress}
 					>
 						Search
 					</button>
 
-					{searchingInProgress &&
+					{fetchingRedditInProgress &&
 					<span className="search-in-progress red-text">
 						Searching in progress...
 					</span>

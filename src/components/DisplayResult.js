@@ -14,7 +14,7 @@ const DisplayResult = () => {
 	const filter = useSelector(state => state.filter)
 	const data = useSelector(state => state.data)
 	const symbols = useSelector(state => state.companies).map(company => company.symbol)
-	const searchingInProgress = useSelector(state => state.meta.searching_in_progress)
+	const fetchingRedditInProgress = useSelector(state => state.meta.fetching_reddit_in_progress)
 
 	const threadsToDisplay = filterThreads(filter, data)
 
@@ -26,7 +26,7 @@ const DisplayResult = () => {
 		}
 	}
 
-	if (threadsToDisplay.length === 0 && filter.subreddits.length !== 0 && !searchingInProgress) {
+	if (threadsToDisplay.length === 0 && filter.subreddits.length !== 0 && !fetchingRedditInProgress) {
 		return (
 			<div className="red-text">
 				No results found.
