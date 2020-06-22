@@ -335,3 +335,46 @@ a:hover {
 	width: 100px;
 	margin-bottom: 10px;
 }
+
+/********************************
+* Option Table
+********************************/
+.option-table-div {
+	overflow-x: auto;
+	margin-top: 10px;
+	font-size: 15px;
+	color: lightgray;
+	background-color: rgb(25, 25, 25);
+}
+
+table > thead > tr{
+	display:block;
+	width: 1200px;
+}
+
+table > tbody {
+	display:block;
+	max-height:200px;
+	overflow-y:auto;
+}
+
+th, td{
+	width: 50px;
+	padding: 4px;
+	text-align: center;
+	border: 1px solid grey;
+	border-collapse: collapse;
+}
+
+th {
+	font-size: 14px;
+	border-bottom: 3px solid grey;
+}
+
+.wider-table-cell {
+	width: 80px;
+}
+
+table {
+	border-collapse: collapse;
+}
