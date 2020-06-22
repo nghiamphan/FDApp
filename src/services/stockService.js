@@ -15,6 +15,9 @@ const fetchQuote = async ticker => {
 			params: { apikey: apiKey }
 		})
 
+		if (!response.data[ticker])
+			return 'FAILED'
+
 		const fundamentalUrl = `${baseUrl}/instruments`
 		const fundamentalResponse = await axios.get(fundamentalUrl, {
 			params: {

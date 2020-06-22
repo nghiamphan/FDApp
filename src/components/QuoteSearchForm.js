@@ -27,14 +27,27 @@ const QuoteSearchForm = () => {
 		input.ticker = input.ticker.toUpperCase()
 
 		const underlying = await stockService.fetchQuote(input.ticker)
+		if (underlying === 'FAILED') {
+			setFetchedData(
+				{
+					underlying: 'FAILED',
+					positions: 'NOT_FETCHED',
+				})
+			return
+		}
+
 		const response = {
 			underlying: { ...underlying, ticker: input.ticker },
-			positions: []
+			positions: 'NOT_FETCHED',
 		}
 
 		if (input.type || input.strike || input.fromDate || input.toDate || input.strikeCount) {
 			const optionResponse = await stockService.fetchOptions(input.ticker, input.type, input.strike, input.fromDate, input.toDate, input.strikeCount)
-			response.positions = optionResponse.positions
+
+			if (optionResponse && optionResponse !== 'FAILED')
+				response.positions = optionResponse.positions
+			else
+				response.positions = 'FAILED'
 		}
 
 		setFetchedData(response)
@@ -155,12 +168,17 @@ const QuoteSearchForm = () => {
 			</form>
 
 			{fetchedData &&
-			<StockCompactDisplay stock={fetchedData.underlying}/>
-			}
+			(fetchedData.underlying !== 'FAILED'
+				? <StockCompactDisplay stock={fetchedData.underlying}/>
+				: <div className="red-text">Invalid ticker.</div>
+			)}
 
-			{fetchedData && fetchedData.positions.length > 0 &&
-			<OptionTable positions={fetchedData.positions}/>
-			}
+
+			{fetchedData && fetchedData.underlying !== 'FAILED' &&
+			(fetchedData.positions !== 'FAILED'
+				? fetchedData.positions !== 'NOT_FETCHED' && <OptionTable positions={fetchedData.positions}/>
+				: <div className="red-text">No options found.</div>
+			)}
 		</div>
 	)
 }
