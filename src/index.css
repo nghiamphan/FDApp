@@ -54,6 +54,7 @@ body {
 	position: sticky;
 	max-height: calc(100vh - 100px);
 	overflow-y: auto;
+	resize: vertical;
 	padding: 0px 10px 10px 10px;
 	background-color: rgb(120, 120, 120);
 	border: lavender 2px solid;
