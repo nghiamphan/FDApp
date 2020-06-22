@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
 import { textColorStyle } from '../utils/dataFormat'
+import { FAILED } from '../utils/constants'
 
 const OptionQuotes = ({ optionsParam }) => {
 	/**
@@ -26,13 +27,13 @@ const OptionQuotes = ({ optionsParam }) => {
 	const onOpenOptionDisplay = async index => {
 		const position = options[index].positions[0]
 		const response = await stockService.fetchOptions(position.ticker, position.type, position.strike, position.date, position.date)
-		if (response && response !== 'FAILED') {
+		if (response && response !== FAILED) {
 			const newOptions = options.map((option, i) => i === index
 				? { ...response, display: true }
 				: option
 			)
 			setOptions(newOptions)
-		} else if (response && response === 'FAILED') {
+		} else if (response && response === FAILED) {
 			const newOptions = options.filter((option, i) => i !== index)
 			setOptions(newOptions)
 			alert(`The option position: ${position.ticker} ${position.type} $${position.strike} ${position.date} is invalid!`)

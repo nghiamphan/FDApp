@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { FAILED } from '../utils/constants'
 
 const baseUrl = 'https://api.tdameritrade.com/v1/'
 // eslint-disable-next-line no-undef
@@ -16,7 +17,7 @@ const fetchQuote = async ticker => {
 		})
 
 		if (!response.data[ticker])
-			return 'FAILED'
+			return FAILED
 
 		const fundamentalUrl = `${baseUrl}/instruments`
 		const fundamentalResponse = await axios.get(fundamentalUrl, {
@@ -60,7 +61,7 @@ const fetchOptions = async (ticker, type, strike, fromDate, toDate, strikeCount)
 		})
 
 		if (response.data.status !== 'SUCCESS')
-			return 'FAILED'
+			return FAILED
 
 		return processOptionResponse(response.data)
 	} catch (error) {

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import stockService from '../services/stockService'
 import { filterTickers } from '../utils/search'
+import { FAILED, NOT_FETCHED } from '../utils/constants'
 import SearchRecommendation from './SearchRecommendation'
 import StockCompactDisplay from './StockCompactDisplay'
 import OptionTable from './OptionTable'
@@ -27,27 +28,27 @@ const QuoteSearchForm = () => {
 		input.ticker = input.ticker.toUpperCase()
 
 		const underlying = await stockService.fetchQuote(input.ticker)
-		if (underlying === 'FAILED') {
+		if (underlying === FAILED) {
 			setFetchedData(
 				{
-					underlying: 'FAILED',
-					positions: 'NOT_FETCHED',
+					underlying: FAILED,
+					positions: NOT_FETCHED,
 				})
 			return
 		}
 
 		const response = {
 			underlying: { ...underlying, ticker: input.ticker },
-			positions: 'NOT_FETCHED',
+			positions: NOT_FETCHED,
 		}
 
 		if (input.type || input.strike || input.fromDate || input.toDate || input.strikeCount) {
 			const optionResponse = await stockService.fetchOptions(input.ticker, input.type, input.strike, input.fromDate, input.toDate, input.strikeCount)
 
-			if (optionResponse && optionResponse !== 'FAILED')
+			if (optionResponse && optionResponse !== FAILED)
 				response.positions = optionResponse.positions
 			else
-				response.positions = 'FAILED'
+				response.positions = FAILED
 		}
 
 		setFetchedData(response)
@@ -168,15 +169,15 @@ const QuoteSearchForm = () => {
 			</form>
 
 			{fetchedData &&
-			(fetchedData.underlying !== 'FAILED'
+			(fetchedData.underlying !== FAILED
 				? <StockCompactDisplay stock={fetchedData.underlying}/>
 				: <div className="red-text">Invalid ticker.</div>
 			)}
 
 
-			{fetchedData && fetchedData.underlying !== 'FAILED' &&
-			(fetchedData.positions !== 'FAILED'
-				? fetchedData.positions !== 'NOT_FETCHED' && <OptionTable positions={fetchedData.positions}/>
+			{fetchedData && fetchedData.underlying !== FAILED &&
+			(fetchedData.positions !== FAILED
+				? fetchedData.positions !== NOT_FETCHED && <OptionTable positions={fetchedData.positions}/>
 				: <div className="red-text">No options found.</div>
 			)}
 		</div>
