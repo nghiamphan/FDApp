@@ -9,10 +9,15 @@ import SearchRecommendation from './SearchRecommendation'
 import StockCompactDisplay from './StockCompactDisplay'
 import OptionTable from './OptionTable'
 
+const KEY = 'fdapp_stock_form_params'
+
 const QuoteSearchForm = () => {
 	const [fetchedData, setFetchedData] = useState(null)
 
-	const { register, handleSubmit, watch, } = useForm()
+	const storedParams = JSON.parse(window.localStorage.getItem(KEY))
+	const { register, handleSubmit, watch, } = useForm({
+		defaultValues: storedParams ? storedParams : ''
+	})
 	const optionType = watch('type')
 	const searchItem = watch('ticker')
 	const companies = useSelector(state => state.companies)
@@ -31,6 +36,7 @@ const QuoteSearchForm = () => {
 	const onSubmit = async input => {
 		dispatch(setFetchingStockInProgress(true))
 		input.ticker = input.ticker.toUpperCase()
+		localStorage.setItem(KEY, JSON.stringify(input))
 
 		const underlying = await stockService.fetchQuote(input.ticker)
 		if (underlying === FAILED) {
