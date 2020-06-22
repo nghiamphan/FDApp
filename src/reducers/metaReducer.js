@@ -1,8 +1,8 @@
 import { FETCH_DATA } from './dataReducer'
 import { REDDIT_TAB } from '../utils/constants'
 
-const FETCHING_REDDIT_IN_PROGRESS = 'FETCHING_REDDIT_IN_PROGRESS'
-const FETCHING_STOCK_IN_PROGRESS = 'FETCHING_STOCK_IN_PROGRESS'
+const SET_FETCHING_REDDIT_IN_PROGRESS = 'SET_FETCHING_REDDIT_IN_PROGRESS'
+const SET_FETCHING_STOCK_IN_PROGRESS = 'SET_FETCHING_STOCK_IN_PROGRESS'
 const SET_NAVIGATION_TAB = 'SET_NAVIGATION_TAB'
 const TURN_OFF_REDDIT_SEARCH_RECOMMENDATION = 'TURN_OFF_REDDIT_SEARCH_RECOMMENDATION'
 const TURN_OFF_STOCK_SEARCH_RECOMMENDATION = 'TURN_OFF_STOCK_SEARCH_RECOMMENDATION'
@@ -22,7 +22,7 @@ const initialState = {
 
 const metaReducer = (state = initialState, action) => {
 	switch (action.type) {
-	case FETCHING_REDDIT_IN_PROGRESS:
+	case SET_FETCHING_REDDIT_IN_PROGRESS:
 		return {
 			...state,
 			fetching_reddit_in_progress: true,
@@ -33,7 +33,7 @@ const metaReducer = (state = initialState, action) => {
 			navigation_tab: null,
 			fetching_reddit_in_progress: false
 		}
-	case FETCHING_STOCK_IN_PROGRESS:
+	case SET_FETCHING_STOCK_IN_PROGRESS:
 		return {
 			...state,
 			fetching_stock_in_progress: action.isFetching
@@ -67,11 +67,11 @@ const metaReducer = (state = initialState, action) => {
 // Actions
 ////////////////////////
 export const setFetchingRedditInProgress = () => ({
-	type: FETCHING_REDDIT_IN_PROGRESS,
+	type: SET_FETCHING_REDDIT_IN_PROGRESS,
 })
 
 export const setFetchingStockInProgress = isFetching => ({
-	type: FETCHING_STOCK_IN_PROGRESS,
+	type: SET_FETCHING_STOCK_IN_PROGRESS,
 	isFetching,
 })
 
