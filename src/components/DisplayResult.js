@@ -28,7 +28,7 @@ const DisplayResult = () => {
 
 	if (threadsToDisplay.length === 0 && filter.subreddits.length !== 0 && !searchingInProgress) {
 		return (
-			<div className="red-text" style={{ marginTop: '10px' }}>
+			<div className="red-text">
 				No results found.
 			</div>
 		)
