@@ -5,7 +5,9 @@ export const FETCH_DATA = 'FETCH_DATA'
 const FETCH_FLAIRS = 'FETCH_FLAIRS'
 const TOGGLE_DISPLAY_POST = 'TOGGLE_DISPLAY_POST'
 const TOGGLE_DISPLAY_COMMENTS = 'TOGGLE_DISPLAY_COMMENTS'
+const TOGGLE_DISPLAY_CHILD_COMMENTS = 'TOGGLE_DISPLAY_CHILD_COMMENTS'
 const UPDATE_TICKERS_AND_OPTIONS = 'UPDATE_TICKERS_AND_OPTIONS'
+
 const KEY = 'fdapp_wsbflairs'
 const ONE_DAY = 86400000
 
@@ -51,6 +53,54 @@ const dataReducer = (state = initialState, action) => {
 				? { ...thread, display_comments: !thread.display_comments }
 				: thread
 		)
+		return newState
+	}
+	case TOGGLE_DISPLAY_CHILD_COMMENTS: {
+		const newState = { ...state }
+		const comments = newState[action.subreddit].threads.filter(thread => thread.id === action.threadId)[0].comments
+
+		/**
+		 * Each comment has three following properties:
+		 * @var displayed_by_parent_comment (@default true)
+		 * @var display_self (@default true)
+		 * @var display_child_comments (@default true)
+		 *
+		 * If @var display_self = false, the comment is hidden.
+		 * If @var display_self = true and @var display_child_comments = false, the comment is collapsed: its header is shown, but its content and its child comments are hidden.
+		 * If @var display_self = true and @var display_child_comments = true, the comment and its child comments are shown.
+		 *
+		 * A comment's @var displayed_by_parent_comment is equal to its parent comment's @var display_child_comments.
+		 */
+		let i = 0
+		while (i < comments.length) {
+			if (comments[i].id !== action.parentCommentId) {
+				i++
+				continue
+			} else {
+				const parentCommentLevel = comments[i].comment_level
+				const setDisplay = !comments[i].display_child_comments
+				comments[i].display_child_comments = setDisplay
+
+				i++
+				while (i < comments.length && comments[i].comment_level > parentCommentLevel) {
+					if (comments[i].comment_level === parentCommentLevel + 1)
+						comments[i].displayed_by_parent_comment = setDisplay
+
+					/**
+					 * If a comment @var X is expanded, all of @var X's child and grandchild comments is displayed as they were the last time @var X is expanded (hidden, collapsed or shown).
+					 * The @var display_self of each grandchild comment is preserved in its parent comment's @var displayed_by_parent_comment.
+					 */
+					if (setDisplay)
+						comments[i].display_self = comments[i].displayed_by_parent_comment
+					else
+						comments[i].display_self = setDisplay
+					i++
+				}
+
+				break
+			}
+		}
+
 		return newState
 	}
 	case UPDATE_TICKERS_AND_OPTIONS: {
@@ -135,6 +185,18 @@ export const toggleDisplayComments = (subreddit, id) => ({
 	type: TOGGLE_DISPLAY_COMMENTS,
 	subreddit,
 	id,
+})
+
+/**
+ * @param subreddit
+ * @param threadId
+ * @param parentCommentId
+ */
+export const toggleDisplayChildComments = (subreddit, threadId, parentCommentId) => ({
+	type: TOGGLE_DISPLAY_CHILD_COMMENTS,
+	subreddit,
+	threadId,
+	parentCommentId,
 })
 
 /**

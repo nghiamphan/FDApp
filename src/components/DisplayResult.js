@@ -2,10 +2,10 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VisibilitySensor from 'react-visibility-sensor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight, faArrowUp } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faArrowUp, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { filterThreads, searchTickersAndOptions } from '../utils/search'
 import { displayDate } from '../utils/dataFormat'
-import { toggleDisplayPost, toggleDisplayComments, updateTickersAndOptions } from '../reducers/dataReducer'
+import { toggleDisplayPost, toggleDisplayComments, toggleDisplayChildComments, updateTickersAndOptions } from '../reducers/dataReducer'
 import StockQuotes from './StockQuotes'
 import OptionQuotes from './OptionQuotes'
 
@@ -135,13 +135,25 @@ const DisplayResult = () => {
 
 						{thread.display_comments && (
 							thread.comments.length > 0
-								? thread.comments.map(comment =>  (
+								? thread.comments.map(comment => (comment.display_self &&
 									<div
 										key={comment.id}
 										className="thread-comment"
 										style={{ marginLeft: comment.comment_level * 10 }}
 									>
 										<div className="comment-details flex-container">
+											<div
+												className="comment-detail-item toggle-button"
+												onClick={() => dispatch(toggleDisplayChildComments(thread.subreddit, thread.id, comment.id))}
+											>
+												&#91;
+												{comment.display_child_comments
+													? <FontAwesomeIcon icon={faMinus} size={'sm'} title="Collapse"/>
+													: <FontAwesomeIcon icon={faPlus} size={'sm'} title="Expand"/>
+												}
+												&#93;
+											</div>
+
 											<div className="comment-detail-item">
 												<a
 													href={`https://www.reddit.com/user/${comment.author}`}
@@ -171,7 +183,9 @@ const DisplayResult = () => {
 											</div>
 										</div>
 
+										{comment.display_child_comments &&
 										<div dangerouslySetInnerHTML={{ __html: new DOMParser().parseFromString(comment.content_html, 'text/html').documentElement.textContent }}/>
+										}
 									</div>
 								))
 								: <div className="thread-comment">No comments yet...</div>

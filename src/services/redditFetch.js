@@ -128,6 +128,9 @@ const preorderTreeTraversal = (array, root, commentLevel) => {
 				link: root.data.permalink,
 				created_utc: root.data.created_utc,
 				comment_level: commentLevel,
+				displayed_by_parent_comment: true,
+				display_self: true,
+				display_child_comments: true,
 			})
 		if (root.data.replies) {
 			for (const childComment of root.data.replies.data.children) {
