@@ -52,6 +52,7 @@ body {
 ********************************/
 .search-form-div {
 	position: sticky;
+	top: 35px;
 	max-height: calc(100vh - 100px);
 	overflow-y: auto;
 	resize: vertical;
