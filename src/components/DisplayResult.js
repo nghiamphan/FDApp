@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VisibilitySensor from 'react-visibility-sensor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight, faArrowUp, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUp, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { filterThreads, searchTickersAndOptions } from '../utils/search'
 import { displayDate } from '../utils/dataFormat'
 import { toggleDisplayPost, toggleDisplayComments, toggleDisplayChildComments, updateTickersAndOptions } from '../reducers/dataReducer'
@@ -52,15 +52,17 @@ const DisplayResult = () => {
 							</div>
 
 							<div className="thread-details flex-container">
-								<button
-									className="toggle-button"
+								<div
+									className="thread-detail-item toggle-button"
 									onClick={() => dispatch(toggleDisplayPost(thread.subreddit, thread.id))}
 								>
+									&#91;
 									{thread.display_post
-										? <FontAwesomeIcon icon={faChevronDown} title="Hide Post"/>
-										: <FontAwesomeIcon icon={faChevronRight} title="Show Post"/>
+										? <FontAwesomeIcon icon={faMinus} size={'sm'} title="Hide Post"/>
+										: <FontAwesomeIcon icon={faPlus} size={'sm'} title="Show Post"/>
 									}
-								</button>
+									&#93;
+								</div>
 
 								<div className="thread-detail-item">
 									<a
@@ -120,15 +122,17 @@ const DisplayResult = () => {
 							? <div className="thread-post">
 								<div dangerouslySetInnerHTML={{ __html: new DOMParser().parseFromString(thread.content_html, 'text/html').documentElement.textContent }}/>
 
-								<button
+								<div
 									className="toggle-button"
 									onClick={() => dispatch(toggleDisplayComments(thread.subreddit, thread.id))}
 								>
+									&#91;
 									{thread.display_comments
-										? <FontAwesomeIcon icon={faChevronDown} title="Hide Comments"/>
-										: <FontAwesomeIcon icon={faChevronRight} title="Show Comments"/>
+										? <FontAwesomeIcon icon={faMinus} size={'sm'} title="Hide Comments"/>
+										: <FontAwesomeIcon icon={faPlus} size={'sm'} title="Show Comments"/>
 									}
-								</button>
+									&#93;
+								</div>
 							</div>
 							: <div className="thread-post">This post does not have any text...</div>
 						}
