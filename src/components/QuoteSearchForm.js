@@ -8,6 +8,7 @@ import { FAILED, NOT_FETCHED } from '../utils/constants'
 import SearchRecommendation from './SearchRecommendation'
 import StockCompactDisplay from './StockCompactDisplay'
 import OptionTable from './OptionTable'
+import StockGraph from './StockGraph'
 
 const KEY = 'fdapp_stock_form_params'
 
@@ -189,7 +190,10 @@ const QuoteSearchForm = () => {
 
 			{fetchedData &&
 			(fetchedData.underlying !== FAILED
-				? <StockCompactDisplay stock={fetchedData.underlying}/>
+				? <>
+					<StockGraph ticker={fetchedData.underlying.ticker}/>
+					<StockCompactDisplay stock={fetchedData.underlying}/>
+				</>
 				: <div className="red-text">Invalid ticker.</div>
 			)}
 
