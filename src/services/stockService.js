@@ -70,7 +70,7 @@ const fetchOptions = async (ticker, type, strike, fromDate, toDate, strikeCount)
 	}
 }
 
-export const fetchPriceHistory = async (ticker, periodType, period, frequency) => {
+export const fetchPriceHistory = async (ticker, periodType, period, frequencyType, frequency) => {
 	try {
 		const url = `${baseUrl}marketdata/${ticker}/pricehistory`
 		const response = await axios.get(url, {
@@ -78,6 +78,7 @@ export const fetchPriceHistory = async (ticker, periodType, period, frequency) =
 				apikey: apiKey,
 				periodType: periodType,
 				period: period,
+				frequencyType: frequencyType,
 				frequency: frequency,
 			}
 		})
