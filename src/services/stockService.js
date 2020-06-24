@@ -70,6 +70,27 @@ const fetchOptions = async (ticker, type, strike, fromDate, toDate, strikeCount)
 	}
 }
 
+export const fetchPriceHistory = async (ticker, periodType, period, frequency) => {
+	try {
+		const url = `${baseUrl}marketdata/${ticker}/pricehistory`
+		const response = await axios.get(url, {
+			params: {
+				apikey: apiKey,
+				periodType: periodType,
+				period: period,
+				frequency: frequency,
+			}
+		})
+
+		return response.data.candles
+			? response.data.candles
+			: FAILED
+
+	} catch (error) {
+		console.log(error.message)
+		return null
+	}
+}
 
 //////////////////
 // Helpers
