@@ -7,6 +7,7 @@ const SET_NAVIGATION_TAB = 'SET_NAVIGATION_TAB'
 const TURN_OFF_REDDIT_SEARCH_RECOMMENDATION = 'TURN_OFF_REDDIT_SEARCH_RECOMMENDATION'
 const TURN_OFF_STOCK_SEARCH_RECOMMENDATION = 'TURN_OFF_STOCK_SEARCH_RECOMMENDATION'
 const SAVE_FETCHED_STOCK_DATA = 'SAVE_FETCHED_STOCK_DATA'
+const SAVE_FETCHED_STOCK_PRICE_HISTORY = 'SAVE_FETCHED_STOCK_PRICE_HISTORY'
 
 ////////////////////////
 // Reducer
@@ -17,7 +18,8 @@ const initialState = {
 	navigation_tab: REDDIT_TAB,
 	show_reddit_search_recommendation: true,
 	show_stock_search_recommendation: true,
-	fetched_stock_data: null // stock's data fetched in Quote Search Form
+	fetched_stock_data: null, // stock's data fetched in Quote Search Form
+	fetched_stock_price_history: { duration: null, prices: [] },
 }
 
 const metaReducer = (state = initialState, action) => {
@@ -58,6 +60,14 @@ const metaReducer = (state = initialState, action) => {
 			...state,
 			fetched_stock_data: action.fetchedData,
 		}
+	case SAVE_FETCHED_STOCK_PRICE_HISTORY:
+		return {
+			...state,
+			fetched_stock_price_history: {
+				duration: action.duration,
+				prices: action.prices,
+			}
+		}
 	default:
 		return state
 	}
@@ -92,4 +102,11 @@ export const saveFetchedStockData = fetchedData => ({
 	type: SAVE_FETCHED_STOCK_DATA,
 	fetchedData,
 })
+
+export const saveFetchedStockPriceHistory = (duration, prices) => ({
+	type: SAVE_FETCHED_STOCK_PRICE_HISTORY,
+	duration,
+	prices,
+})
+
 export default metaReducer
