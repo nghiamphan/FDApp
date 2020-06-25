@@ -377,3 +377,28 @@ th {
 table {
 	border-collapse: collapse;
 }
+
+/********************************
+* Stock Graph
+********************************/
+.stock-graph-div {
+	justify-content: center;
+}
+
+.stock-graph-select {
+	padding-left: 30px;
+}
+
+.stock-graph-select > div {
+	margin: 0px 0px 5px 0px;
+	padding: 1px 5px 0px 5px;
+	text-align: center;
+	font-weight: 600;
+	background-color: gray;
+	border-radius: 2px;
+}
+
+.stock-graph-select > div:hover {
+	cursor: pointer;
+	background-color: #343a40;
+}

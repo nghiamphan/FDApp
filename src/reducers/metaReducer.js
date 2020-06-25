@@ -19,7 +19,7 @@ const initialState = {
 	show_reddit_search_recommendation: true,
 	show_stock_search_recommendation: true,
 	fetched_stock_data: null, // stock's data fetched in Quote Search Form
-	fetched_stock_price_history: { duration: null, prices: [] },
+	fetched_stock_price_history: { duration: null, prices: [], change: null },
 }
 
 const metaReducer = (state = initialState, action) => {
@@ -66,6 +66,7 @@ const metaReducer = (state = initialState, action) => {
 			fetched_stock_price_history: {
 				duration: action.duration,
 				prices: action.prices,
+				change: action.prices[action.prices.length-1].y - action.prices[0].y
 			}
 		}
 	default:

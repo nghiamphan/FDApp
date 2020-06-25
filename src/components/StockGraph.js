@@ -21,9 +21,9 @@ const StockGraph = ({ ticker }) => {
 	const priceHistory = useSelector(state => state.meta.fetched_stock_price_history)
 
 	// Helper
-	const processResponse = response => {
+	const processResponse = (response, durationKey) => {
 		if (response && response !== FAILED) {
-			dispatch(saveFetchedStockPriceHistory('day', response.map(pricePoint => ({
+			dispatch(saveFetchedStockPriceHistory(durationKey, response.map(pricePoint => ({
 				x: pricePoint.datetime,
 				y: pricePoint.close,
 			}))))
@@ -33,31 +33,52 @@ const StockGraph = ({ ticker }) => {
 	useEffect(() => {
 		if (!priceHistory.duration) {
 			fetchPriceHistory(ticker, 'day', 1, 'minute', 1)
-				.then(response => processResponse(response))
+				.then(response => processResponse(response, '1D'))
 		}
 	})
 
-	const chooseDuration = async duration => {
-		const t = DURATIONS[duration]
+	const chooseDuration = async durationKey => {
+		const t = DURATIONS[durationKey]
 		const response = await fetchPriceHistory(ticker, t.periodType, t.period, t.frequencyType, t.frequency)
-		processResponse(response)
+		processResponse(response, durationKey)
+	}
+
+	const durationSelectStyle = durationKey => {
+		return priceHistory.duration === durationKey
+			? priceHistory.change > 0
+				? {
+					color: 'green',
+					backgroundColor: '#343a40',
+				}
+				:  {
+					color: 'red',
+					backgroundColor: '#343a40',
+				}
+			: {}
 	}
 
 	return (
-		<div className="stock-graph-div">
-			<XYPlot height={200} width={600}>
-				<LineSeries data={priceHistory.prices}  color="green" size="3"/>
+		<div className="stock-graph-div flex-container">
+			<XYPlot className="stock-graph" height={200} width={600}>
+				<LineSeries
+					data={priceHistory.prices}
+					color={priceHistory.change > 0 ? 'green' : 'red'}
+					size="3"
+				/>
 				<XAxis/>
 				<YAxis/>
 			</XYPlot>
 
-			<div className="stock-graph-select flex-container">
-				<div onClick={() => chooseDuration('1D')}>1D</div>
-				<div onClick={() => chooseDuration('1W')}>1W</div>
-				<div onClick={() => chooseDuration('1M')}>1M</div>
-				<div onClick={() => chooseDuration('3M')}>3M</div>
-				<div onClick={() => chooseDuration('1Y')}>1Y</div>
-				<div onClick={() => chooseDuration('20Y')}>20Y</div>
+			<div className="stock-graph-select">
+				{Object.keys(DURATIONS).map(durationKey =>
+					<div
+						key={durationKey}
+						onClick={() => chooseDuration(durationKey)}
+						style={durationSelectStyle(durationKey)}
+					>
+						{durationKey}
+					</div>
+				)}
 			</div>
 		</div>
 	)

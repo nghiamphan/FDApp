@@ -1,11 +1,14 @@
 import React from 'react'
 import { displayLargeNumber, textColorStyle } from '../utils/dataFormat'
+import StockGraph from './StockGraph'
 
 const StockCompactDisplay = ({ stock }) => (
 	<div key={stock.ticker} className="stock-quote-card">
 		<div className="quote-heading">
 			<strong>{stock.ticker}</strong> - {stock.description}
 		</div>
+
+		<StockGraph ticker={stock.ticker}/>
 
 		<div className="flex-container">
 			<div className="compact-quote-stat">
