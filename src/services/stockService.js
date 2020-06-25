@@ -80,6 +80,7 @@ export const fetchPriceHistory = async (ticker, periodType, period, frequencyTyp
 				period: period,
 				frequencyType: frequencyType,
 				frequency: frequency,
+				needExtendedHoursData: false,
 			}
 		})
 
