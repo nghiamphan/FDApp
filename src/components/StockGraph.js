@@ -23,7 +23,7 @@ const StockGraph = ({ ticker }) => {
 	// Helper
 	const processResponse = (response, durationKey) => {
 		if (response && response !== FAILED) {
-			dispatch(saveFetchedStockPriceHistory(durationKey, response.map(pricePoint => ({
+			dispatch(saveFetchedStockPriceHistory(ticker, durationKey, response.map(pricePoint => ({
 				x: pricePoint.datetime,
 				y: pricePoint.close,
 			}))))
@@ -31,7 +31,7 @@ const StockGraph = ({ ticker }) => {
 	}
 
 	useEffect(() => {
-		if (!priceHistory.duration) {
+		if (priceHistory.ticker !== ticker) {
 			fetchPriceHistory(ticker, 'day', 1, 'minute', 1)
 				.then(response => processResponse(response, '1D'))
 		}
