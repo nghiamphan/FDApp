@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { XYPlot, LineSeries, XAxis, YAxis } from 'react-vis'
 import '../../node_modules/react-vis/dist/style.css'
+import moment from 'moment'
 
 import { fetchPriceHistory } from '../services/stockService'
 import { saveFetchedStockPriceHistory } from '../reducers/metaReducer'
@@ -23,9 +24,10 @@ const StockGraph = ({ ticker }) => {
 	// Helper
 	const processResponse = (response, durationKey) => {
 		if (response && response !== FAILED) {
-			dispatch(saveFetchedStockPriceHistory(ticker, durationKey, response.map(pricePoint => ({
-				x: pricePoint.datetime,
+			dispatch(saveFetchedStockPriceHistory(ticker, durationKey, response.map((pricePoint, index) => ({
+				x: index,
 				y: pricePoint.close,
+				timeInMillis: pricePoint.datetime,
 			}))))
 		}
 	}
@@ -57,6 +59,33 @@ const StockGraph = ({ ticker }) => {
 			: {}
 	}
 
+	const xAxisTickerFormatter = x => {
+		const date = new Date(priceHistory.prices[x].timeInMillis)
+			.toLocaleString('en-US', { timeZone: 'America/New_York' })
+
+		let formatStr
+		switch (priceHistory.duration) {
+		case '1D':
+			formatStr = 'h:mm A'
+			break
+		case '1W':
+		case '1M':
+		case '3M':
+			formatStr = 'MMM D'
+			break
+		case '1Y':
+			formatStr = 'MMM YY'
+			break
+		case '20Y':
+			formatStr = 'YYYY'
+			break
+		default:
+		}
+		return (
+			<tspan>{moment(new Date(date)).format(formatStr)}</tspan>
+		)
+	}
+
 	return (
 		<div className="stock-graph-div flex-container">
 			<XYPlot className="stock-graph" height={200} width={600}>
@@ -65,8 +94,18 @@ const StockGraph = ({ ticker }) => {
 					color={priceHistory.change > 0 ? 'green' : 'red'}
 					size="3"
 				/>
-				<XAxis/>
-				<YAxis/>
+				<XAxis
+					tickFormat={xAxisTickerFormatter}
+					tickSize={0}
+					tickSizeOuter={5}
+					tickTotal={5}
+					top={170}
+				/>
+				<YAxis
+					left={-10}
+					hideLine
+					tickSize={0}
+				/>
 			</XYPlot>
 
 			<div className="stock-graph-select">

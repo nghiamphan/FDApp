@@ -383,6 +383,7 @@ table {
 ********************************/
 .stock-graph-div {
 	justify-content: center;
+	margin-bottom: 5px;
 }
 
 .stock-graph-select {
