@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { XYPlot, LineSeries, XAxis, YAxis } from 'react-vis'
-import '../../node_modules/react-vis/dist/style.css'
+import { VictoryCandlestick, VictoryChart, VictoryAxis } from 'victory'
 import moment from 'moment'
 
 import { fetchPriceHistory } from '../services/stockService'
@@ -26,7 +25,10 @@ const StockGraph = ({ ticker }) => {
 		if (response && response !== FAILED) {
 			dispatch(saveFetchedStockPriceHistory(ticker, durationKey, response.map((pricePoint, index) => ({
 				x: index,
-				y: pricePoint.close,
+				open: pricePoint.open,
+				close: pricePoint.close,
+				high: pricePoint.high,
+				low: pricePoint.close,
 				timeInMillis: pricePoint.datetime,
 			}))))
 		}
@@ -59,7 +61,10 @@ const StockGraph = ({ ticker }) => {
 			: {}
 	}
 
-	const xAxisTickerFormatter = x => {
+	const xAxisTickFormatter = x => {
+		if (!priceHistory.prices[x])
+			return x
+
 		const date = new Date(priceHistory.prices[x].timeInMillis)
 			.toLocaleString('en-US', { timeZone: 'America/New_York' })
 
@@ -81,32 +86,44 @@ const StockGraph = ({ ticker }) => {
 			break
 		default:
 		}
-		return (
-			<tspan>{moment(new Date(date)).format(formatStr)}</tspan>
-		)
+		return moment(new Date(date)).format(formatStr)
 	}
 
 	return (
 		<div className="stock-graph-div flex-container">
-			<XYPlot className="stock-graph" height={200} width={600}>
-				<LineSeries
-					data={priceHistory.prices}
-					color={priceHistory.change > 0 ? 'green' : 'red'}
-					size="3"
-				/>
-				<XAxis
-					tickFormat={xAxisTickerFormatter}
-					tickSize={0}
-					tickSizeOuter={5}
-					tickTotal={5}
-					top={170}
-				/>
-				<YAxis
-					left={-10}
-					hideLine
-					tickSize={0}
-				/>
-			</XYPlot>
+			<div>
+				<VictoryChart
+					domainPadding={{ y: 20 }}
+					padding={{ top: 0, bottom: 30, left: 50, right: 20 }}
+					height={250}
+					width={1000}
+				>
+					<VictoryCandlestick
+						data={priceHistory.prices}
+						style= {{
+							data: {
+								stroke: ({ datum }) => datum.close >= datum.open ? 'green' : 'red',
+								strokeWidth: 1,
+								fill: ({ datum }) => datum.close >= datum.open ? 'green' : 'red',
+							},
+						}}
+					/>
+					<VictoryAxis
+						tickFormat={(x) => xAxisTickFormatter(x)}
+						style={{
+							axis: { stroke: 'white' },
+							ticks: { stroke: 'white', size: 5 },
+							tickLabels: { fontSize: 14, padding: 5, fill: 'white' },
+						}}
+					/>
+					<VictoryAxis dependentAxis
+						style={{
+							axis: { stroke: null },
+							tickLabels: { fontSize: 14, padding: 20, fill: 'white' },
+						}}
+					/>
+				</VictoryChart>
+			</div>
 
 			<div className="stock-graph-select">
 				{Object.keys(DURATIONS).map(durationKey =>
