@@ -26,6 +26,7 @@ body {
 ********************************/
 .navigation {
 	position: sticky;
+	z-index: 2;
 	top: 0px;
 	margin: 0px -50px 0px -100px;
 	padding-left: 100px;
@@ -52,6 +53,7 @@ body {
 ********************************/
 .search-form-div {
 	position: sticky;
+	z-index: 1;
 	top: 35px;
 	max-height: calc(100vh - 100px);
 	overflow-y: auto;
