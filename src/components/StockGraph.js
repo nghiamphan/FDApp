@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { VictoryCandlestick, VictoryChart, VictoryAxis } from 'victory'
+import { VictoryCandlestick, VictoryChart, VictoryAxis, VictoryTooltip } from 'victory'
 import moment from 'moment'
 
 import { fetchPriceHistory } from '../services/stockService'
@@ -61,6 +61,32 @@ const StockGraph = ({ ticker }) => {
 			: {}
 	}
 
+	const tooltipFormatter = datum => {
+		const date = new Date(datum.timeInMillis)
+			.toLocaleString('en-US', { timeZone: 'America/New_York' })
+
+		let formatStr
+		switch (priceHistory.duration) {
+		case '1D':
+		case '1W':
+			formatStr = 'MMM D, h:mm A'
+			break
+		case '1M':
+		case '3M':
+		case '1Y':
+		case '20Y':
+			formatStr = 'MMM D, YYYY'
+			break
+		default:
+		}
+
+		return [
+			moment(new Date(date)).format(formatStr),
+			`Open: ${datum.open} - Close: ${datum.close}`,
+			`Low: ${datum.low} - High: ${datum.high}`
+		]
+	}
+
 	const xAxisTickFormatter = x => {
 		if (!priceHistory.prices[x])
 			return x
@@ -93,12 +119,20 @@ const StockGraph = ({ ticker }) => {
 		<div className="stock-graph-div flex-container">
 			<div>
 				<VictoryChart
-					domainPadding={{ y: 20 }}
+					domainPadding={{ y: [20, 60] }}
 					padding={{ top: 0, bottom: 30, left: 50, right: 20 }}
 					height={250}
 					width={1000}
 				>
 					<VictoryCandlestick
+						labels={({ datum }) => tooltipFormatter(datum)}
+						labelComponent={<VictoryTooltip
+							center={{ x: 900, y: 20 }}
+							flyoutHeight={50}
+							flyoutWidth={180}
+							pointerLength={0}
+							flyoutStyle={{ fill: 'transparent', stroke:'white' }}
+						/>}
 						data={priceHistory.prices}
 						style= {{
 							data: {
@@ -106,6 +140,7 @@ const StockGraph = ({ ticker }) => {
 								strokeWidth: 1,
 								fill: ({ datum }) => datum.close >= datum.open ? 'green' : 'red',
 							},
+							labels: { fontSize: 13, fill: 'white' }
 						}}
 					/>
 					<VictoryAxis
