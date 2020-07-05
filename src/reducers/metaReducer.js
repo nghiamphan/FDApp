@@ -67,7 +67,7 @@ const metaReducer = (state = initialState, action) => {
 				ticker: action.ticker,
 				duration: action.duration,
 				prices: action.prices,
-				change: action.prices[action.prices.length-1].y - action.prices[0].y
+				change: action.prices[action.prices.length-1].close - action.prices[0].open
 			}
 		}
 	default:
