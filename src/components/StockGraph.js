@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { VictoryCandlestick, VictoryChart, VictoryAxis, VictoryTooltip } from 'victory'
 import moment from 'moment'
@@ -16,29 +16,47 @@ const DURATIONS = {
 	'20Y': { periodType: 'year', period: 20, frequencyType: 'weekly', frequency: 1 },
 }
 
-const StockGraph = ({ ticker }) => {
+const StockGraph = ({ ticker, isSavedToRedux }) => {
 	const dispatch = useDispatch()
-	const priceHistory = useSelector(state => state.meta.fetched_stock_price_history)
+	const priceFromRedux = useSelector(state => state.meta.fetched_stock_price_history)
+	const [priceFromUseState, setPriceFromUseState] = useState({ ticker: null, prices: [] })
+	const priceHistory = isSavedToRedux ? priceFromRedux : priceFromUseState
 
 	// Helper
 	const processResponse = (response, durationKey) => {
-		if (response && response !== FAILED) {
-			dispatch(saveFetchedStockPriceHistory(ticker, durationKey, response.map((pricePoint, index) => ({
-				x: index,
-				open: pricePoint.open,
-				close: pricePoint.close,
-				high: pricePoint.high,
-				low: pricePoint.close,
-				timeInMillis: pricePoint.datetime,
-			}))))
-		}
+		if (response && response !== FAILED)
+			if (isSavedToRedux)
+				dispatch(saveFetchedStockPriceHistory(ticker, durationKey, response.map((pricePoint, index) => ({
+					x: index,
+					open: pricePoint.open,
+					close: pricePoint.close,
+					high: pricePoint.high,
+					low: pricePoint.close,
+					timeInMillis: pricePoint.datetime,
+				}))))
+			else
+				setPriceFromUseState({
+					ticker,
+					duration: durationKey,
+					prices: response.map((pricePoint, index) => ({
+						x: index,
+						open: pricePoint.open,
+						close: pricePoint.close,
+						high: pricePoint.high,
+						low: pricePoint.close,
+						timeInMillis: pricePoint.datetime,
+					})),
+					change: response[response.length-1].close - response[0].open,
+				})
 	}
 
 	useEffect(() => {
+		let mounted = true
 		if (priceHistory.ticker !== ticker) {
 			fetchPriceHistory(ticker, 'day', 1, 'minute', 1)
-				.then(response => processResponse(response, '1D'))
+				.then(response => mounted ? processResponse(response, '1D') : null)
 		}
+		return () => mounted = false
 	})
 
 	const chooseDuration = async durationKey => {

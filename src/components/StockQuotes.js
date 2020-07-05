@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import stockService from '../services/stockService'
 import { displayLargeNumber, textColorStyle } from '../utils/dataFormat'
+import StockGraph from './StockGraph'
 
 const StockQuotes = ({ tickers }) => {
 	/**
@@ -55,6 +56,8 @@ const StockQuotes = ({ tickers }) => {
 								<FontAwesomeIcon icon={faTimes}/>
 							</span>
 						</div>
+
+						<StockGraph ticker={stock.ticker} isSavedToRedux={false}/>
 
 						<div className="flex-container">
 							<div className="quote-stat">

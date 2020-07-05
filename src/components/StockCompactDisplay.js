@@ -8,7 +8,7 @@ const StockCompactDisplay = ({ stock }) => (
 			<strong>{stock.ticker}</strong> - {stock.description}
 		</div>
 
-		<StockGraph ticker={stock.ticker}/>
+		<StockGraph ticker={stock.ticker} isSavedToRedux={true}/>
 
 		<div className="flex-container">
 			<div className="compact-quote-stat">
