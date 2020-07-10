@@ -31,7 +31,7 @@ const StockGraph = ({ ticker, isSavedToRedux }) => {
 					open: pricePoint.open,
 					close: pricePoint.close,
 					high: pricePoint.high,
-					low: pricePoint.close,
+					low: pricePoint.low,
 					timeInMillis: pricePoint.datetime,
 				}))))
 			else
@@ -43,7 +43,7 @@ const StockGraph = ({ ticker, isSavedToRedux }) => {
 						open: pricePoint.open,
 						close: pricePoint.close,
 						high: pricePoint.high,
-						low: pricePoint.close,
+						low: pricePoint.low,
 						timeInMillis: pricePoint.datetime,
 					})),
 					change: response[response.length-1].close - response[0].open,
